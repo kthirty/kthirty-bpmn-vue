@@ -11,7 +11,7 @@ import Logger from '@/utils/Logger'
 import modelerStore from '@/store/modeler'
 import { Translate } from 'diagram-js/lib/i18n/translate'
 import { isCanbeConditional } from '../utils/conditionUtil'
-import { isStartInitializable, isUserAssignmentSupported } from '../utils/initiatorUtil'
+import { isStartInitializable } from '../utils/initiatorUtil'
 import styles from '../styles.module.scss'
 
 import { customTranslate } from '@/utils/Translate'
@@ -74,7 +74,7 @@ const Panel = defineComponent({
 
       setCurrentComponents(activatedElement)
       EventEmitter.emit('element-update', activatedElement)
-      
+
 
       Logger.prettyPrimary(
         'Selected element changed',
