@@ -1,5 +1,5 @@
-import { defineComponent, Component, markRaw, onMounted, ref, watch } from 'vue'
-import { Collapse, PageHeader } from 'ant-design-vue'
+import { defineComponent, Component, markRaw, onMounted, ref } from 'vue'
+import { Collapse } from 'ant-design-vue'
 import { Element, Connection, Label, Shape } from 'diagram-js/lib/model/Types'
 import { BpmnElement } from '@/components/types'
 import debounce from 'lodash.debounce'
@@ -9,7 +9,6 @@ import bpmnIcons from '@/bpmn-icons'
 import BpmnIcon from '../common/BpmnIcon.vue'
 import Logger from '@/utils/Logger'
 import modelerStore from '@/store/modeler'
-import { Translate } from 'diagram-js/lib/i18n/translate'
 import { isCanbeConditional } from '../utils/conditionUtil'
 import { isStartInitializable } from '../utils/initiatorUtil'
 import styles from '../styles.module.scss'
@@ -68,7 +67,7 @@ const Panel = defineComponent({
       currentElementId.value = activatedElement.id
       currentElementType.value = activatedElement.type.split(':')[1]
 
-      penalTitle.value = modeler.getModeler?.get<Translate>('translate')(currentElementType.value)
+      penalTitle.value = modeler.getModeler?.get<any>('translate')(currentElementType.value)
       bpmnIconName.value = bpmnIcons[activatedElementTypeName]
       bpmnElementName.value = activatedElementTypeName
 
@@ -82,7 +81,7 @@ const Panel = defineComponent({
       )
     }, 100)
 
-    EventEmitter.on('modeler-init', (modeler) => {
+    EventEmitter.on('modeler-init', (modeler:any) => {
       // 导入完成后默认选中 process 节点
       modeler.on('import.done', () => {
         setCurrentElement(null)
