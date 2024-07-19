@@ -1,6 +1,6 @@
-import { defineComponent, Component, markRaw, onMounted, ref, unref } from 'vue'
+import { defineComponent, Component, markRaw, onMounted, ref } from 'vue'
 import { Collapse } from 'ant-design-vue'
-import { Element, Connection, Label, Shape } from 'diagram-js/lib/model/Types'
+import { Element, Connection, Label, Shape } from 'bpmn-js/lib/model/Types'
 import { BpmnElement } from '@/components/types'
 import { debounce } from '../utils/BpmnElementHelper'
 import EventEmitter from '../utils/EventEmitter'
@@ -16,6 +16,7 @@ import ElementGenerations from './components/ElementGenerations.vue'
 import ElementDocumentations from './components/ElementDocumentations.vue'
 import ElementStartInitiator from './components/ElementStartInitiator.vue'
 import ElementConditional from './components/ElementConditional.vue'
+import ElementBaseInfo from './components/ElementBaseInfo.vue'
 
 
 const Panel = defineComponent({
@@ -34,7 +35,7 @@ const Panel = defineComponent({
       // 清空
       renderComponents.splice(0, renderComponents.length)
       // 添加基础组件
-      renderComponents.push(ElementGenerations)
+      renderComponents.push(ElementBaseInfo)
       renderComponents.push(ElementDocumentations)
       // 开始节点
       renderComponents.push(ElementStartInitiator)

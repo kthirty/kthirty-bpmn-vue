@@ -1,8 +1,12 @@
-import modeler from '@/store/modeler'
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil'
-import { Connection,Element } from 'diagram-js/lib/model/Types'
-import { createElement, message ,getEventDefinition} from './BpmnElementHelper'
-import { getModdle, getModeling } from '@/components/utils/BpmnHolder'
+import { Connection,Element } from 'bpmn-js/lib/model/Types'
+import { createElement, message, getEventDefinition, createCategoryValue } from './BpmnElementHelper'
+import { getCanvas, getModdle, getModeler, getModeling } from '@/components/utils/BpmnHolder'
+import { isAny } from 'bpmn-js/lib/features/modeling/util/ModelingUtil'
+import modelerStore from '@/store/modeler'
+import BpmnFactory from 'bpmn-js/lib/features/modeling/BpmnFactory'
+import editorStore from '@/store/editor'
+import { BpmnElement } from '@/components/types'
 
 /**
  * Conditional 工具类，包含处理 BPMN 条件相关的方法
@@ -14,6 +18,7 @@ export class Conditional {
    * @param isDefault - 是否为默认条件
    */
   static setDefaultCondition(element: Connection, isDefault: boolean) {
+    // @ts-ignore
     getModeling()?.updateProperties(element.source, { default: isDefault ? element : undefined });
   }
 
@@ -22,7 +27,7 @@ export class Conditional {
    * @param element - BPMN 元素
    * @returns 条件事件定义或 false
    */
-  static getConditionalEventDefinition(element: Element): false | undefined {
+  static getConditionalEventDefinition(element: Element): Element | false | undefined {
     if (!is(element, 'bpmn:Event')) return false;
     return getEventDefinition(element, 'bpmn:ConditionalEventDefinition');
   }
@@ -32,7 +37,7 @@ export class Conditional {
    * @param element - BPMN 元素
    * @param condition - 条件表达式（可选）
    */
-  static updateCondition(element: Element, condition?: string) {
+  static updateCondition(element: Element, condition?: string | Element) {
     const modeling = getModeling()
     if (is(element, 'bpmn:SequenceFlow')) {
       modeling?.updateProperties(element, { conditionExpression: condition });
@@ -113,7 +118,7 @@ export class Conditional {
     const modeling = getModeling();
     const eventDefinition = this.getConditionalEventDefinition(element);
     if (eventDefinition) {
-      modeling.updateModdleProperties(element, eventDefinition, { variableName: value || '' });
+      modeling?.updateModdleProperties(element, eventDefinition, { variableName: value || '' });
     }
   }
 
@@ -138,7 +143,7 @@ export class Conditional {
     const modeling = getModeling();
     const eventDefinition = this.getConditionalEventDefinition(element);
     if (eventDefinition) {
-      modeling.updateModdleProperties(element, eventDefinition, { variableEvents: value || '' });
+      modeling?.updateModdleProperties(element, eventDefinition, { variableEvents: value || '' });
     }
   }
 }
@@ -154,7 +159,7 @@ export class Id {
    * @returns 错误消息或 undefined
    */
   static isIdValid(element: Element, idValue: string): string | undefined {
-    const assigned = element.$model.ids.assigned(idValue);
+    const assigned = element.$model?.ids?.assigned(idValue);
     const idAlreadyExists = assigned && assigned !== element;
     if (!idValue) return 'ID 不能为空.';
     if (idAlreadyExists) return 'ID 必须是唯一的';
@@ -179,9 +184,69 @@ export class Id {
    * @param element - BPMN 元素
    * @param value - ID 值
    */
-  static setIdValue(element: Element, value: string) {
+  static setIdValue(element: Element | BpmnElement, value: string) {
     const errorMsg = this.isIdValid(element, value);
     if (errorMsg && errorMsg.length) return message('warning', errorMsg);
-    getModeling().updateProperties(element, { id: value });
+    getModeling()?.updateProperties(element, { id: value });
+  }
+}
+export class Name {
+  static getNameValue(element: Element | BpmnElement): string | undefined {
+    if (isAny(element, ['bpmn:Collaboration', 'bpmn:DataAssociation', 'bpmn:Association'])) {
+      return undefined
+    }
+    if (is(element, 'bpmn:TextAnnotation')) {
+      return element.businessObject.text
+    }
+    if (is(element, 'bpmn:Group')) {
+      const businessObject: Element = getBusinessObject(element),
+        categoryValueRef = businessObject?.categoryValueRef
+      return categoryValueRef?.value
+    }
+    return element?.businessObject.name
+  }
+  static setNameValue(element: Element | BpmnElement, value: string): void {
+    const modeling = getModeling()
+    const canvas = getCanvas()
+    const bpmnFactory: BpmnFactory | undefined = getModeler()?.get('bpmnFactory')
+    // 不支持Name的节点
+    if (isAny(element, ['bpmn:Collaboration', 'bpmn:DataAssociation', 'bpmn:Association'])) {
+      return undefined
+    }
+    // 文字注释，直接修改text
+    if (is(element, 'bpmn:TextAnnotation')) {
+      return modeling?.updateModdleProperties(element, element.businessObject, { text: value })
+    }
+    // 组
+    if (is(element, 'bpmn:Group')) {
+      const businessObject = getBusinessObject(element),
+        categoryValueRef = businessObject.categoryValueRef
+      if (!categoryValueRef) {
+        const definitions = getBusinessObject(canvas?.getRootElement()).$parent
+        businessObject.categoryValueRef = createCategoryValue(definitions, bpmnFactory)
+      }
+      return modeling?.updateLabel(element, value)
+    }
+    modeling?.updateModdleProperties(element, element.businessObject, { name: value })
+  }
+}
+export class Version{
+  static getProcessVersionTag(element: Element): string {
+    return element.businessObject.get('versionTag')
+  }
+  static setProcessVersionTag(element: Element | BpmnElement, value: string) {
+    getModeling()?.updateProperties(element, {
+      versionTag: value
+    })
+  }
+}
+export class Executable{
+  static getProcessExecutable(element: Element | BpmnElement): boolean {
+    return !!element.businessObject.isExecutable
+  }
+  static setProcessExecutable(element: Element | BpmnElement, value: boolean) {
+    getModeling()?.updateProperties(element, {
+      isExecutable: value
+    })
   }
 }

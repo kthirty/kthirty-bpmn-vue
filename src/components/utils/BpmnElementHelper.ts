@@ -1,7 +1,8 @@
-import { Element } from 'diagram-js/lib/model/Types'
+import { Element } from 'bpmn-js/lib/model/Types'
 import { Moddle } from 'bpmn-js/lib/model/Types'
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil'
 import Modeler from 'bpmn-js/lib/Modeler'
+import { add as collectionAdd } from 'diagram-js/lib/util/Collections'
 // 创建元素
 export function createElement(
   moddle: Moddle,
@@ -87,4 +88,15 @@ export function debounce<T extends (...args: any[]) => any>(func: T, wait: numbe
     }
     timeout = setTimeout(later, wait);
   };
+}
+// 创建元素
+export function createCategoryValue(definitions: any, bpmnFactory: any): Element {
+  const categoryValue = bpmnFactory.create('bpmn:CategoryValue')
+  const category = bpmnFactory.create('bpmn:Category', {
+    categoryValue: [categoryValue]
+  })
+  collectionAdd(definitions.get('rootElements'), category)
+  getBusinessObject(category).$parent = definitions
+  getBusinessObject(categoryValue).$parent = category
+  return categoryValue
 }

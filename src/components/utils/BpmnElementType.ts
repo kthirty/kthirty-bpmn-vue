@@ -33,3 +33,7 @@ export function isConditionEventDefinition(element: Element): boolean {
     is(element, 'bpmn:Event') && !!getEventDefinition(element, 'bpmn:ConditionalEventDefinition')
   )
 }
+// 是否为流程
+export function isProcess(element: BpmnElement): boolean {
+  return is(element, 'bpmn:Process')
+}
