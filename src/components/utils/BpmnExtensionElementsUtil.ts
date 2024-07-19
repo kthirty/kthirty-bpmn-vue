@@ -75,8 +75,8 @@ export function removeExtensionElements(
 export function createModdleElement(
   elementType: string,
   properties: Record<string, any>,
-  parent?: Element | ModdleElement
-): ModdleElement {
+  parent?: Element
+): Element {
   const moddle = modeler().getModdle!
   const element = moddle.create(elementType, properties)
   parent && (element.$parent = parent)

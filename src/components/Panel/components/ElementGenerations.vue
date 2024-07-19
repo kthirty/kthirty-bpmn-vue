@@ -31,9 +31,7 @@
   import LucideIcon from '../../common/LucideIcon.vue'
   import EditItem from '../../common/EditItem.vue'
   import {CollapsePanel , Input ,Switch } from 'ant-design-vue'
-  import { defineComponent } from 'vue'
-  import { mapState } from 'pinia'
-  import modelerStore from '@/store/modeler'
+ import { defineComponent } from 'vue'
   import { Element } from 'diagram-js/lib/model/Types'
   import { setIdValue } from '../../utils/idUtil'
   import { getNameValue, setNameValue } from '../../utils/nameUtil'
@@ -45,6 +43,8 @@
   } from '../../utils/processUtil'
   import EventEmitter from '@/utils/EventEmitter'
   import { BpmnElement } from '@/components/types'
+ import {getActive ,getActiveId} from '../../utils/BpmnHolder'
+ import { message } from '@/components/utils/BpmnElementHelper'
 
   export default defineComponent({
     name: 'ElementGenerations',
@@ -68,51 +68,39 @@
         isProcess: false
       }
     },
-    watch: {
-      element: {
-        immediate: true,
-        handler() {
-          console.log(this.element)
-        }
-      }
-    },
-    computed: {
-      ...mapState(modelerStore, ['getActive', 'getActiveId'])
-    },
     mounted() {
-      console.log('element',this.element)
       this.reloadGenerationData()
       EventEmitter.on('element-update', this.reloadGenerationData)
     },
     methods: {
       reloadGenerationData() {
-        this.isProcess = !!this.getActive && this.getActive.type === 'bpmn:Process'
-        this.elementId = this.getActiveId as string
-        this.elementName = getNameValue(this.getActive as Element) || ''
+        this.isProcess = !!getActive() && getActive()?.type === 'bpmn:Process'
+        this.elementId = getActiveId() as string
+        this.elementName = getNameValue(getActive() as Element) || ''
         if (this.isProcess) {
-          this.elementExecutable = getProcessExecutable(this.getActive as Element)
-          this.elementVersion = getProcessVersionTag(this.getActive as Element) || ''
+          this.elementExecutable = getProcessExecutable(getActive() as Element)
+          this.elementVersion = getProcessVersionTag(getActive() as Element) || ''
         }
       },
       updateElementName(event: Event) {
         const value = (event.target as HTMLInputElement).value
-        setNameValue(this.getActive as Element, value)
+        setNameValue(getActive() as Element, value)
       },
       updateElementId(event: Event) {
         const value = (event.target as HTMLInputElement).value
-        setIdValue(this.getActive as Element, value)
+        setIdValue(getActive() as Element, value)
       },
       updateElementVersion(event: Event) {
         const value = (event.target as HTMLInputElement).value
         const reg = /((\d|([1-9](\d*))).){2}(\d|([1-9](\d*)))/
         if (reg.test(value)) {
-          setProcessVersionTag(this.getActive as Element, value)
+          setProcessVersionTag(getActive() as Element, value)
         } else {
-          window.__messageBox.error('版本号必须符合语义化版本2.0.0 要点')
+          message('error','版本号必须符合语义化版本2.0.0 要点')
         }
       },
       updateElementExecutable(checked: boolean) {
-        setProcessExecutable(this.getActive as Element, checked)
+        setProcessExecutable(getActive() as Element, checked)
       }
     }
   })

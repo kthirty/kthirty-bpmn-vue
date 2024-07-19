@@ -1,15 +1,15 @@
 import { defineComponent, ref, toRefs, onMounted,markRaw } from 'vue'
 import type { PropType } from 'vue'
-import modelerStore from '@/store/modeler'
-import {BaseViewerOptions} from "bpmn-js/lib/BaseViewer";
-import Translate from '@/utils/Translate';
-import EventEmitter from '@/utils/EventEmitter';
+import { BaseViewerOptions } from "bpmn-js/lib/BaseViewer";
 import Modeler from "bpmn-js/lib/Modeler";
-import { EmptyXml } from '@/utils/ModelerUtil';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
+import Translate from '@/utils/Translate';
+import EventEmitter from '../utils/EventEmitter';
+import { EmptyXml } from '../utils/BpmnElementHelper';
 import styles from '../styles.module.scss'
+import {getModeler,setModeler} from '../utils/BpmnHolder'
 
 const Designer = defineComponent({
   name: 'BpmnDesigner',
@@ -24,11 +24,10 @@ const Designer = defineComponent({
     const designer = ref<HTMLDivElement>()
     onMounted(async () => {
         try {
-            const store = modelerStore()
-            if (store.getModeler) {
+            if (getModeler) {
                 // 清除旧 modeler
-                store.getModeler.destroy()
-                await store.setModeler(undefined)
+                getModeler()?.destroy()
+                setModeler(undefined)
             }
             // 初始化参数
             const options: BaseViewerOptions = {
@@ -39,7 +38,7 @@ const Designer = defineComponent({
             }
             // 开始初始化Modeler
             const modeler: Modeler = new Modeler(options)
-            await store.setModeler(markRaw(modeler))
+            setModeler(markRaw(modeler))
             EventEmitter.emit('modeler-init', modeler)
             // 添加监听事件
             modeler.on('commandStack.changed', async (event) => {

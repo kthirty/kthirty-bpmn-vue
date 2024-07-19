@@ -5,9 +5,10 @@ import type Modeling from 'bpmn-js/lib/features/modeling/Modeling'
 import type Canvas from 'diagram-js/lib/core/Canvas'
 import type ElementRegistry from 'diagram-js/lib/core/ElementRegistry'
 import { toRaw } from 'vue'
+import { Element } from 'diagram-js/lib/model/Types'
 
 type ModelerStore = {
-  activeElement: BpmnElement | undefined
+  activeElement: Element | undefined
   activeElementId: string | undefined
   modeler: Modeler | undefined
   moddle: Moddle | undefined
@@ -49,7 +50,7 @@ export default defineStore('modeler', {
         this.modeling = this.moddle = this.canvas = this.elementRegistry = undefined
       }
     },
-    setElement(element: BpmnElement | undefined) {
+    setElement(element: Element | undefined) {
       this.activeElement = element
       this.activeElementId = element?.id
     }

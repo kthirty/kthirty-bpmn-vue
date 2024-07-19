@@ -1,17 +1,15 @@
-import { defineComponent, Component, markRaw, onMounted, ref } from 'vue'
+import { defineComponent, Component, markRaw, onMounted, ref, unref } from 'vue'
 import { Collapse } from 'ant-design-vue'
 import { Element, Connection, Label, Shape } from 'diagram-js/lib/model/Types'
 import { BpmnElement } from '@/components/types'
-import debounce from 'lodash.debounce'
-import EventEmitter from '@/utils/EventEmitter'
+import { debounce } from '../utils/BpmnElementHelper'
+import EventEmitter from '../utils/EventEmitter'
 import getBpmnIconType from '@/bpmn-icons/getIconType'
 import bpmnIcons from '@/bpmn-icons'
 import BpmnIcon from '../common/BpmnIcon.vue'
 import Logger from '@/utils/Logger'
-import modelerStore from '@/store/modeler'
-import { isCanbeConditional } from '../utils/conditionUtil'
-import { isStartInitializable } from '../utils/initiatorUtil'
 import styles from '../styles.module.scss'
+import {getElRegistry ,setElement , getModeler} from '../utils/BpmnHolder'
 
 import { customTranslate } from '@/utils/Translate'
 import ElementGenerations from './components/ElementGenerations.vue'
@@ -23,7 +21,6 @@ import ElementConditional from './components/ElementConditional.vue'
 const Panel = defineComponent({
   name: 'PropertiesPanel',
   setup() {
-    const modeler = modelerStore()
     const panel = ref<HTMLDivElement | null>(null)
     const currentElementId = ref<string | undefined>(undefined)
     const currentElementType = ref<string | undefined>(undefined)
@@ -40,9 +37,9 @@ const Panel = defineComponent({
       renderComponents.push(ElementGenerations)
       renderComponents.push(ElementDocumentations)
       // 开始节点
-      isStartInitializable(element) && renderComponents.push(ElementStartInitiator)
+      renderComponents.push(ElementStartInitiator)
       // 连线条件
-      isCanbeConditional(element) && renderComponents.push(ElementConditional)
+      renderComponents.push(ElementConditional)
 
     }
 
@@ -50,38 +47,33 @@ const Panel = defineComponent({
     const setCurrentElement = debounce((element: Shape | Element | Connection | Label | null) => {
       let activatedElement: BpmnElement | undefined = element
       let activatedElementTypeName = ''
-
+      // 验证当前选中节点
       if (!activatedElement) {
         activatedElement =
-          modeler.getElRegistry?.find((el) => el.type === 'bpmn:Process') ||
-          modeler.getElRegistry?.find((el) => el.type === 'bpmn:Collaboration')
-
+          getElRegistry()?.find((el) => el.type === 'bpmn:Process') ||
+          getElRegistry()?.find((el) => el.type === 'bpmn:Collaboration')
         if (!activatedElement) {
           return Logger.prettyError('No Element found!')
         }
       }
       activatedElementTypeName = getBpmnIconType(activatedElement)
-
-      modeler.setElement(markRaw(activatedElement))
+      // 缓存当前节点信息
+      setElement(markRaw(activatedElement))
       currentElement.value = activatedElement
       currentElementId.value = activatedElement.id
       currentElementType.value = activatedElement.type.split(':')[1]
-
-      penalTitle.value = modeler.getModeler?.get<any>('translate')(currentElementType.value)
+      // 面板标题、图标、名称信息
+      penalTitle.value = getModeler()?.get<any>('translate')(currentElementType.value)
       bpmnIconName.value = bpmnIcons[activatedElementTypeName]
       bpmnElementName.value = activatedElementTypeName
-
-      setCurrentComponents(activatedElement)
+      // 推送事件消息
       EventEmitter.emit('element-update', activatedElement)
+      setCurrentComponents(currentElement.value)
 
-
-      Logger.prettyPrimary(
-        'Selected element changed',
-        `ID: ${activatedElement.id} , type: ${activatedElement.type}`
-      )
+      Logger.prettyPrimary('Selected element changed', `ID: ${activatedElement.id} , type: ${activatedElement.type}`)
     }, 100)
 
-    EventEmitter.on('modeler-init', (modeler:any) => {
+    EventEmitter.on('modeler-init', (modeler: any) => {
       // 导入完成后默认选中 process 节点
       modeler.on('import.done', () => {
         setCurrentElement(null)
@@ -96,10 +88,9 @@ const Panel = defineComponent({
           setCurrentElement(element)
         }
       })
-
-      // modeler.on('element.click', (event) => {
-      //   Logger.prettyInfo('Element Click', event)
-      // })
+      modeler.on('element.click', (event: Event) => {
+        Logger.prettyPrimary('Element Click', event)
+      })
     })
 
     onMounted(() => !currentElementId.value && setCurrentElement(null))
@@ -107,13 +98,13 @@ const Panel = defineComponent({
     return () => (
       <div class={styles.panel} ref={panel}>
         <div class={styles.panel_header}>
-          <BpmnIcon name={bpmnIconName.value}/>
+          <BpmnIcon name={bpmnIconName.value} />
           <p class={styles.panel_header_p}>{bpmnElementName.value}</p>
           <p class={styles.panel_header_p}>{customTranslate(currentElementType.value || 'Process')}</p>
         </div>
         <Collapse ghost>
           {renderComponents.map((component) => (
-            <component is={component} element={currentElement}></component>
+            <component is={component} v-model:element={currentElement.value}></component>
           ))}
         </Collapse>
       </div>
