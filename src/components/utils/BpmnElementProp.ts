@@ -5,6 +5,7 @@ import BpmnFactory from 'bpmn-js/lib/features/modeling/BpmnFactory'
 import { createElement, message, getEventDefinition, createCategoryValue,without ,createModdleElement} from './BpmnElementHelper'
 import { getCanvas, getModdle, getModeler, getModeling, getProcessEngine } from './BpmnHolder'
 import { BpmnElement } from '../types'
+import ElementRegistry from 'diagram-js/lib/core/ElementRegistry'
 
 
 /**
@@ -227,8 +228,17 @@ export class Id {
    * @returns 错误消息或 undefined
    */
   static isIdValid(element: Element, idValue: string): string | undefined {
-    const assigned = element.$model?.ids?.assigned(idValue);
-    const idAlreadyExists = assigned && assigned !== element;
+    const idAlreadyExists = getModeler()
+      ?.get<ElementRegistry>('elementRegistry')
+      ?.getAll()
+      .filter(item => item !== element)
+      .filter(item => item.id === idValue)
+      .length !== 0
+    console.log('idAlreadyExists',idAlreadyExists,getModeler()
+      ?.get<ElementRegistry>('elementRegistry')
+      ?.getAll()
+      .filter(item => item !== element)
+      .filter(item => item.id === idValue))
     if (!idValue) return 'ID 不能为空.';
     if (idAlreadyExists) return 'ID 必须是唯一的';
     if (/\s/.test(idValue)) return 'ID 不能包含空格';

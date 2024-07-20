@@ -23,7 +23,11 @@ export function customTranslate(template: string, replacements?: Record<string, 
   const translations = languages[lang || 'zh_CN']
 
   // Translate
-  template = getByKey(translations.elements,template) || template
+  const val = getByKey(translations.elements,template)
+  if(!val && template.startsWith('Sub')){
+    console.log('Translate',translations.elements,template)
+  }
+  template = val || template
 
   // Replace
   return template.replace(/{([^}]+)}/g, function (_, key) {

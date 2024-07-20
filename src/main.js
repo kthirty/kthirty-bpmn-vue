@@ -4,10 +4,9 @@ import App from './App.vue'
 import i18n from '@/i18n'
 import { createPinia } from 'pinia'
 import 'virtual:svg-icons-register'
-import { Modal } from 'ant-design-vue';
 
-const [modal, contextHolder] = Modal.useModal();
-window.__messageBox = modal
+import { message } from 'ant-design-vue';
+window.__messageBox = message
 
 
 const app = createApp(App)

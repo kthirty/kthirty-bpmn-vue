@@ -1,6 +1,7 @@
 import { defineComponent, ref, toRefs, onMounted, markRaw } from 'vue'
 import type { PropType } from 'vue'
 import { BaseViewerOptions } from 'bpmn-js/lib/BaseViewer'
+import { CreateAppendAnythingModule } from 'bpmn-js-create-append-anything';
 import Modeler from 'bpmn-js/lib/Modeler'
 import 'bpmn-js/dist/assets/diagram-js.css'
 import 'bpmn-js/dist/assets/bpmn-js.css'
@@ -34,8 +35,12 @@ const Designer = defineComponent({
         const options: BaseViewerOptions = {
           container: designer!.value as HTMLElement,
           additionalModules: [
-            Translate
-          ]
+            Translate,
+            CreateAppendAnythingModule
+          ],
+          keyboard: {
+            bindTo: window
+          }
         }
         // 开始初始化Modeler
         const modeler: Modeler = new Modeler(options)

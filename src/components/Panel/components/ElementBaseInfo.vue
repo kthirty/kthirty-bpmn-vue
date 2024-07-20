@@ -3,13 +3,13 @@
   import CollapseTitle from '../../common/CollapseTitle.vue'
   import LucideIcon from '../../common/LucideIcon.vue'
   import EditItem from '../../common/EditItem.vue'
-  import { BpmnElement } from '../../types'
   import { onMounted, ref, watch } from 'vue'
   import {isProcess} from '../../utils/BpmnElementType'
   import { Id,Name,Process} from '../../utils/BpmnElementProp'
+  import { Element } from 'bpmn-js/lib/model/Types'
 
   defineOptions({ name: 'ElementBaseInfo' })
-  const props = defineProps({ element: Object as BpmnElement })
+  const props = defineProps<{ element: Element }>()
 
   const elementId = ref<string>('')
   const elementName = ref<string>('')
@@ -23,7 +23,7 @@
   const updateElementExecutable = () => Process.setProcessExecutable(props.element,elementExecutable.value)
 
   // 根据element更新本组件字段
-  const updateInfo = (element: BpmnElement) => {
+  const updateInfo = (element: Element) => {
     elementIsProcess.value = isProcess(element)
     elementId.value = Id.getIdValue(element)
     elementName.value = Name.getNameValue(element) || ''
@@ -35,7 +35,7 @@
   // 加载完成后进行一次计算
   onMounted(() => updateInfo(props.element))
   // 监听Element
-  watch(() => props.element,(newVal: BpmnElement) => updateInfo(newVal))
+  watch(() => props.element,(newVal: Element) => updateInfo(newVal))
 </script>
 <template>
   <CollapsePanel name="base-info">

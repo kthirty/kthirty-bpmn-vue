@@ -20,6 +20,9 @@ importers:
       bpmn-js:
         specifier: ^17.9.1
         version: 17.9.1
+      bpmn-js-create-append-anything:
+        specifier: ^0.5.2
+        version: 0.5.2(bpmn-js@17.9.1)(diagram-js@14.8.0)
       bpmn-moddle:
         specifier: ^9.0.1
         version: 9.0.1
@@ -240,6 +243,12 @@ packages:
 
   '@bpmn-io/diagram-js-ui@0.2.3':
     resolution: {integrity: sha512-OGyjZKvGK8tHSZ0l7RfeKhilGoOGtFDcoqSGYkX0uhFlo99OVZ9Jn1K7TJGzcE9BdKwvA5Y5kGqHEhdTxHvFfw==}
+
+  '@bpmn-io/element-template-chooser@1.0.0':
+    resolution: {integrity: sha512-jSzvoWwYiTpsR7X/+nhao8e8jfveTPLeT3cUUJYhcztLysJaJo+5VXX+QbzH4eFOCnqaoIz6ehbd8px4EjVYnA==}
+    peerDependencies:
+      bpmn-js: '>= 11'
+      diagram-js: '>= 11.3.0'
 
   '@ctrl/tinycolor@3.6.1':
     resolution: {integrity: sha512-SITSV6aIXsuVNV3f3O0f2n/cgyEDWoSqtZMYiAmcsYHydcKrOz3gUxB/iXd/Qf08+IZX4KpgNbvUdMBmWz+kcA==}
@@ -840,6 +849,9 @@ packages:
 
   boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
+
+  bpmn-js-create-append-anything@0.5.2:
+    resolution: {integrity: sha512-JN1kGDb81YzCmmuOqYrA0cW92zRMHS5liO4OIj/DDf8fIpB/g8qPccJSqYJgxtvwTmvMD5d5cjX3NZ/RLdTACw==}
 
   bpmn-js@17.9.1:
     resolution: {integrity: sha512-yuCGfVwdZpWc+JqqL3Y8oV3HR44TkzsZ7PY/eUINhihKXe1W5ghqLNEYEmEU6JlVlHpELKewvrdEuuMmdIy1Qw==}
@@ -2852,6 +2864,11 @@ snapshots:
       htm: 3.1.1
       preact: 10.22.1
 
+  '@bpmn-io/element-template-chooser@1.0.0(bpmn-js@17.9.1)(diagram-js@14.8.0)':
+    dependencies:
+      bpmn-js: 17.9.1
+      diagram-js: 14.8.0
+
   '@ctrl/tinycolor@3.6.1': {}
 
   '@emotion/hash@0.9.1': {}
@@ -3432,6 +3449,13 @@ snapshots:
   bluebird@3.7.2: {}
 
   boolbase@1.0.0: {}
+
+  bpmn-js-create-append-anything@0.5.2(bpmn-js@17.9.1)(diagram-js@14.8.0):
+    dependencies:
+      '@bpmn-io/element-template-chooser': 1.0.0(bpmn-js@17.9.1)(diagram-js@14.8.0)
+    transitivePeerDependencies:
+      - bpmn-js
+      - diagram-js
 
   bpmn-js@17.9.1:
     dependencies:
