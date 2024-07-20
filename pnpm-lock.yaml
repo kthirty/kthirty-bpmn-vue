@@ -20,6 +20,9 @@ importers:
       bpmn-js:
         specifier: ^17.9.1
         version: 17.9.1
+      bpmn-js-color-picker:
+        specifier: ^0.7.1
+        version: 0.7.1(bpmn-js@17.9.1)
       bpmn-js-create-append-anything:
         specifier: ^0.5.2
         version: 0.5.2(bpmn-js@17.9.1)(diagram-js@14.8.0)
@@ -29,9 +32,6 @@ importers:
       diagram-js:
         specifier: ^14.8.0
         version: 14.8.0
-      lodash.debounce:
-        specifier: ^4.0.8
-        version: 4.0.8
       lucide-vue-next:
         specifier: ^0.408.0
         version: 0.408.0(vue@3.4.31(typescript@5.5.3))
@@ -849,6 +849,11 @@ packages:
 
   boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
+
+  bpmn-js-color-picker@0.7.1:
+    resolution: {integrity: sha512-SsDKewfopMPFTETAS1ZUWNKZvnQ7OBsODVcFEL2GzrQusW1VtnoCB2wc2vOtcafLAUPoUaRnVx5gZNtvywnJQA==}
+    peerDependencies:
+      bpmn-js: '>= 14'
 
   bpmn-js-create-append-anything@0.5.2:
     resolution: {integrity: sha512-JN1kGDb81YzCmmuOqYrA0cW92zRMHS5liO4OIj/DDf8fIpB/g8qPccJSqYJgxtvwTmvMD5d5cjX3NZ/RLdTACw==}
@@ -1763,9 +1768,6 @@ packages:
 
   lodash.camelcase@4.3.0:
     resolution: {integrity: sha512-TwuEnCnxbc3rAvhf/LbG7tJUDzhqXyFnv3dtzLOPgCG/hODL7WFnsbwktkD7yUV0RrreP/l1PALq/YSg6VvjlA==}
-
-  lodash.debounce@4.0.8:
-    resolution: {integrity: sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==}
 
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==}
@@ -3450,6 +3452,10 @@ snapshots:
 
   boolbase@1.0.0: {}
 
+  bpmn-js-color-picker@0.7.1(bpmn-js@17.9.1):
+    dependencies:
+      bpmn-js: 17.9.1
+
   bpmn-js-create-append-anything@0.5.2(bpmn-js@17.9.1)(diagram-js@14.8.0):
     dependencies:
       '@bpmn-io/element-template-chooser': 1.0.0(bpmn-js@17.9.1)(diagram-js@14.8.0)
@@ -4541,8 +4547,6 @@ snapshots:
   lodash-es@4.17.21: {}
 
   lodash.camelcase@4.3.0: {}
-
-  lodash.debounce@4.0.8: {}
 
   lodash.merge@4.6.2: {}
 
