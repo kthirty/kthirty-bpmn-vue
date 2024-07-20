@@ -2,9 +2,9 @@
 import Designer from './components/Designer'
 import Panel from './components/Panel'
 import {ref} from "vue";
-import {EmptyXml} from "@/utils/ModelerUtil";
+import {EmptyXml} from "./components/utils/BpmnElementHelper";
 import {Button} from 'ant-design-vue'
-import Logger from '@/utils/Logger'
+import Logger from './components/utils/Logger'
 
 
 const xml = ref<string>(EmptyXml())

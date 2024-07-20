@@ -1,12 +1,11 @@
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil'
-import { Connection,Element } from 'bpmn-js/lib/model/Types'
-import { createElement, message, getEventDefinition, createCategoryValue } from './BpmnElementHelper'
-import { getCanvas, getModdle, getModeler, getModeling } from '@/components/utils/BpmnHolder'
+import { Connection, Element, ModdleElement } from 'bpmn-js/lib/model/Types'
 import { isAny } from 'bpmn-js/lib/features/modeling/util/ModelingUtil'
-import modelerStore from '@/store/modeler'
 import BpmnFactory from 'bpmn-js/lib/features/modeling/BpmnFactory'
-import editorStore from '@/store/editor'
-import { BpmnElement } from '@/components/types'
+import { createElement, message, getEventDefinition, createCategoryValue,without ,createModdleElement} from './BpmnElementHelper'
+import { getCanvas, getModdle, getModeler, getModeling, getProcessEngine } from './BpmnHolder'
+import { BpmnElement } from '../types'
+
 
 /**
  * Conditional 工具类，包含处理 BPMN 条件相关的方法
@@ -146,8 +145,77 @@ export class Conditional {
       modeling?.updateModdleProperties(element, eventDefinition, { variableEvents: value || '' });
     }
   }
-}
 
+// 4. 元素条件表达式
+  static getConditionExpressionValue(element: Element): string | undefined {
+    const conditionExpression = this.getConditionExpression(element)
+    if (conditionExpression) {
+      return conditionExpression.get('body')
+    }
+  }
+  static setConditionExpressionValue(element: Element, body: string | undefined) {
+    const parent = is(element, 'bpmn:SequenceFlow')
+      ? getBusinessObject(element)
+      : (this.getConditionalEventDefinition(element) as ModdleElement)
+    const formalExpressionElement = createModdleElement('bpmn:FormalExpression', { body }, parent)
+    this.updateCondition(element, formalExpressionElement)
+  }
+
+// 5. 元素脚本来源类型
+  static getConditionScriptTypeValue(element: Element): string | undefined {
+    const prefix = getProcessEngine()
+    const conditionExpression = this.getConditionExpression(element)!
+    if (conditionExpression.get('body') !== undefined) return 'inline'
+    if (conditionExpression.get(`${prefix}:resource`) !== undefined) return 'external'
+    return 'none'
+  }
+  static setConditionScriptTypeValue(element: Element, value: string | undefined) {
+    const prefix = getProcessEngine()
+    const modeling = getModeling()
+    let props:any = undefined
+    if (!value || value === 'none') {
+      props = { body: undefined, [`${prefix}:resource`]: undefined }
+    }
+    if (value === 'inline') {
+      props = { body: '', [`${prefix}:resource`]: undefined }
+    }
+    if (value === 'external') {
+      props = { body: undefined, [`${prefix}:resource`]: '' }
+    }
+    modeling?.updateModdleProperties(element, this.getConditionExpression(element)!, props)
+  }
+
+// 6. 元素脚本 语言类型
+  static getConditionScriptLanguageValue(element: Element): string | undefined {
+    return this.getConditionExpression(element)?.get('language')
+  }
+  static setConditionScriptLanguageValue(element: Element, value: string | undefined) {
+    const modeling = getModeling()
+    modeling?.updateModdleProperties(element, this.getConditionExpression(element)!, { language: value })
+  }
+
+// 7. 元素脚本 body
+  static getConditionScriptBodyValue(element: Element): string | undefined {
+    return this.getConditionExpression(element)?.get('body')
+  }
+  static setConditionScriptBodyValue(element: Element, value: string | undefined) {
+    const modeling = getModeling()
+    modeling?.updateModdleProperties(element, this.getConditionExpression(element)!, { body: value })
+  }
+
+// 8. 元素脚本 source
+  static getConditionScriptResourceValue(element: Element): string | undefined {
+    const prefix = getProcessEngine()
+    return this.getConditionExpression(element)?.get(`${prefix}:resource`)
+  }
+  static setConditionScriptResourceValue(element: Element, value: string | undefined) {
+    const modeling = getModeling()
+    const prefix = getProcessEngine()
+    modeling?.updateModdleProperties(element, this.getConditionExpression(element)!, {
+      [`${prefix}:resource`]: value
+    })
+  }
+}
 /**
  * Id 工具类，包含处理 BPMN 元素 ID 相关的方法
  */
@@ -184,12 +252,13 @@ export class Id {
    * @param element - BPMN 元素
    * @param value - ID 值
    */
-  static setIdValue(element: Element | BpmnElement, value: string) {
+  static setIdValue(element: Element, value: string) {
     const errorMsg = this.isIdValid(element, value);
     if (errorMsg && errorMsg.length) return message('warning', errorMsg);
     getModeling()?.updateProperties(element, { id: value });
   }
 }
+// 节点名称
 export class Name {
   static getNameValue(element: Element | BpmnElement): string | undefined {
     if (isAny(element, ['bpmn:Collaboration', 'bpmn:DataAssociation', 'bpmn:Association'])) {
@@ -205,7 +274,7 @@ export class Name {
     }
     return element?.businessObject.name
   }
-  static setNameValue(element: Element | BpmnElement, value: string): void {
+  static setNameValue(element: Element, value: string): void {
     const modeling = getModeling()
     const canvas = getCanvas()
     const bpmnFactory: BpmnFactory | undefined = getModeler()?.get('bpmnFactory')
@@ -230,23 +299,81 @@ export class Name {
     modeling?.updateModdleProperties(element, element.businessObject, { name: value })
   }
 }
-export class Version{
+// 流程相关工具
+export class Process{
   static getProcessVersionTag(element: Element): string {
     return element.businessObject.get('versionTag')
   }
-  static setProcessVersionTag(element: Element | BpmnElement, value: string) {
+  static setProcessVersionTag(element: Element, value: string) {
     getModeling()?.updateProperties(element, {
       versionTag: value
     })
   }
-}
-export class Executable{
-  static getProcessExecutable(element: Element | BpmnElement): boolean {
-    return !!element.businessObject.isExecutable
+  static getProcessExecutable(element: Element): boolean {
+    return element.businessObject.isExecutable
   }
-  static setProcessExecutable(element: Element | BpmnElement, value: boolean) {
+  static setProcessExecutable(element: Element, value: boolean) {
     getModeling()?.updateProperties(element, {
       isExecutable: value
+    })
+  }
+}
+// 文档内容
+export class Document {
+  static getDocumentValue(element: Element): string {
+    const businessObject = element?.businessObject
+    const documentation = businessObject && this.findDocumentation(businessObject.get('documentation'))
+    return documentation && documentation.text
+  }
+
+  static setDocumentValue(element: Element, value: string | undefined) {
+    const bpmnFactory: BpmnFactory | undefined = getModeler()?.get('bpmnFactory')
+    let modeling = getModeling()
+
+    const businessObject = element.businessObject
+    const documentation = this.findDocumentation(businessObject && businessObject.get('documentation'))
+    // (1) 更新或者移除 原有 documentation
+    if (documentation) {
+      if (value) {
+        return modeling?.updateModdleProperties(element, documentation, { text: value })
+      } else {
+        return modeling?.updateModdleProperties(element, businessObject, {
+          documentation: without(businessObject.get('documentation'), documentation)
+        })
+      }
+    }
+    // (2) 创建新的 documentation
+    if (value) {
+      const newDocumentation = bpmnFactory?.create('bpmn:Documentation', {
+        text: value
+      })
+      return modeling?.updateModdleProperties(element, businessObject, {
+        documentation: [...businessObject.get('documentation'), newDocumentation]
+      })
+    }
+  }
+  static findDocumentation(docs: any[]) {
+    const DOCUMENTATION_TEXT_FORMAT = 'text/plain'
+    return docs.find(function (d) {
+      return (d.textFormat || DOCUMENTATION_TEXT_FORMAT) === DOCUMENTATION_TEXT_FORMAT
+    })
+  }
+}
+
+/**
+ * 开始节点
+ */
+export class Start{
+  static getInitiatorValue(element: Element): string | undefined {
+    const prefix = getProcessEngine()
+    const businessObject = getBusinessObject(element)
+    return businessObject.get(`${prefix}:initiator`)
+  }
+  static setInitiatorValue(element: Element, value: string | undefined) {
+    const prefix = getProcessEngine()
+    const businessObject = getBusinessObject(element)
+    getModeling()?.updateModdleProperties(element, businessObject, {
+      [`${prefix}:initiator`]: value
     })
   }
 }

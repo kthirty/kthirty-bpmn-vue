@@ -10,6 +10,7 @@
 .panel_header {
   display: grid;
   padding: 8px;
+  margin-top: 10px;
   grid-template-columns: 40px auto;
   grid-template-rows: 1fr 1fr;
   grid-column-gap: 16px;

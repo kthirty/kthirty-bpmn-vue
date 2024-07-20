@@ -1,8 +1,9 @@
 import { Element } from 'bpmn-js/lib/model/Types'
 import { Moddle } from 'bpmn-js/lib/model/Types'
-import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil'
 import Modeler from 'bpmn-js/lib/Modeler'
+import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil'
 import { add as collectionAdd } from 'diagram-js/lib/util/Collections'
+import { getModdle } from './BpmnHolder'
 // 创建元素
 export function createElement(
   moddle: Moddle,
@@ -26,7 +27,7 @@ export function getEventDefinition(
 ): Element {
   const businessObject = getBusinessObject(element)
   const eventDefinitions = businessObject.get('eventDefinitions') || []
-  return eventDefinitions.find(eventDefinitions, function (definition:any) {
+  return find(eventDefinitions, function (definition:any) {
     return is(definition, eventType)
   })
 }
@@ -99,4 +100,32 @@ export function createCategoryValue(definitions: any, bpmnFactory: any): Element
   getBusinessObject(category).$parent = definitions
   getBusinessObject(categoryValue).$parent = category
   return categoryValue
+}
+export function without<T>(array: T[], ...values: T[]): T[] {
+  return array.filter(item => !values.includes(item));
+}
+/**
+ * 查找数组中第一个满足谓词函数的元素。
+ * @param array - 要搜索的数组
+ * @param predicate - 用于测试每个元素的函数
+ * @returns 数组中第一个满足谓词函数的元素，如果没有找到则返回 undefined
+ */
+function find<T>(array: T[], predicate: (value: T, index: number, obj: T[]) => boolean): T | undefined {
+  for (let i = 0; i < array.length; i++) {
+    if (predicate(array[i], i, array)) {
+      return array[i];
+    }
+  }
+  return undefined;
+}
+// 创建Moddle
+export function createModdleElement(
+  elementType: string,
+  properties: Record<string, any>,
+  parent?: Element
+): Element {
+  const moddle = getModdle()
+  const element = moddle.create(elementType, properties)
+  parent && (element.$parent = parent)
+  return element
 }

@@ -1,7 +1,5 @@
-import { ElementLike } from 'diagram-js/lib/core'
-import { ViewerOptions } from 'diagram-js/lib/model/Types'
-import { ModuleDeclaration } from 'didi'
 import { defaultLang } from '@/i18n'
+import { ElementLike } from 'diagram-js/lib/model/Types'
 
 export type BpmnElement = ElementLike & { type: string }
 
@@ -46,10 +44,6 @@ export const defaultSettings: EditorSettings = {
 }
 
 
-export type ModelerOptions<E extends Element> = ViewerOptions<E> & {
-  additionalModules: ModuleDeclaration[]
-  moddleExtensions: Object
-}
 
 // bpmn.js 事件参数
 // 1. canvas 事件
@@ -57,7 +51,7 @@ export type CanvasEventParams = {
   svg: SVGElement
   viewport: SVGElement
 }
-
+// 连线条件相关
 export interface ConditionalForm {
   conditionType?: string
   expression?: string

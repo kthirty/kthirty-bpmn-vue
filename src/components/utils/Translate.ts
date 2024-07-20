@@ -1,5 +1,5 @@
-import zh_CN from '../i18n/zh_CN'
-import en_US from '../i18n/en_US'
+import zh_CN from '@/i18n/zh_CN'
+import en_US from '@/i18n/en_US'
 
 const languages = {
   zh_CN,

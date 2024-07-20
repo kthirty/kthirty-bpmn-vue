@@ -1,22 +1,21 @@
-import { defineComponent, Component, markRaw, onMounted, ref } from 'vue'
+import { Component, defineComponent, markRaw, onMounted, ref } from 'vue'
 import { Collapse } from 'ant-design-vue'
-import { Element, Connection, Label, Shape } from 'bpmn-js/lib/model/Types'
+import { Element } from 'bpmn-js/lib/model/Types'
 import { BpmnElement } from '@/components/types'
 import { debounce } from '../utils/BpmnElementHelper'
 import EventEmitter from '../utils/EventEmitter'
 import getBpmnIconType from '@/bpmn-icons/getIconType'
 import bpmnIcons from '@/bpmn-icons'
 import BpmnIcon from '../common/BpmnIcon.vue'
-import Logger from '@/utils/Logger'
+import Logger from '../utils/Logger'
 import styles from '../styles.module.scss'
-import {getElRegistry ,setElement , getModeler} from '../utils/BpmnHolder'
+import { getElRegistry, getModeler, setElement } from '../utils/BpmnHolder'
 
-import { customTranslate } from '@/utils/Translate'
-import ElementGenerations from './components/ElementGenerations.vue'
-import ElementDocumentations from './components/ElementDocumentations.vue'
-import ElementStartInitiator from './components/ElementStartInitiator.vue'
-import ElementConditional from './components/ElementConditional.vue'
+import { customTranslate } from '../utils/Translate'
 import ElementBaseInfo from './components/ElementBaseInfo.vue'
+import ElementDocument from './components/ElementDocument.vue'
+import ElementStart from './components/ElementStart.vue'
+import ElementCondition from './components/ElementCondition.vue'
 
 
 const Panel = defineComponent({
@@ -36,20 +35,19 @@ const Panel = defineComponent({
       renderComponents.splice(0, renderComponents.length)
       // 添加基础组件
       renderComponents.push(ElementBaseInfo)
-      renderComponents.push(ElementDocumentations)
-      // 开始节点
-      renderComponents.push(ElementStartInitiator)
-      // 连线条件
-      renderComponents.push(ElementConditional)
+      renderComponents.push(ElementDocument)
+      renderComponents.push(ElementStart)
+      renderComponents.push(ElementCondition)
 
     }
 
     // 设置选中元素，更新 store
-    const setCurrentElement = debounce((element: Shape | Element | Connection | Label | null) => {
-      let activatedElement: BpmnElement | undefined = element
+    const setCurrentElement = debounce((element: Element | null) => {
+      let activatedElement: Element | null = element
       let activatedElementTypeName = ''
       // 验证当前选中节点
       if (!activatedElement) {
+        // @ts-ignore
         activatedElement =
           getElRegistry()?.find((el) => el.type === 'bpmn:Process') ||
           getElRegistry()?.find((el) => el.type === 'bpmn:Collaboration')

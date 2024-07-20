@@ -5,6 +5,7 @@ import ElementRegistry from 'diagram-js/lib/core/ElementRegistry'
 import { Moddle } from 'bpmn-js/lib/model/Types'
 import Modeling from 'bpmn-js/lib/features/modeling/Modeling'
 import type Canvas from 'diagram-js/lib/core/Canvas'
+import editor from '@/store/editor'
 
 export function getModeling(): Modeling | undefined {
   return modelerStore().getModeling
@@ -33,3 +34,4 @@ export function getElRegistry(): ElementRegistry | undefined {
 export const getActive = (): Element | undefined => modelerStore().getActive
 export const getActiveId = (): string | undefined => modelerStore().getActiveId
 export const getCanvas = () : Canvas | undefined => modelerStore().getCanvas
+export const getProcessEngine = () : string =>  editor().getProcessEngine
