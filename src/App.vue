@@ -3,16 +3,12 @@ import Designer from './components/Designer'
 import Panel from './components/Panel'
 import {ref} from "vue";
 import {EmptyXml} from "./components/utils/BpmnElementHelper";
-import {Button} from 'ant-design-vue'
-import Logger from './components/utils/Logger'
 
 
 const xml = ref<string>(EmptyXml())
-const logXml = () => Logger.prettySuccess('Current Xml',xml.value)
 </script>
 
 <template>
-  <Button @click="logXml">Console</Button>
   <div style="display: flex;height: 95vh">
     <Designer v-model:xml="xml"/>
     <Panel/>

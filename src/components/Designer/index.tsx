@@ -13,6 +13,7 @@ import { EmptyXml } from '../utils/BpmnElementHelper'
 import styles from '../styles.module.scss'
 import { getModeler, setModeler } from '../utils/BpmnHolder'
 import Logger from '../utils/Logger'
+import Toolbar from '../Toolbar/index.vue'
 
 const Designer = defineComponent({
   name: 'BpmnDesigner',
@@ -65,7 +66,10 @@ const Designer = defineComponent({
       }
     })
 
-    return () => <div ref={designer} class={styles.designer}></div>
+    return () => <div class={styles.designer}>
+      <Toolbar/>
+      <div ref={designer} class={styles.designer_panel}></div>
+    </div>
   }
 })
 export default Designer
