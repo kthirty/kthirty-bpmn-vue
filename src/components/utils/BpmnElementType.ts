@@ -2,6 +2,7 @@ import { Element ,Connection} from 'bpmn-js/lib/model/Types'
 import { is,isAny } from 'bpmn-js/lib/util/ModelUtil'
 import {BpmnElement} from '../types'
 import {getEventDefinition} from './BpmnElementHelper'
+import { getProcessEngine } from '@/components/utils/BpmnHolder'
 // 是否开始节点
 export function isStartEvent(element: Element): boolean {
   return is(element, 'bpmn:StartEvent')
@@ -36,4 +37,8 @@ export function isConditionEventDefinition(element: Element): boolean {
 // 是否为流程
 export function isProcess(element: BpmnElement): boolean {
   return is(element, 'bpmn:Process')
+}
+// 是否支持选择任务人
+export function isUserTask(element: Element): boolean {
+  return is(element, 'bpmn:UserTask')
 }

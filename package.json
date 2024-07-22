@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@types/bpmn-moddle": "^5.1.11",
     "@vitejs/plugin-vue-jsx": "^4.0.0",
     "ant-design-vue": "^4.2.3",
     "bpmn-js": "^17.9.1",

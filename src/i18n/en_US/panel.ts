@@ -50,5 +50,11 @@ export default {
   operations: 'operations',
   edit: 'edit',
   remove: 'remove',
-  confirm: 'confirm'
+  confirm: 'confirm',
+
+  assignee: 'assignee',
+  candidateUsers: 'candidateUsers',
+  candidateGroups: 'candidateGroups',
+  dueDate: 'dueDate',
+  priority: 'priority',
 }

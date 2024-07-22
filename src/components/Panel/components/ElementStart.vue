@@ -5,11 +5,11 @@
   import LucideIcon from '../../common/LucideIcon.vue'
   import { onMounted, ref, watch } from 'vue'
   import {Start} from '../../utils/BpmnElementProp'
-  import { BpmnElement } from '../../types'
   import {isCanSetInitiator} from '../../utils/BpmnElementType'
+  import { Element } from 'bpmn-js/lib/model/Types'
 
   defineOptions({ name: 'ElementStart' })
-  const props = defineProps({ element: Object as BpmnElement })
+  const props = defineProps<{element: Element}>()
 
   const initiator = ref<string>()
   const setElementInitiator = () => Start.setInitiatorValue(props.element,initiator.value)

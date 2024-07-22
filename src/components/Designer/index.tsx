@@ -14,6 +14,7 @@ import styles from '../styles.module.scss'
 import { getModeler, setModeler } from '../utils/BpmnHolder'
 import Logger from '../utils/Logger'
 import Toolbar from '../Toolbar/index.vue'
+import flowableModdleDescriptors from '../moddle-extensions/flowable.json'
 
 const Designer = defineComponent({
   name: 'BpmnDesigner',
@@ -41,6 +42,9 @@ const Designer = defineComponent({
             CreateAppendAnythingModule,
             BpmnColorPickerModule
           ],
+          moddleExtensions: {
+            flowable: flowableModdleDescriptors,
+          },
           keyboard: {
             bindTo: window
           }

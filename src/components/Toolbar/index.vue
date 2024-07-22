@@ -59,7 +59,7 @@
     .ant-modal-content {
       display: flex;
       flex-direction: column;
-      height: calc(100vh);
+      min-height: calc(100vh);
     }
     .ant-modal-confirm-body-wrapper{
       display: flex;

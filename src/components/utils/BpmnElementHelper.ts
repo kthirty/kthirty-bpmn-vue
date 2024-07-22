@@ -3,7 +3,8 @@ import { Moddle } from 'bpmn-js/lib/model/Types'
 import Modeler from 'bpmn-js/lib/Modeler'
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil'
 import { add as collectionAdd } from 'diagram-js/lib/util/Collections'
-import { getModdle } from './BpmnHolder'
+import { getModdle, getModeling, getProcessEngine } from './BpmnHolder'
+
 // 创建元素
 export function createElement(
   moddle: Moddle,
@@ -15,27 +16,30 @@ export function createElement(
   parent && (element.$parent = parent)
   return element
 }
+
 // 提示
-export function message(method:String,errorMsg: String){
+export function message(method: String, errorMsg: String) {
   // @ts-ignore
   window.__messageBox[method](errorMsg)
 }
+
 // 获取节点事件定义
 export function getEventDefinition(
-  element: Element ,
+  element: Element,
   eventType: string
 ): Element {
   const businessObject = getBusinessObject(element)
   const eventDefinitions = businessObject.get('eventDefinitions') || []
-  return find(eventDefinitions, function (definition:any) {
+  return find(eventDefinitions, function(definition: any) {
     return is(definition, eventType)
   })
 }
+
 // 获取空的Xml
-export function EmptyXml (key?: string, name?: string): string {
+export function EmptyXml(key?: string, name?: string): string {
   const timestamp = Date.now()
-  key = key || `Process_${timestamp}`;
-  name = name || `业务流程_${timestamp}`;
+  key = key || `Process_${timestamp}`
+  name = name || `业务流程_${timestamp}`
   return `<?xml version="1.0" encoding="UTF-8"?>
   <bpmn:definitions 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -51,8 +55,9 @@ export function EmptyXml (key?: string, name?: string): string {
     </bpmndi:BPMNDiagram>
   </bpmn:definitions>`
 }
+
 // 创建一个新的图表
-export async function createNewDiagram(modeler: Modeler,newXml?: string, settings?: any) {
+export async function createNewDiagram(modeler: Modeler, newXml?: string, settings?: any) {
   try {
     const timestamp = Date.now()
     const { processId, processName } = settings || {}
@@ -76,20 +81,21 @@ export async function createNewDiagram(modeler: Modeler,newXml?: string, setting
  * @returns A new debounced function.
  */
 export function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => void {
-  let timeout: ReturnType<typeof setTimeout> | null;
+  let timeout: ReturnType<typeof setTimeout> | null
 
   return function(this: ThisParameterType<T>, ...args: Parameters<T>): void {
     const later = () => {
-      timeout = null;
-      func.apply(this, args);
-    };
+      timeout = null
+      func.apply(this, args)
+    }
 
     if (timeout !== null) {
-      clearTimeout(timeout);
+      clearTimeout(timeout)
     }
-    timeout = setTimeout(later, wait);
-  };
+    timeout = setTimeout(later, wait)
+  }
 }
+
 // 创建元素
 export function createCategoryValue(definitions: any, bpmnFactory: any): Element {
   const categoryValue = bpmnFactory.create('bpmn:CategoryValue')
@@ -101,9 +107,11 @@ export function createCategoryValue(definitions: any, bpmnFactory: any): Element
   getBusinessObject(categoryValue).$parent = category
   return categoryValue
 }
+
 export function without<T>(array: T[], ...values: T[]): T[] {
-  return array.filter(item => !values.includes(item));
+  return array.filter(item => !values.includes(item))
 }
+
 /**
  * 查找数组中第一个满足谓词函数的元素。
  * @param array - 要搜索的数组
@@ -113,11 +121,12 @@ export function without<T>(array: T[], ...values: T[]): T[] {
 function find<T>(array: T[], predicate: (value: T, index: number, obj: T[]) => boolean): T | undefined {
   for (let i = 0; i < array.length; i++) {
     if (predicate(array[i], i, array)) {
-      return array[i];
+      return array[i]
     }
   }
-  return undefined;
+  return undefined
 }
+
 // 创建Moddle
 export function createModdleElement(
   elementType: string,
@@ -128,4 +137,20 @@ export function createModdleElement(
   const element = moddle.create(elementType, properties)
   parent && (element.$parent = parent)
   return element
+}
+
+// 获取节点属性
+export function getExPropValue<T>(element: any, propKey: string): T {
+  const exPropKey = `${getProcessEngine()}:${propKey}`
+  return element && element.get ? element.get(exPropKey) : element ? element[exPropKey] : element
+}
+
+// 修改节点属性
+export function updateExPropValue(element: Element, propKey: string, value: any) {
+  const exPropKey = `${getProcessEngine()}:${propKey}`
+  console.log('updateExPropValue',exPropKey)
+  getModeling()
+    ?.updateModdleProperties(element
+      , getBusinessObject(element)
+      , { [exPropKey]: value === '' ? undefined : value })
 }

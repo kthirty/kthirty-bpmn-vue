@@ -3,19 +3,17 @@
   import LucideIcon from '../../common/LucideIcon.vue'
   import EditItem from '../../common/EditItem.vue'
   import {CollapsePanel , Textarea} from 'ant-design-vue'
-  import { BpmnElement } from '@/components/types'
+  import { Element } from 'bpmn-js/lib/model/Types'
   import { onMounted, ref, watch } from 'vue'
   import {Document} from '../../utils/BpmnElementProp'
 
   defineOptions({ name: 'ElementDocument' })
-  const props = defineProps({ element: Object as BpmnElement })
+  const props = defineProps<{element: Element}>()
 
   const elementDoc = ref<string>('')
   const updateElementDoc = () => Document.setDocumentValue(props.element,elementDoc.value)
 
-  const updateInfo = () => {
-    elementDoc.value = Document.getDocumentValue(props.element)
-  }
+  const updateInfo = () => elementDoc.value = Document.getDocumentValue(props.element)
   watch(() => props.element, updateInfo)
   onMounted(updateInfo)
 

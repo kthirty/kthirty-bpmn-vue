@@ -16,6 +16,7 @@ import ElementBaseInfo from './components/ElementBaseInfo.vue'
 import ElementDocument from './components/ElementDocument.vue'
 import ElementStart from './components/ElementStart.vue'
 import ElementCondition from './components/ElementCondition.vue'
+import ElementUserTask from './components/ElementUserTask.vue'
 
 
 const Panel = defineComponent({
@@ -38,6 +39,7 @@ const Panel = defineComponent({
       renderComponents.push(ElementDocument)
       renderComponents.push(ElementStart)
       renderComponents.push(ElementCondition)
+      renderComponents.push(ElementUserTask)
 
     }
 
