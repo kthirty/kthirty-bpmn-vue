@@ -10,3 +10,5 @@ declare module "*.scss" {
   const classes: { readonly [key: string]: string };
   export default classes;
 }
+declare module 'bpmn-js-create-append-anything';
+declare module 'bpmn-js-color-picker';

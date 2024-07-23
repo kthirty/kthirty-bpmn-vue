@@ -2,9 +2,17 @@ import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil'
 import { Connection, Element, ModdleElement } from 'bpmn-js/lib/model/Types'
 import { isAny } from 'bpmn-js/lib/features/modeling/util/ModelingUtil'
 import BpmnFactory from 'bpmn-js/lib/features/modeling/BpmnFactory'
-import { createElement, message, getEventDefinition, createCategoryValue,without ,createModdleElement} from './BpmnElementHelper'
+import {
+  createElement,
+  message,
+  getEventDefinition,
+  createCategoryValue,
+  without,
+  createModdleElement,
+  addExtensionElements, removeExtensionElements, getExtensionElementsList
+} from './BpmnElementHelper'
 import { getCanvas, getModdle, getModeler, getModeling, getProcessEngine } from './BpmnHolder'
-import { BpmnElement } from '../types'
+import { BpmnElement, BpmnScript, ExecutionListenerForm, ScriptForm } from '../types'
 import ElementRegistry from 'diagram-js/lib/core/ElementRegistry'
 
 
@@ -386,4 +394,100 @@ export class Start{
       [`${prefix}:initiator`]: value
     })
   }
+}
+export function getListenersContainer(element: Element): ModdleElement {
+  const businessObject = getBusinessObject(element)
+  return businessObject?.get('processRef') || businessObject
+}
+
+/**
+ * 监听器
+ */
+export class Listener{
+  static addExecutionListener(element: Element, props: ExecutionListenerForm) {
+    const prefix = getProcessEngine()
+    const moddle = getModdle()
+    const businessObject = getListenersContainer(element)
+    const listener = moddle!.create(`${prefix}:ExecutionListener`, {})
+    this.updateListenerProperty(element, listener, props)
+    addExtensionElements(element, businessObject, listener)
+  }
+  static updateListenerProperty(
+    element: Element,
+    listener: ModdleElement,
+    props: ExecutionListenerForm
+  ) {
+    const modeling = getModeling()
+    const prefix = getProcessEngine()
+    const { event, class: listenerClass, expression, delegateExpression,
+      script, type, fields
+    } = props
+    const updateProperty = (key:any, value:any) =>
+      modeling?.updateModdleProperties(element, listener, { [`${prefix}:${key}`]: value })
+
+    event && updateProperty('event', event)
+    listenerClass && updateProperty('class', listenerClass)
+    expression && updateProperty('expression', expression)
+    delegateExpression && updateProperty('delegateExpression', delegateExpression)
+
+    if (script) {
+      const bpmnScript = Script.createScript(script)
+      modeling?.updateModdleProperties(element, listener, { script: bpmnScript })
+    }
+  }
+  static updateExecutionListener(
+    element: Element,
+    props: ExecutionListenerForm,
+    listener: ModdleElement
+  ) {
+    removeExtensionElements(element, getListenersContainer(element), listener)
+    Listener.addExecutionListener(element, props)
+  }
+  static getExecutionListenerTypes(element: Element) {
+    if (is(element, 'bpmn:SequenceFlow')) {
+      return [{ label: 'Take', value: 'take' }]
+    }
+    return [
+      { label: 'Start', value: 'start' },
+      { label: 'End', value: 'end' }
+    ]
+  }
+  static getExecutionListeners(element: Element): ModdleElement[] {
+    const prefix = getProcessEngine()
+    const businessObject = getListenersContainer(element)
+    return getExtensionElementsList(businessObject, `${prefix}:ExecutionListener`)
+  }
+  static getDefaultEvent(element: Element) {
+    return is(element, 'bpmn:SequenceFlow') ? 'take' : 'start'
+  }
+  static getExecutionListenerType(listener: ModdleElement): string {
+    const prefix = getProcessEngine()
+    if (isAny(listener, [`${prefix}:ExecutionListener`])) {
+      if (listener.get(`${prefix}:class`)) return 'class'
+      if (listener.get(`${prefix}:expression`)) return 'expression'
+      if (listener.get(`${prefix}:delegateExpression`)) return 'delegateExpression'
+      if (listener.get('script')) return 'script'
+    }
+    return ''
+  }
+}
+export class Script{
+
+  static createScript(props: ScriptForm): ModdleElement {
+    const prefix = getProcessEngine()
+    const moddle = getModdle()
+    const { scriptFormat, value, resource } = props
+    return moddle!.create(`${prefix}:Script`, { scriptFormat, value, resource })
+  }
+
+  static getScriptType(script: ModdleElement & BpmnScript): string {
+    if (script.get('resource')) {
+      return 'External Resource'
+    }
+    if (script.get('value')) {
+      return 'Inline Script'
+    }
+    return 'none'
+  }
+
 }

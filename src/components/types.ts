@@ -60,3 +60,37 @@ export interface ConditionalForm {
   body?: string
   resource?: string
 }
+
+export interface ScriptForm extends BpmnScript {
+  scriptType?: string
+}
+export interface BpmnScript {
+  scriptFormat?: string
+  resource?: string
+  value?: string
+  scriptType?: string
+}
+
+export interface BpmnListenerField {
+  name: string
+  expression?: string
+  stringValue?: string
+  string?: string
+  htmlVar?: string
+}
+export interface BpmnExecutionListener {
+  event: string
+  expression?: string
+  class?: string
+  delegateExpression?: string
+  script?: BpmnScript
+  fields?: BpmnListenerField[]
+}
+export interface ExecutionListenerForm extends BpmnExecutionListener {
+  type: string
+  script?: BpmnScript
+}
+export interface FormItemVisible {
+  listenerType: string
+  scriptType: string
+}

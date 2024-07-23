@@ -24,9 +24,6 @@ export function customTranslate(template: string, replacements?: Record<string, 
 
   // Translate
   const val = getByKey(translations.elements,template)
-  if(!val && template.startsWith('Sub')){
-    console.log('Translate',translations.elements,template)
-  }
   template = val || template
 
   // Replace

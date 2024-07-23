@@ -1,20 +1,17 @@
 import { defineComponent, ref, toRefs, onMounted, markRaw } from 'vue'
 import type { PropType } from 'vue'
 import { BaseViewerOptions } from 'bpmn-js/lib/BaseViewer'
-import { CreateAppendAnythingModule } from 'bpmn-js-create-append-anything';
-import BpmnColorPickerModule from 'bpmn-js-color-picker';
 import Modeler from 'bpmn-js/lib/Modeler'
 import 'bpmn-js/dist/assets/diagram-js.css'
 import 'bpmn-js/dist/assets/bpmn-js.css'
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css'
-import Translate from '../utils/Translate'
 import EventEmitter from '../utils/EventEmitter'
 import { EmptyXml } from '../utils/BpmnElementHelper'
 import styles from '../styles.module.scss'
 import { getModeler, setModeler } from '../utils/BpmnHolder'
 import Logger from '../utils/Logger'
 import Toolbar from '../Toolbar/index.vue'
-import flowableModdleDescriptors from '../moddle-extensions/flowable.json'
+import config from './config'
 
 const Designer = defineComponent({
   name: 'BpmnDesigner',
@@ -37,17 +34,7 @@ const Designer = defineComponent({
         // 初始化参数
         const options: BaseViewerOptions = {
           container: designer!.value as HTMLElement,
-          additionalModules: [
-            Translate,
-            CreateAppendAnythingModule,
-            BpmnColorPickerModule
-          ],
-          moddleExtensions: {
-            flowable: flowableModdleDescriptors,
-          },
-          keyboard: {
-            bindTo: window
-          }
+          ...config
         }
         // 开始初始化Modeler
         const modeler: Modeler = new Modeler(options)

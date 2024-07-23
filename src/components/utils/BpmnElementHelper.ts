@@ -1,9 +1,10 @@
-import { Element } from 'bpmn-js/lib/model/Types'
+import { Element, ModdleElement } from 'bpmn-js/lib/model/Types'
 import { Moddle } from 'bpmn-js/lib/model/Types'
 import Modeler from 'bpmn-js/lib/Modeler'
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil'
 import { add as collectionAdd } from 'diagram-js/lib/util/Collections'
 import { getModdle, getModeling, getProcessEngine } from './BpmnHolder'
+import { isArray } from 'ant-design-vue/es/_util/util'
 
 // 创建元素
 export function createElement(
@@ -153,4 +154,68 @@ export function updateExPropValue(element: Element, propKey: string, value: any)
     ?.updateModdleProperties(element
       , getBusinessObject(element)
       , { [exPropKey]: value === '' ? undefined : value })
+}
+
+
+/**
+ * Add one or more extension elements. Create bpmn:ExtensionElements if it doesn't exist.
+ */
+export function addExtensionElements(
+  element: Element,
+  businessObject: ModdleElement,
+  extensionElementToAdd: ModdleElement
+) {
+  const modeling = getModeling()
+  let extensionElements = businessObject.get('extensionElements')
+
+  // (1) create bpmn:ExtensionElements if it doesn't exist
+  if (!extensionElements) {
+    extensionElements = createModdleElement(
+      'bpmn:ExtensionElements',
+      { values: [] },
+      businessObject
+    )
+    modeling!.updateModdleProperties(element, businessObject, { extensionElements })
+  }
+  extensionElementToAdd.$parent = extensionElements
+
+  // (2) add extension element to list
+  modeling!.updateModdleProperties(element, extensionElements, {
+    values: [...extensionElements.get('values'), extensionElementToAdd]
+  })
+}
+
+/**
+ * Remove one or more extension elements. Remove bpmn:ExtensionElements afterwards if it's empty.
+ */
+export function removeExtensionElements(
+  element: Element,
+  businessObject: ModdleElement,
+  extensionElementsToRemove: ModdleElement | ModdleElement[]
+) {
+  if (!isArray(extensionElementsToRemove)) {
+    extensionElementsToRemove = [extensionElementsToRemove]
+  }
+  const extensionElements = businessObject.get('extensionElements'),
+    values = extensionElements.get('values').filter((value) => !extensionElementsToRemove.includes(value))
+  const modeling = getModeling()
+  modeling!.updateModdleProperties(element, extensionElements, { values })
+}
+
+/**
+ * Get extension elements of business object. Optionally filter by type.
+ */
+export function getExtensionElementsList(
+  businessObject: ModdleElement,
+  type?: string
+): ModdleElement[] {
+  const extensionElements = businessObject?.get('extensionElements')
+  if (!extensionElements) return []
+
+  const values = extensionElements.get('values')
+  if (!values || !values.length) return []
+
+  if (type) return values.filter((value) => is(value, type))
+
+  return values
 }

@@ -11,12 +11,13 @@ import Logger from '../utils/Logger'
 import styles from '../styles.module.scss'
 import { getElRegistry, getModeler, setElement } from '../utils/BpmnHolder'
 
-import { customTranslate } from '../utils/Translate'
+import { customTranslate } from '../Designer/config/modules/Translate'
 import ElementBaseInfo from './components/ElementBaseInfo.vue'
 import ElementDocument from './components/ElementDocument.vue'
 import ElementStart from './components/ElementStart.vue'
 import ElementCondition from './components/ElementCondition.vue'
 import ElementUserTask from './components/ElementUserTask.vue'
+import ElementExecutionListeners from './components/ElementExecutionListeners.vue'
 
 
 const Panel = defineComponent({
@@ -40,6 +41,7 @@ const Panel = defineComponent({
       renderComponents.push(ElementStart)
       renderComponents.push(ElementCondition)
       renderComponents.push(ElementUserTask)
+      renderComponents.push(ElementExecutionListeners)
 
     }
 

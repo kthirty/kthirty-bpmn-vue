@@ -42,3 +42,19 @@ export function isProcess(element: BpmnElement): boolean {
 export function isUserTask(element: Element): boolean {
   return is(element, 'bpmn:UserTask')
 }
+// 是否支持设置监听器
+export function isExecutable(element: Element): boolean {
+  const LISTENER_ALLOWED_TYPES = [
+    'bpmn:Activity',
+    'bpmn:Event',
+    'bpmn:Gateway',
+    'bpmn:SequenceFlow',
+    'bpmn:Process',
+    'bpmn:Participant'
+  ]
+  if (isAny(element, LISTENER_ALLOWED_TYPES)) return true
+  if (is(element, 'bpmn:Participant')) {
+    return !!element.businessObject.processRef
+  }
+  return false
+}
