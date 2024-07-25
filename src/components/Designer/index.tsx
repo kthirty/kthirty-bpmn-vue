@@ -57,10 +57,7 @@ const Designer = defineComponent({
       }
     })
 
-    return () => <div class={styles.designer}>
-      <Toolbar/>
-      <div ref={designer} class={styles.designer_panel}></div>
-    </div>
+    return () => <div ref={designer} class={styles.designer}></div>
   }
 })
 export default Designer

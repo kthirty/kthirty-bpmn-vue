@@ -23,11 +23,11 @@
   font-size: 14px;
   font-weight: bolder;
 }
-.designer_panel{
-  flex: 1;
-  height: 96%;
-}
-.designer {
+.designer{
   flex: 1;
   height: 100%;
+}
+.toolbar{
+  height: 30px;
+  width: 100%;
 }

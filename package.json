@@ -24,6 +24,7 @@
     "vue-i18n": "^9.13.1"
   },
   "devDependencies": {
+    "@types/bpmn-moddle": "^5.1.11",
     "@typescript-eslint/eslint-plugin": "^5.59.1",
     "@typescript-eslint/parser": "^5.59.1",
     "@vitejs/plugin-vue": "^5.0.5",

@@ -48,6 +48,9 @@ importers:
         specifier: ^9.13.1
         version: 9.13.1(vue@3.4.31(typescript@5.5.3))
     devDependencies:
+      '@types/bpmn-moddle':
+        specifier: ^5.1.11
+        version: 5.1.11
       '@typescript-eslint/eslint-plugin':
         specifier: ^5.59.1
         version: 5.62.0(@typescript-eslint/parser@5.62.0(eslint@8.57.0)(typescript@5.5.3))(eslint@8.57.0)(typescript@5.5.3)
@@ -563,6 +566,9 @@ packages:
   '@trysound/sax@0.2.0':
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
     engines: {node: '>=10.13.0'}
+
+  '@types/bpmn-moddle@5.1.11':
+    resolution: {integrity: sha512-YNVOQ+zMDVG9xv53PqlGDG/jKa0jMPNgK6HS4DFf0PRVP4sErKN1xRhGdya9H+0TX9QubAwVvxFbjWz9KskAMA==}
 
   '@types/estree@1.0.5':
     resolution: {integrity: sha512-/kYRxGDLWzHOB7q+wtSUQlFrtcdUccpfy+X+9iMBpHK8QLLhx2wIPYuS5DYtR9Wa/YlZAbIovy7qVdB1Aq6Lyw==}
@@ -3070,6 +3076,8 @@ snapshots:
       nanopop: 2.4.2
 
   '@trysound/sax@0.2.0': {}
+
+  '@types/bpmn-moddle@5.1.11': {}
 
   '@types/estree@1.0.5': {}
 
