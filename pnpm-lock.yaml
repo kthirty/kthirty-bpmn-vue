@@ -17,6 +17,9 @@ importers:
       bpmn-js:
         specifier: ^17.9.1
         version: 17.9.1
+      bpmn-js-bpmnlint:
+        specifier: ^0.22.3
+        version: 0.22.3(bpmn-js@17.9.1)(bpmnlint@10.3.0)(diagram-js@14.8.0)
       bpmn-js-color-picker:
         specifier: ^0.7.1
         version: 0.7.1(bpmn-js@17.9.1)
@@ -26,6 +29,9 @@ importers:
       bpmn-moddle:
         specifier: ^9.0.1
         version: 9.0.1
+      bpmnlint:
+        specifier: ^10.3.0
+        version: 10.3.0
       diagram-js:
         specifier: ^14.8.0
         version: 14.8.0
@@ -249,6 +255,9 @@ packages:
     peerDependencies:
       bpmn-js: '>= 11'
       diagram-js: '>= 11.3.0'
+
+  '@bpmn-io/moddle-utils@0.2.1':
+    resolution: {integrity: sha512-iv9zwk7PEGupSq9bkVZNFL0ZmoJLHExlUcjsiYx200Nh3a5mH9BHXF+PLaSaiE4882KVEirklpWf3oQLAmShSA==}
 
   '@ctrl/tinycolor@3.6.1':
     resolution: {integrity: sha512-SITSV6aIXsuVNV3f3O0f2n/cgyEDWoSqtZMYiAmcsYHydcKrOz3gUxB/iXd/Qf08+IZX4KpgNbvUdMBmWz+kcA==}
@@ -727,6 +736,10 @@ packages:
   ajv@6.12.6:
     resolution: {integrity: sha512-j3fVLgvTo527anyYyJOGTYJbG+vnnQYvE0m5mmkc1TK+nxAppkCLMIL0aZ4dblVCNoGShhm+kzE4ZUykBoMg4g==}
 
+  ansi-colors@4.1.3:
+    resolution: {integrity: sha512-/6w/C21Pm1A7aZitlI5Ni/2J6FFQN8i1Cvz3kHABAAbw93v/NlvKdVOqz7CCWz/3iv/JplRSEEZ83XION15ovw==}
+    engines: {node: '>=6'}
+
   ansi-regex@2.1.1:
     resolution: {integrity: sha512-TIGnTpdo+E3+pCyAluZvtED5p5wCqLdezCyhPZzKPcxvFplEt4i+W7OONCKgeZFT3+y5NZZfOOS/Bdcanm1MYA==}
     engines: {node: '>=0.10.0'}
@@ -850,6 +863,13 @@ packages:
   boolbase@1.0.0:
     resolution: {integrity: sha512-JZOSA7Mo9sNGB8+UjSgzdLtokWAky1zbztM3WRLCbZ70/3cTANmQmOdR7y2g+J0e2WXywy1yS468tY+IruqEww==}
 
+  bpmn-js-bpmnlint@0.22.3:
+    resolution: {integrity: sha512-cDDK58/FA4ETXb05Zxmr9bXuqYd9hrzhvtlooxSqeYI/Yw2rOIrAtbC3u8I3otYDCAMQVC2vJ5isd8Ee/bZusw==}
+    peerDependencies:
+      bpmn-js: '*'
+      bpmnlint: '>= 3.2'
+      diagram-js: '*'
+
   bpmn-js-color-picker@0.7.1:
     resolution: {integrity: sha512-SsDKewfopMPFTETAS1ZUWNKZvnQ7OBsODVcFEL2GzrQusW1VtnoCB2wc2vOtcafLAUPoUaRnVx5gZNtvywnJQA==}
     peerDependencies:
@@ -867,6 +887,14 @@ packages:
   bpmn-moddle@9.0.1:
     resolution: {integrity: sha512-jO2P5RBx0cZCCd+imqhpNE5anttaYuGd71u76NEA/qMZwJSW1t5ETAtw9/E2InfiPU2w0TR8oxPyopJXRc9VQg==}
     engines: {node: '>= 18'}
+
+  bpmnlint-utils@1.1.1:
+    resolution: {integrity: sha512-Afdb77FmwNB3INyUfbzXW40yY+mc0qYU3SgDFeI4zTtduiVomOlfqoXiEaUIGI8Hyh7aVYpmf3O97P2w7x0DYQ==}
+
+  bpmnlint@10.3.0:
+    resolution: {integrity: sha512-7z1j7erchQ+vPccUWUsSgQM/8XlMt3q7eKyRa67SeaQFwdswXi3cv1pqyKJhnKBxCbeTcU07q9fH4640CdRu+g==}
+    engines: {node: '>= 16'}
+    hasBin: true
 
   brace-expansion@1.1.11:
     resolution: {integrity: sha512-iCuPHDFgrHX7H2vEI/5xpz07zSHB00TpugqhmYtVmMO6518mCuRMoOYFldEBl0g187ufozdaHgWKcYFb61qGiA==}
@@ -923,6 +951,10 @@ packages:
     resolution: {integrity: sha512-qOhPa/Fj7s6TY8H8esGu5QNpMMQxz79h+urzrNYN6mn+9BnxlDGf5QZ+XeCDsxSjPqsSR56XOZOJmpeurnLMeg==}
     engines: {node: '>=0.10.0'}
 
+  cli-table@0.3.11:
+    resolution: {integrity: sha512-IqLQi4lO0nIB4tcdTpN4LCB9FI3uqrJZK7RC515EnhZ6qBaglkIgICb1wjeAqpdoOabm1+SuQtkXIPdYC93jhQ==}
+    engines: {node: '>= 0.2.0'}
+
   clone@2.1.2:
     resolution: {integrity: sha512-3Pe/CF1Nn94hyhIYpjtiLhdCoEoz0DqQ+988E9gmeEdQZlojxnOb74wctFyuwWQHzqyf9X7C7MG8juUpqBJT8w==}
     engines: {node: '>=0.8'}
@@ -947,6 +979,14 @@ packages:
 
   color-name@1.1.4:
     resolution: {integrity: sha512-dOy+3AuW3a2wNbZHIuMZpTcgjGuLU/uBL/ubcZF9OXbDo8ff4O8yVp5Bf0efS8uEoYo5q4Fx7dY9OgQGXgAsQA==}
+
+  color-support@1.1.3:
+    resolution: {integrity: sha512-qiBjkpbMLO/HL68y+lh4q0/O1MZFj2RX6X/KmMa3+gJD3z+WwI1ZzDHysvqHGS3mP6mznPckpXmw1nI9cJjyRg==}
+    hasBin: true
+
+  colors@1.0.3:
+    resolution: {integrity: sha512-pFGrxThWcWQ2MsAz6RtgeWe4NK2kUE1WfsrvvlctdII745EW9I0yflqhe7++M5LEc7bV2c/9/5zc8sFcpL0Drw==}
+    engines: {node: '>=0.1.90'}
 
   commander@7.2.0:
     resolution: {integrity: sha512-QrWXB+ZQSVPmIWIhtEO9H+gwHaMGYiF5ChvoJ+K9ZGHG/sVsa6yiesAD1GC/x46sET00Xlwo1u49RVVVzvcSkw==}
@@ -1380,9 +1420,15 @@ packages:
     resolution: {integrity: sha512-DpLKbNU4WylpxJykQujfCcwYWiV/Jhm50Goo0wrVILAv5jOr9d+H+UR3PhSCD2rCCEIg0uc+G+muBTwD54JhDQ==}
     engines: {node: '>= 0.4'}
 
+  globalyzer@0.1.0:
+    resolution: {integrity: sha512-40oNTM9UfG6aBmuKxk/giHn5nQ8RVz/SS4Ir6zgzOv9/qC3kKZ9v4etGTcJbEl/NyVQH7FGU7d+X1egr57Md2Q==}
+
   globby@11.1.0:
     resolution: {integrity: sha512-jhIXaOzy1sb8IyocaruWSn1TjmnBVs8Ayhcy83rmxNJ8q2uWKCAj3CnJY+KpGSXCueAPc0i05kVvVKtP1t9S3g==}
     engines: {node: '>=10'}
+
+  globrex@0.1.2:
+    resolution: {integrity: sha512-uHJgbwAMwNFf5mLst7IWLNg14x1CkeqglJb/K3doi4dw6q2IvAAmM/Y81kevy83wP+Sst+nutFTYOGg3d1lsxg==}
 
   gopd@1.0.1:
     resolution: {integrity: sha512-d65bNlIadxvpb/A2abVdlqKqV563juRnZ1Wtk6s1sIR8uNsXR70xqIzVqxVf1eTqDunwT2MkczEeaezCKTZhwA==}
@@ -1857,6 +1903,10 @@ packages:
   moddle@7.0.0:
     resolution: {integrity: sha512-Hpte2hfKDwoZWPvDngsEHjloPnO+sKMUVkAPc0r9PrpnVLqsyPUTV0ZQU8CAp87YmRZ9QzeQMJxdKbaP9vEIKA==}
 
+  mri@1.2.0:
+    resolution: {integrity: sha512-tzzskb3bG8LvYGFF/mDTpq3jpI6Q9wc3LEmBaghu+DdCssd1FakN7Bc0hVNmEyGq1bq3RgfkCb3cmQLpNPOroA==}
+    engines: {node: '>=4'}
+
   ms@2.0.0:
     resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==}
 
@@ -2014,6 +2064,10 @@ packages:
         optional: true
       typescript:
         optional: true
+
+  pluralize@7.0.0:
+    resolution: {integrity: sha512-ARhBOdzS3e41FbkW/XWrTEtukqqLoK5+Z/4UeDaLuSW+39JPeFgs4gCGqsrJHVZX0fUrx//4OF0K1CUGwlIFow==}
+    engines: {node: '>=4'}
 
   posix-character-classes@0.1.1:
     resolution: {integrity: sha512-xTgYBc3fuo7Yt7JbiuFxSYGToMoz8fLoE6TC9Wx1P/u+LfeThMOAqmuyECnlBaaJb+u1m9hHiXUEtwW4OzfUJg==}
@@ -2402,6 +2456,9 @@ packages:
   throttle-debounce@5.0.2:
     resolution: {integrity: sha512-B71/4oyj61iNH0KeCamLuE2rmKuTO5byTOSVwECM5FA7TiAiAW+UqTKZ9ERueC4qvgSttUhdmq1mXC3kJqGX7A==}
     engines: {node: '>=12.22'}
+
+  tiny-glob@0.2.9:
+    resolution: {integrity: sha512-g/55ssRPUjShh+xkfx9UPDXqhckHEsHr4Vd9zX55oSdGZc/MD0m3sferOkwWtp98bv+kcVfEHtRJgBVJzelrzg==}
 
   tiny-svg@3.1.2:
     resolution: {integrity: sha512-qvNlv/4N48HqbNpwAhzQ9HKHlBUKgA4091x+aVfsrRXHIcQ9NA3W6ZYwdmYAIdwT+vfAAksrc9L/3RQBj5KwPw==}
@@ -2871,6 +2928,10 @@ snapshots:
       bpmn-js: 17.9.1
       diagram-js: 14.8.0
 
+  '@bpmn-io/moddle-utils@0.2.1':
+    dependencies:
+      min-dash: 4.2.1
+
   '@ctrl/tinycolor@3.6.1': {}
 
   '@emotion/hash@0.9.1': {}
@@ -3300,6 +3361,8 @@ snapshots:
       json-schema-traverse: 0.4.1
       uri-js: 4.4.1
 
+  ansi-colors@4.1.3: {}
+
   ansi-regex@2.1.1: {}
 
   ansi-regex@5.0.1: {}
@@ -3452,6 +3515,14 @@ snapshots:
 
   boolbase@1.0.0: {}
 
+  bpmn-js-bpmnlint@0.22.3(bpmn-js@17.9.1)(bpmnlint@10.3.0)(diagram-js@14.8.0):
+    dependencies:
+      bpmn-js: 17.9.1
+      bpmnlint: 10.3.0
+      diagram-js: 14.8.0
+      min-dash: 4.2.1
+      min-dom: 4.2.1
+
   bpmn-js-color-picker@0.7.1(bpmn-js@17.9.1):
     dependencies:
       bpmn-js: 17.9.1
@@ -3485,6 +3556,21 @@ snapshots:
       min-dash: 4.2.1
       moddle: 7.0.0
       moddle-xml: 11.0.0(moddle@7.0.0)
+
+  bpmnlint-utils@1.1.1: {}
+
+  bpmnlint@10.3.0:
+    dependencies:
+      '@bpmn-io/moddle-utils': 0.2.1
+      ansi-colors: 4.1.3
+      bpmn-moddle: 8.1.0
+      bpmnlint-utils: 1.1.1
+      cli-table: 0.3.11
+      color-support: 1.1.3
+      min-dash: 4.2.1
+      mri: 1.2.0
+      pluralize: 7.0.0
+      tiny-glob: 0.2.9
 
   brace-expansion@1.1.11:
     dependencies:
@@ -3581,6 +3667,10 @@ snapshots:
       isobject: 3.0.1
       static-extend: 0.1.2
 
+  cli-table@0.3.11:
+    dependencies:
+      colors: 1.0.3
+
   clone@2.1.2: {}
 
   clsx@2.1.1: {}
@@ -3601,6 +3691,10 @@ snapshots:
   color-name@1.1.3: {}
 
   color-name@1.1.4: {}
+
+  color-support@1.1.3: {}
+
+  colors@1.0.3: {}
 
   commander@7.2.0: {}
 
@@ -4186,6 +4280,8 @@ snapshots:
       define-properties: 1.2.1
       gopd: 1.0.1
 
+  globalyzer@0.1.0: {}
+
   globby@11.1.0:
     dependencies:
       array-union: 2.1.0
@@ -4194,6 +4290,8 @@ snapshots:
       ignore: 5.3.1
       merge2: 1.4.1
       slash: 3.0.0
+
+  globrex@0.1.2: {}
 
   gopd@1.0.1:
     dependencies:
@@ -4653,6 +4751,8 @@ snapshots:
     dependencies:
       min-dash: 4.2.1
 
+  mri@1.2.0: {}
+
   ms@2.0.0: {}
 
   ms@2.1.2: {}
@@ -4800,6 +4900,8 @@ snapshots:
       vue-demi: 0.14.8(vue@3.4.31(typescript@5.5.3))
     optionalDependencies:
       typescript: 5.5.3
+
+  pluralize@7.0.0: {}
 
   posix-character-classes@0.1.1: {}
 
@@ -5243,6 +5345,11 @@ snapshots:
   text-table@0.2.0: {}
 
   throttle-debounce@5.0.2: {}
+
+  tiny-glob@0.2.9:
+    dependencies:
+      globalyzer: 0.1.0
+      globrex: 0.1.2
 
   tiny-svg@3.1.2: {}
 

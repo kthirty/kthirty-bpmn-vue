@@ -10,9 +10,9 @@ const xml = ref<string>(EmptyXml())
 </script>
 
 <template>
-  <div style="height: 100vh;width: 100%">
+  <div style="height: 98vh;width: 100%">
     <Toolbar/>
-    <div style='display: flex;height: 100%;'>
+    <div style='display: flex;height: 97%;'>
       <Designer v-model:xml="xml"/>
       <Panel/>
     </div>

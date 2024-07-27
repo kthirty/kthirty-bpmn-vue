@@ -5,12 +5,12 @@ import Modeler from 'bpmn-js/lib/Modeler'
 import 'bpmn-js/dist/assets/diagram-js.css'
 import 'bpmn-js/dist/assets/bpmn-js.css'
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css'
+import "bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css";
 import EventEmitter from '../utils/EventEmitter'
 import { EmptyXml } from '../utils/BpmnElementHelper'
 import styles from '../styles.module.scss'
 import { getModeler, setModeler } from '../utils/BpmnHolder'
 import Logger from '../utils/Logger'
-import Toolbar from '../Toolbar/index.vue'
 import config from './config'
 
 const Designer = defineComponent({

@@ -3,6 +3,7 @@ import { Button, Popover ,Dropdown,Menu,MenuItem  } from 'ant-design-vue'
 import { downloadFile, setEncoded } from '../../utils/BpmnElementHelper'
 import { useI18n } from 'vue-i18n'
 import { getModeler } from '../../utils/BpmnHolder'
+import LucideIcon from '@/components/common/LucideIcon.vue'
 
 const Exports = defineComponent({
   name: 'ExportTools',
@@ -40,7 +41,7 @@ const Exports = defineComponent({
 
     return () => (
       <Dropdown v-slots={{
-        default: () => (<Button>{t('toolbar.exportAs')}</Button>),
+        default: () => (<Button size="small" type="text"><LucideIcon size={18} name="FolderDown"/></Button>),
         overlay: () => (
           <Menu onClick={handleMenuClick}>
             <MenuItem key="bpmn">

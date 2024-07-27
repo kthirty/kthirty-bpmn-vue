@@ -2,6 +2,7 @@ import { defineComponent, ref } from 'vue'
 import { Button } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import { getModeler } from '../../utils/BpmnHolder'
+import LucideIcon from '@/components/common/LucideIcon.vue'
 
 const Imports = defineComponent({
   name: 'Imports',
@@ -26,11 +27,10 @@ const Imports = defineComponent({
         importRef.value.files = null
       }
     }
-
     return () => (
       <span>
-        <Button onClick={openImportWindow}>
-          {t('toolbar.openFile')}
+        <Button size="small" type="text" onClick={openImportWindow}>
+          <LucideIcon name="FolderInput" size={18}/>
         </Button>
         <input
           type="file"
