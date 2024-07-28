@@ -18,6 +18,7 @@ import ElementStart from './components/ElementStart.vue'
 import ElementCondition from './components/ElementCondition.vue'
 import ElementUserTask from './components/ElementUserTask.vue'
 import ElementExecutionListeners from './components/ElementExecutionListeners.vue'
+import ElementUserTaskListener from './components/ElementUserTaskListener.vue'
 
 
 const Panel = defineComponent({
@@ -42,6 +43,7 @@ const Panel = defineComponent({
       renderComponents.push(ElementCondition)
       renderComponents.push(ElementUserTask)
       renderComponents.push(ElementExecutionListeners)
+      renderComponents.push(ElementUserTaskListener)
 
     }
 

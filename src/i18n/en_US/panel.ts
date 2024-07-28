@@ -37,6 +37,8 @@ export default {
   executionListenerEventType: 'executionListenerEventType',
   executionListenerType: 'executionListenerType',
 
+  userTaskListeners: 'userTaskListeners',
+
   extensionProperties: 'extensionProperties',
   addExtensionProperties: 'addExtensionProperties',
   propertyName: 'propertyName',

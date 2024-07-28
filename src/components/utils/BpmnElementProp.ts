@@ -12,8 +12,9 @@ import {
   addExtensionElements, removeExtensionElements, getExtensionElementsList
 } from './BpmnElementHelper'
 import { getCanvas, getModdle, getModeler, getModeling, getProcessEngine } from './BpmnHolder'
-import { BpmnElement, BpmnScript, ExecutionListenerForm, ScriptForm } from '../types'
+import { BpmnElement, BpmnScript, ExecutionListenerForm, ScriptForm, TaskListener } from '../types'
 import ElementRegistry from 'diagram-js/lib/core/ElementRegistry'
+import { isUserTask } from '@/components/utils/BpmnElementType'
 
 
 /**
@@ -493,4 +494,39 @@ export class Script{
     return 'none'
   }
 
+}
+export class UserTaskListener{
+  static getListeners(element: Element): TaskListener[]{
+    if(!isUserTask(element)){
+      return []
+    }
+    const businessObject = getBusinessObject(element);
+    const extensionElements = businessObject.extensionElements;
+    if (!extensionElements || !extensionElements.values) {
+      return [];
+    }
+    return extensionElements.values
+      .filter((el: any) => el.$type === 'bpmn:TaskListener')
+      .map((listener: any) => ({
+        event: listener.event,
+        class: listener.class,
+        ...listener
+      }));
+  }
+  static setListener(element: Element,listeners: TaskListener[]){
+    if(!isUserTask(element)){
+      return
+    }
+    const businessObject = getBusinessObject(element);
+    const extensionElements = businessObject.extensionElements || { values: [] };
+    const newListeners = listeners.map(listener => ({
+      $type: 'bpmn:TaskListener',
+      ...listener
+    }));
+    extensionElements.values = extensionElements.values.filter((el: any) => el.$type !== 'bpmn:TaskListener');
+    extensionElements.values.push(...newListeners);
+    businessObject.extensionElements = extensionElements;
+
+
+  }
 }

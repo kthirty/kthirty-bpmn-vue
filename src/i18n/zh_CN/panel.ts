@@ -37,6 +37,8 @@ export default {
   executionListenerEventType: '事件类型',
   executionListenerType: '监听器类型',
 
+  userTaskListeners: '任务监听器',
+
   extensionProperties: '扩展属性',
   addExtensionProperties: '添加扩展属性',
   propertyName: '属性名称',

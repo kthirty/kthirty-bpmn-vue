@@ -94,3 +94,8 @@ export interface FormItemVisible {
   listenerType: string
   scriptType: string
 }
+export interface TaskListener {
+  event: string;
+  class: string;
+  [key: string]: any;
+}
