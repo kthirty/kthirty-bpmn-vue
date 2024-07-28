@@ -1,5 +1,5 @@
 import { defineComponent, ref } from 'vue'
-import { Button } from 'ant-design-vue'
+import { Button, Popover } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import { getModeler } from '../../utils/BpmnHolder'
 import LucideIcon from '@/components/common/LucideIcon.vue'
@@ -29,9 +29,11 @@ const Imports = defineComponent({
     }
     return () => (
       <span>
-        <Button size="small" type="text" onClick={openImportWindow}>
+        <Popover content= {t('toolbar.openFile')} placement="right">
+          <Button size="small" type="text" onClick={openImportWindow}>
           <LucideIcon name="FolderInput" size={18}/>
         </Button>
+        </Popover>
         <input
           type="file"
           ref={importRef}

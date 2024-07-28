@@ -32,7 +32,6 @@
     },
     setup(props) {
       const icon = computed(() => icons[props.name])
-      console.log(icons)
 
       return { icon }
     }

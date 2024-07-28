@@ -470,6 +470,9 @@ export class Listener{
     }
     return ''
   }
+  static removeExecutionListener(element: Element, listener: ModdleElement) {
+    removeExtensionElements(element, getListenersContainer(element), listener)
+  }
 }
 export class Script{
 

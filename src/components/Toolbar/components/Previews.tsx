@@ -1,7 +1,7 @@
 import { defineComponent, ref } from 'vue'
 
 import BpmnModdle from 'bpmn-moddle'
-import { Button, Dropdown, Menu, MenuItem, Modal, Textarea } from 'ant-design-vue'
+import { Button, Dropdown, Menu, MenuItem, Modal, Popover, Textarea } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 import { getModeler } from '../../utils/BpmnHolder'
 import { message } from '../../utils/BpmnElementHelper'
@@ -45,9 +45,11 @@ const Previews = defineComponent({
     }
 
     return () => (
-      <Button onClick={preview} size="small" type="text">
-        <LucideIcon name="Eye" size={18}/>
-      </Button>
+      <Popover content={t('toolbar.previewAs')} placement="right">
+        <Button onClick={preview} size="small" type="text">
+          <LucideIcon name="Eye" size={18}/>
+        </Button>
+      </Popover>
     )
   }
 })
