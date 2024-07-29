@@ -295,7 +295,6 @@ export class Name {
   }
   static setNameValue(element: Element, value: string): void {
     const modeling = getModeling()
-    const canvas = getCanvas()
     const bpmnFactory: BpmnFactory | undefined = getModeler()?.get('bpmnFactory')
     // 不支持Name的节点
     if (isAny(element, ['bpmn:Collaboration', 'bpmn:DataAssociation', 'bpmn:Association'])) {
@@ -310,7 +309,7 @@ export class Name {
       const businessObject = getBusinessObject(element),
         categoryValueRef = businessObject.categoryValueRef
       if (!categoryValueRef) {
-        const definitions = getBusinessObject(canvas?.getRootElement()).$parent
+        const definitions = getBusinessObject(element?.getRootElement()).$parent
         businessObject.categoryValueRef = createCategoryValue(definitions, bpmnFactory)
       }
       return modeling?.updateLabel(element, value)

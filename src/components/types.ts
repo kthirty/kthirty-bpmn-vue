@@ -1,7 +1,7 @@
 import { defaultLang } from '@/i18n'
-import { ElementLike } from 'diagram-js/lib/model/Types'
+import { Element } from 'bpmn-js/lib/model/Types'
 
-export type BpmnElement = ElementLike & { type: string }
+export type BpmnElement = Element & { type: string }
 
 export interface EditorSettings {
   language: string

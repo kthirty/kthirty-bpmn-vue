@@ -1,11 +1,10 @@
 import { defineStore } from 'pinia'
-import type { Moddle } from 'moddle'
 import type Modeler from 'bpmn-js/lib/Modeler'
 import type Modeling from 'bpmn-js/lib/features/modeling/Modeling'
 import type Canvas from 'diagram-js/lib/core/Canvas'
 import type ElementRegistry from 'diagram-js/lib/core/ElementRegistry'
 import { toRaw } from 'vue'
-import { Element } from 'diagram-js/lib/model/Types'
+import { Element,Moddle } from 'bpmn-js/lib/model/Types'
 
 type ModelerStore = {
   activeElement: Element | undefined

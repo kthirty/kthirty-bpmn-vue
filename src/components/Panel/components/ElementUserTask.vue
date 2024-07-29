@@ -34,7 +34,6 @@
     form.value.candidateGroups = getExPropValue<string>(props.element,'candidateGroups')
     form.value.dueDate = getExPropValue(props.element,'dueDate')
     form.value.priority = getExPropValue(props.element,'priority')
-    console.log('form',form.value)
   }
   onMounted(reloadData)
   watch(() => props.element,reloadData)

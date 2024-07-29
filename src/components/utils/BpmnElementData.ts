@@ -1,4 +1,4 @@
-import { Element } from 'diagram-js/lib/model/Types'
+import { Element } from 'bpmn-js/lib/model/Types'
 import { is } from 'bpmn-js/lib/util/ModelUtil'
 import { ref } from 'vue'
 // 条件类型
