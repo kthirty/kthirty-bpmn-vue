@@ -19,14 +19,22 @@
     priority?: string
   }
 
-  const Form = ref<UserAssigneeProp>({})
+  const form = ref<UserAssigneeProp>({})
   const updateUserAssignProp = (key: string, value: string) => {
+    console.log('updateUserAssignProp', key, value)
     updateExPropValue(props.element, key, value)
   }
   const reloadData = () => {
-    Object.keys(Form.value).forEach((key:string) => {
-      Form[key] = getExPropValue(props.element,key);
-    })
+    if(!isUserTask(props.element)){
+      form.value = {}
+      return
+    }
+    form.value.assignee = getExPropValue<string>(props.element,'assignee')
+    form.value.candidateUsers = getExPropValue<string>(props.element,'candidateUsers')
+    form.value.candidateGroups = getExPropValue<string>(props.element,'candidateGroups')
+    form.value.dueDate = getExPropValue(props.element,'dueDate')
+    form.value.priority = getExPropValue(props.element,'priority')
+    console.log('form',form.value)
   }
   onMounted(reloadData)
   watch(() => props.element,reloadData)
@@ -41,19 +49,19 @@
     </template>
     <div>
       <EditItem :label-width="100" :label="$t('panel.assignee')">
-        <Input v-model:value="Form.assignee" @change="updateUserAssignProp('assignee', Form.assignee || '')" />
+        <Input v-model:value="form.assignee" @change="updateUserAssignProp('assignee', form.assignee || '')" />
       </EditItem>
       <EditItem :label-width="100" :label="$t('panel.candidateUsers')">
-        <Input v-model:value="Form.candidateUsers" @change="updateUserAssignProp('candidateUsers', Form.candidateUsers || '')" />
+        <Input v-model:value="form.candidateUsers" @change="updateUserAssignProp('candidateUsers', form.candidateUsers || '')" />
       </EditItem>
       <EditItem :label-width="100" :label="$t('panel.candidateGroups')">
-        <Input v-model:value="Form.candidateGroups" @change="updateUserAssignProp('candidateGroups', Form.candidateGroups || '')" />
+        <Input v-model:value="form.candidateGroups" @change="updateUserAssignProp('candidateGroups', form.candidateGroups || '')" />
       </EditItem>
       <EditItem :label-width="100" :label="$t('panel.dueDate')" description="The due date as an EL expression (e.g. ${someDate}) or an ISO date (e.g. 2015-06-26T09:54:00).">
-        <Input v-model:value="Form.dueDate" @change="updateUserAssignProp('dueDate', Form.dueDate || '')" />
+        <Input v-model:value="form.dueDate" @change="updateUserAssignProp('dueDate', form.dueDate || '')" />
       </EditItem>
       <EditItem :label-width="100" :label="$t('panel.priority')">
-        <Input v-model:value="Form.priority" @change="updateUserAssignProp('priority', Form.priority || '')" />
+        <Input v-model:value="form.priority" @change="updateUserAssignProp('priority', form.priority || '')" />
       </EditItem>
     </div>
   </CollapsePanel>
