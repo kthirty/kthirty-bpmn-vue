@@ -37,20 +37,18 @@
       index = list.value?.length - 1
     }
     currentIndex.value = index
-    console.log(currentIndex.value)
     modelVisible.value = true
   }
   const removeData = (index: number) => {
-    console.log('remove',index)
-    list.value = list.value?.splice(index,1)
-    console.log('list.value',list.value)
+    list.value?.splice(index,1)
+    currentIndex.value = -1
   }
 
   onMounted(loadData)
   watch(() => props.element, loadData)
-  watch(() => list, (newVal) => {
-    console.log(newVal)
-  })
+  watch(() => list.value, (newVal) => {
+    console.log(list.value)
+  }, { deep: true , immediate: true })
 
 </script>
 <template>
@@ -75,7 +73,7 @@
       </template>
     </Table>
     <Modal v-model:open='modelVisible' width='640px' :footer='false'>
-      <Form ref='formRef' :model='list[currentIndex]' :rules='formRules' :labelCol='{span: 4}'>
+      <Form v-if='list[currentIndex]' ref='formRef' :model='list[currentIndex]' :rules='formRules' :labelCol='{span: 4}'>
         <FormItem name='type' :label="$t('panel.userTaskListenerType')">
           <RadioGroup option-type='button' button-style="solid" v-model:value='list[currentIndex].type' :options='["class","expression","delegateExpression"]' />
         </FormItem>

@@ -9,7 +9,6 @@ const userTaskAssignee: Rule = () => {
         const hasCandidateUsers = getExPropValue<string>(node,"candidateUsers")?.trim() !== '';
         const hasCandidateGroups = getExPropValue<string>(node,"candidateGroups")?.trim() !== '';
 
-        console.log(hasAssignee,hasCandidateUsers,hasCandidateGroups)
         if (!hasAssignee && !hasCandidateUsers && !hasCandidateGroups) {
           reporter.report(node.id, 'User task should have an assignee, candidate users, or candidate groups.');
         }
