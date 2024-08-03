@@ -1,6 +1,6 @@
 {
   "name": "kthirty-bpmn-vue",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "src/index.ts",
   "module": "dist/kthirty-bpmn-vue.esm.js",
   "types": "dist/index.d.ts",
