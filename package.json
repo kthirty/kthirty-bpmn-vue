@@ -1,0 +1,37 @@
+{
+  "name": "kthirty-bpmn-vue",
+  "version": "1.0.2",
+  "main": "src/index.ts",
+  "module": "dist/kthirty-bpmn-vue.esm.js",
+  "types": "dist/index.d.ts",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "dev": "vite --config example/vite.config.ts",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vue/runtime-core": "^3.4.35",
+    "ant-design-vue": "^4.2.3",
+    "bpmn-js": "^17.9.1",
+    "bpmn-js-bpmnlint": "^0.22.3",
+    "bpmn-js-color-picker": "^0.7.1",
+    "bpmn-js-create-append-anything": "^0.5.2",
+    "bpmn-moddle": "^9.0.1",
+    "bpmnlint": "^10.3.0",
+    "lucide-vue-next": "^0.424.0",
+    "vite": "^5.3.5",
+    "vue": "^3.4.35",
+    "vue-i18n": "^9.13.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.1.0",
+    "@vitejs/plugin-vue": "^5.1.2",
+    "@vitejs/plugin-vue-jsx": "^4.0.0",
+    "sass": "^1.77.8",
+    "typescript": "^5.5.4"
+  }
+}

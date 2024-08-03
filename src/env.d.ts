@@ -1,0 +1,17 @@
+/// <reference types="vite/client" />
+
+declare module '*.vue' {
+  import type { DefineComponent } from 'vue'
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/ban-types
+  const component: DefineComponent<{}, {}, any>
+  export default component
+}
+declare module "*.scss" {
+  const classes: { readonly [key: string]: string };
+  export default classes;
+}
+declare module 'bpmn-js-create-append-anything';
+declare module 'bpmn-js-color-picker';
+declare module 'bpmn-js-bpmnlint';
+declare module 'bpmn-moddle';
+declare module 'bpmnlint';
