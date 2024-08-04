@@ -156,7 +156,6 @@ export function getExPropValue<T>(element: any, propKey: string): T {
 // 修改节点属性
 export function updateExPropValue(element: Element, propKey: string, value: any) {
   const exPropKey = `${getProcessEngine()}:${propKey}`
-  console.log('updateExPropValue',exPropKey)
   getModeling()
     ?.updateModdleProperties(element
       , getBusinessObject(element)

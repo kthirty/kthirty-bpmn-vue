@@ -1,4 +1,5 @@
 import {getProcessEngine} from "@/utils/BpmnHolder";
+import Logger from "@/utils/Logger";
 
 function getExPropValue<T>(element: any, propKey: string): T {
   const exPropKey = `${getProcessEngine()}:${propKey}`
@@ -8,11 +9,11 @@ function getExPropValue<T>(element: any, propKey: string): T {
 
 const userTaskAssignee = () => {
   return {
-    check(node:any, reporter:any) {
+    check(node, reporter:any) {
       if (node.$type === 'bpmn:UserTask') {
-        const hasAssignee = getExPropValue<string>(node,"assignee")?.trim() !== '';
-        const hasCandidateUsers = getExPropValue<string>(node,"candidateUsers")?.trim() !== '';
-        const hasCandidateGroups = getExPropValue<string>(node,"candidateGroups")?.trim() !== '';
+        const hasAssignee = (getExPropValue<string>(node,"assignee") || '')?.trim() !== '';
+        const hasCandidateUsers = (getExPropValue<string>(node,"candidateUsers") || '')?.trim() !== '';
+        const hasCandidateGroups = (getExPropValue<string>(node,"candidateGroups") || '')?.trim() !== '';
 
         if (!hasAssignee && !hasCandidateUsers && !hasCandidateGroups) {
           reporter.report(node.id, 'User task should have an assignee, candidate users, or candidate groups.');
