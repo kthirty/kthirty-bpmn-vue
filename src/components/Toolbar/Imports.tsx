@@ -1,7 +1,7 @@
 import { defineComponent, ref } from 'vue'
 import { Button, Popover } from 'ant-design-vue'
 import { getModeler } from '../../utils/BpmnHolder'
-import LucideIcon from '@/components/common/LucideIcon.vue'
+import { FolderInput } from 'lucide-vue-next'
 
 const Imports = defineComponent({
   name: 'Imports',
@@ -29,7 +29,7 @@ const Imports = defineComponent({
       <span>
         <Popover content="打开文件" placement="bottom">
           <Button size="small" type="text" onClick={openImportWindow}>
-          <LucideIcon name="FolderInput" size={18}/>
+          <FolderInput size={18}/>
         </Button>
         </Popover>
         <input

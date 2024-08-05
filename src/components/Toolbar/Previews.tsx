@@ -4,7 +4,7 @@ import BpmnModdle from 'bpmn-moddle'
 import { Button, Modal, Popover, Textarea } from 'ant-design-vue'
 import { getModeler } from '../../utils/BpmnHolder'
 import { message } from '../../utils/BpmnElementHelper'
-import LucideIcon from '../common/LucideIcon.vue'
+import { Eye } from 'lucide-vue-next'
 
 const Previews = defineComponent({
   name: 'Previews',
@@ -43,7 +43,7 @@ const Previews = defineComponent({
     return () => (
       <Popover content="预览文件" placement="bottom">
         <Button onClick={preview} size="small" type="text">
-          <LucideIcon name="Eye" size={18}/>
+          <Eye size={18}/>
         </Button>
       </Popover>
     )

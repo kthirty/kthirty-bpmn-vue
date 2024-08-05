@@ -12,8 +12,8 @@ import { getModeler, setModeler } from '../../utils/BpmnHolder'
 import Logger from '../../utils/Logger'
 import config from './config'
 
-const Index = defineComponent({
-    name: 'BpmnDesigner',
+const Designer = defineComponent({
+    name: 'Designer',
     props: {
         xml: {
             type: String as PropType<string>
@@ -59,4 +59,4 @@ const Index = defineComponent({
         return () => <div ref={designer} style="height:100%"></div>
     }
 })
-export default Index
+export default Designer

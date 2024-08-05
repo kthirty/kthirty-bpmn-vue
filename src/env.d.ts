@@ -15,3 +15,4 @@ declare module 'bpmn-js-color-picker';
 declare module 'bpmn-js-bpmnlint';
 declare module 'bpmn-moddle';
 declare module 'bpmnlint';
+declare module 'vite-plugin-dts';

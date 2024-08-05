@@ -1,24 +1,24 @@
-import { computed, ComputedRef, defineComponent } from 'vue'
+import { Component, computed, ComputedRef, defineComponent } from 'vue'
 import Modeler from 'bpmn-js/lib/Modeler'
 import Modeling from 'bpmn-js/lib/features/modeling/Modeling.js'
 import EventEmitter from '../../utils/EventEmitter'
-import LucideIcon from '../common/LucideIcon.vue'
 
 import { message } from '../../utils/BpmnElementHelper'
 import { Button, Divider, Popover } from 'ant-design-vue'
+import { AlignStartVertical ,AlignCenterVertical,AlignEndVertical ,AlignStartHorizontal ,AlignCenterHorizontal ,AlignEndHorizontal} from 'lucide-vue-next'
 
 const Aligns = defineComponent({
   name: 'Aligns',
   setup() {
 
-    const buttons: ComputedRef<{ name: string; key: string; icon: string }[]> = computed(() => {
+    const buttons: ComputedRef<{ name: string; key: string; icon: Component }[]> = computed(() => {
       return [
-        { name: '左对齐', key: 'left', icon: 'AlignStartVertical' },
-        { name: '水平居中', key: 'center', icon: 'AlignCenterVertical' },
-        { name: '右对齐', key: 'right', icon: 'AlignEndVertical' },
-        { name: '上对齐', key: 'top', icon: 'AlignStartHorizontal' },
-        { name: '垂直居中', key: 'middle', icon: 'AlignCenterHorizontal' },
-        { name: '下对齐', key: 'bottom', icon: 'AlignEndHorizontal' }
+        { name: '左对齐', key: 'left', icon: <AlignStartVertical/> },
+        { name: '水平居中', key: 'center', icon: <AlignCenterVertical/> },
+        { name: '右对齐', key: 'right', icon: <AlignEndVertical/> },
+        { name: '上对齐', key: 'top', icon: <AlignStartHorizontal/> },
+        { name: '垂直居中', key: 'middle', icon: <AlignCenterHorizontal/> },
+        { name: '下对齐', key: 'bottom', icon: <AlignEndHorizontal/> }
       ]
     })
 
@@ -52,7 +52,7 @@ const Aligns = defineComponent({
                 content: () => item.name,
                 default: () => (
                   <Button size="small" type="text" onClick={() => alignElements(item.key)}>
-                    <LucideIcon name={item.icon} size={18}></LucideIcon>
+                    <component is={item.icon} size={18}></component>
                   </Button>
                 )
               }}

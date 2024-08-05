@@ -2,7 +2,7 @@ import { defineComponent } from 'vue'
 import { Button ,Dropdown,Menu,MenuItem  } from 'ant-design-vue'
 import { downloadFile, setEncoded } from '../../utils/BpmnElementHelper'
 import { getModeler } from '../../utils/BpmnHolder'
-import LucideIcon from '../common/LucideIcon.vue'
+import { FolderDown } from 'lucide-vue-next'
 
 const Exports = defineComponent({
   name: 'ExportTools',
@@ -39,7 +39,9 @@ const Exports = defineComponent({
 
     return () => (
       <Dropdown v-slots={{
-        default: () => (<Button size="small" type="text"><LucideIcon size={18} name="FolderDown"/></Button>),
+        default: () => (<Button size="small" type="text">
+          <FolderDown size={18}/>
+        </Button>),
         overlay: () => (
           <Menu onClick={handleMenuClick}>
             <MenuItem key="bpmn">导出为BPMN</MenuItem>
