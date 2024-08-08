@@ -13,7 +13,6 @@ import {
   AlignCenterHorizontal,
   AlignEndHorizontal
 } from 'lucide-vue-next'
-console.log(AlignStartVertical)
 
 const Aligns = defineComponent({
   name: 'Aligns',

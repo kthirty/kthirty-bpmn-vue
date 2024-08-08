@@ -15,8 +15,8 @@ const Previews = defineComponent({
     const preview = async () => {
       const modeler = getModeler()
       if (!modeler) return message('warning', '模型加载失败，请刷新重试')
-      const { xml } = await modeler.saveXML({ format: true, preamble: true })
-      previewText.value = xml || ''
+      const res = await modeler.saveXML({ format: true, preamble: true })
+      previewText.value = res.xml || ''
       Modal.info({
         title: '预览文件',
         icon: false,
@@ -34,7 +34,7 @@ const Previews = defineComponent({
         },
         content: () => (
           <div class="preview-model" style={{ height: '100%' }}>
-            <Textarea bordered={false} readonly autoSize v-model:value={previewText} />
+            <Textarea bordered={false} readonly autoSize v-model:value={previewText.value} />
           </div>
         )
       })
