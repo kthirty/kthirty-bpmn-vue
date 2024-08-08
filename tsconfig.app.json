@@ -3,6 +3,7 @@
   "include": ["env.d.ts", "src/**/*", "src/**/*.vue","packages/**/*.tsx", "packages/**/*.ts", "packages/**/*.vue"],
   "exclude": ["src/**/__tests__/*"],
   "compilerOptions": {
+    "jsx": "preserve",
     "removeComments": true,
     "isolatedModules": true,
     "composite": true,
