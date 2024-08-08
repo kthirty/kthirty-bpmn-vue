@@ -1,0 +1,104 @@
+{
+  "name": "kthirty-demo2",
+  "version": "0.0.8",
+  "private": false,
+  "type": "module",
+  "files": [
+    "dist",
+    "package.json",
+    "README.md"
+  ],
+  "main": "./dist/kthirty-bpmn-vue.umd.cjs",
+  "module": "./dist/kthirty-bpmn-vue.js",
+  "browser": "./dist/kthirty-bpmn-vue.js",
+  "unpkg": "dist/kthirty-bpmn-vue.iife.js",
+  "exports": {
+    "./dist/style.css": "./dist/style.css",
+    "./css": "./dist/style.css",
+    ".": {
+      "import": "./dist/kthirty-bpmn-vue.js",
+      "require": "./dist/kthirty-bpmn-vue.umd.cjs"
+    }
+  },
+  "scripts": {
+    "docs:dev": "vitepress dev docs --port 8000 --open",
+    "docs:build": "vitepress build docs",
+    "docs:deploy": "sh scripts/deploy.sh",
+    "dev": "vite",
+    "pub": "sh scripts/publish.sh",
+    "push": "sh scripts/push.sh",
+    "build": "run-s format clean build:lib",
+    "format": "prettier --write src/ packages/",
+    "clean": "rimraf ./dist",
+    "build:lib": "run-p type-check build:es build:browser",
+    "type-check": "vue-tsc --noEmit",
+    "build:es": "vite build",
+    "build:browser": "vite -f iife build",
+    "preview": "vite preview",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-pattern .gitignore"
+  },
+  "dependencies": {
+    "ant-design-vue": "^4.2.3",
+    "bpmn-js": "^17.9.2",
+    "bpmn-js-bpmnlint": "^0.22.3",
+    "bpmn-js-color-picker": "^0.7.1",
+    "bpmn-js-create-append-anything": "^0.5.2",
+    "bpmn-moddle": "^9.0.1",
+    "bpmnlint": "^10.3.0",
+    "core-js": "^3.38.0",
+    "lucide-vue-next": "^0.424.0",
+    "vue": "^3.4.36"
+  },
+  "devDependencies": {
+    "vue-router": "^4.4.3",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rushstack/eslint-patch": "^1.10.4",
+    "@types/node": "^22.1.0",
+    "@vitejs/plugin-vue": "^5.1.2",
+    "@vitejs/plugin-vue-jsx": "^4.0.0",
+    "@vue/eslint-config-prettier": "^9.0.0",
+    "@vue/tsconfig": "^0.5.1",
+    "eslint": "^9.8.0",
+    "eslint-plugin-vue": "^9.27.0",
+    "less": "^4.2.0",
+    "minimist": "^1.2.8",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.3.3",
+    "rimraf": "^6.0.1",
+    "rollup-plugin-visualizer": "^5.12.0",
+    "typescript": "^5.5.4",
+    "unplugin-vue-components": "^0.27.3",
+    "vite": "^5.3.5",
+    "vitepress": "^1.3.2",
+    "vue-tsc": "^2.0.29"
+  },
+  "sideEffects": [
+    "dist/*"
+  ],
+  "description": "Bpmn Vue Components Library.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kthirty/kthirty-bpmn-vue.git"
+  },
+  "keywords": [
+    "Vue3",
+    "TS",
+    "Vite",
+    "Less",
+    "KThirty",
+    "Components",
+    "Bpmn",
+    "Flowable"
+  ],
+  "author": "kthirty",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/kthirty/kthirty-bpmn-vue/issues"
+  },
+  "homepage": "https://kthirty.github.io/kthirty-bpmn-vue",
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not dead"
+  ]
+}

@@ -1,0 +1,123 @@
+html,
+body,
+#app {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body {
+  background: #fff;
+}
+html {
+  transition: filter 0.3s ease-in-out;
+}
+/*
+  invert(): 反转输入图像，1表示完全反转
+  hue-rotate(): 在输入图像上应用色相旋转
+*/
+html.dark {
+  // 网站暗黑模式
+  filter: invert(1) hue-rotate(180deg);
+  img,
+  video {
+    // 将图片和视频再次反转以恢复原本的颜色
+    filter: invert(1) hue-rotate(180deg);
+  }
+  .ant-menu,
+  .m-switch-wrap {
+    filter: invert(1) hue-rotate(180deg);
+  }
+}
+// sepia(): 将图像转换为深褐色
+html.cafe {
+  filter: sepia(0.9) hue-rotate(315deg) brightness(0.9);
+}
+html.contrast {
+  filter: contrast(2); // 调整颜色对比度
+}
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif,
+    'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Noto Color Emoji';
+  color: rgba(0, 0, 0, 0.85);
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+hr,
+a,
+span,
+p,
+div,
+ul,
+ol,
+li,
+button,
+input,
+textarea,
+th,
+td,
+img {
+  margin: 0;
+  padding: 0;
+}
+h1 {
+  // h1 标签渐变色文本
+  display: inline-block;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #0000;
+  white-space: nowrap;
+  background-image: linear-gradient(to right, #09c8ce, #eb2f96);
+}
+.mt10 {
+  margin-top: 10px;
+}
+.mt30 {
+  margin-top: 30px;
+}
+.mt150 {
+  margin-top: 150px;
+}
+.mb10 {
+  margin-bottom: 10px;
+}
+.mb30 {
+  margin-bottom: 30px;
+}
+.ml20 {
+  margin-left: 20px;
+}
+.ml60 {
+  margin-left: 60px;
+}
+.ml120 {
+  margin-left: 120px;
+}
+.mr20 {
+  margin-right: 20px;
+}
+.mr30 {
+  margin-right: 30px;
+}
+.m-list {
+  margin-top: 10px;
+  margin-left: 16px;
+  font-size: 20px;
+}
+.u-file {
+  font-size: 18px;
+  cursor: pointer;
+}
+.u-tip {
+  font-size: 18px;
+  color: #333;
+}
+.u-intro {
+  font-size: 16px;
+  color: #333;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
