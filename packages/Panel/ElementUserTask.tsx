@@ -2,17 +2,11 @@ import { defineComponent, onMounted, ref, watch } from 'vue'
 import type { PropType } from 'vue'
 import type { Element } from 'bpmn-js/lib/model/Types'
 import { isUserTask } from '../utils/BpmnElementType'
-import { Button, CollapsePanel, Form, FormItem, Input, InputGroup } from 'ant-design-vue'
+import { Button, Col, CollapsePanel, Form, FormItem, FormItemRest, Input, InputGroup, Row, Select } from 'ant-design-vue'
 import { Settings } from 'lucide-vue-next'
 import { getExPropValue, updateExPropValue } from '../utils/BpmnElementHelper'
-
-interface UserAssigneeProp {
-  assignee?: string
-  candidateUsers?: string
-  candidateGroups?: string
-  dueDate?: string
-  priority?: string
-}
+import type { DefaultOptionType } from 'ant-design-vue/es/select'
+import SelectableDrawer from '../SelectableDrawer'
 
 export default defineComponent({
   name: 'ElementUserTask',
@@ -24,83 +18,84 @@ export default defineComponent({
   },
   setup(props) {
     const visible = ref<boolean>(false)
-    const formProp = ref<UserAssigneeProp>({})
-    const formRef = ref<HTMLFormElement>()
+    const formProp = ref<{
+      assigneeType: string,
+      assigneeValue?: string,
+      dueDate?: string
+    }>({ assigneeType: 'assignee'})
+    const assigneeTypeOption = ref<DefaultOptionType[]>([
+      { value: 'assignee', label: '任务人' },
+      { value: 'candidateUsers', label: '候选人' },
+      { value: 'candidateGroups', label: '候选组' },
+    ])
+    
 
     const loadProps = () => {
       visible.value = isUserTask(props.element)
       if (!visible.value) return
-      formProp.value.assignee = getExPropValue<string>(props.element, 'assignee')
-      formProp.value.candidateUsers = getExPropValue<string>(props.element, 'candidateUsers')
-      formProp.value.candidateGroups = getExPropValue<string>(props.element, 'candidateGroups')
+      const assignee = getExPropValue<string>(props.element, 'assignee');
+      const candidateUsers = getExPropValue<string>(props.element, 'candidateUsers');
+      const candidateGroups = getExPropValue<string>(props.element, 'candidateGroups');
+      if (assignee){
+        formProp.value.assigneeType = 'assignee';
+        formProp.value.assigneeValue = assignee;
+      }
+      if (candidateUsers) {
+        formProp.value.assigneeType = 'candidateUsers';
+        formProp.value.assigneeValue = candidateUsers;
+      }
+      if (candidateGroups) {
+        formProp.value.assigneeType = 'candidateGroups';
+        formProp.value.assigneeValue = candidateGroups;
+      }
       formProp.value.dueDate = getExPropValue<string>(props.element, 'dueDate')
     }
     const updateProps = () => {
-      if (!visible.value) return
-      updateExPropValue(props.element, 'assignee', formProp.value.assignee || '')
-      updateExPropValue(props.element, 'candidateUsers', formProp.value.candidateUsers || '')
-      updateExPropValue(props.element, 'candidateGroups', formProp.value.candidateGroups || '')
-      updateExPropValue(props.element, 'dueDate', formProp.value.dueDate || '')
+      if (!visible.value) return     
+      updateExPropValue(props.element, formProp.value.assigneeType, formProp.value.assigneeValue)
+      updateExPropValue(props.element, 'dueDate', formProp.value.dueDate)
     }
 
     onMounted(loadProps)
     watch(() => props.element, loadProps)
+    const assigneeTypeChange = () => {
+      formProp.value.assigneeValue = undefined
+      updateExPropValue(props.element, 'assignee', undefined)
+      updateExPropValue(props.element, 'candidateUsers', undefined)
+      updateExPropValue(props.element, 'candidateGroups', undefined)
+    }
 
     return () =>
       visible.value ? (
         <CollapsePanel
-          name="ElementUserTask"
+          key="ElementUserTask"
           v-slots={{
             header: () => '任务配置',
             default: () => (
               <>
                 {formProp.value && (
-                  <Form
-                    ref={formRef}
-                    model={formProp.value}
-                    autocomplete="off"
-                    labelCol={{ span: 6 }}
-                    validateTrigger="blur"
-                  >
-                    <FormItem label="任务人" name="assignee">
-                      <InputGroup compact>
-                        <Input
-                          style="width: calc(100% - 40px)"
-                          v-model:value={formProp.value.assignee}
-                          onChange={updateProps}
-                        />
-                        <Button v-slots={{ icon: () => <Settings size={18} /> }} />
-                      </InputGroup>
-                    </FormItem>
-                    <FormItem label="候选人" name="candidateUsers">
-                      <InputGroup compact>
-                        <Input
-                          style="width: calc(100% - 40px)"
-                          v-model:value={formProp.value.candidateUsers}
-                          onChange={updateProps}
-                        />
-                        <Button v-slots={{ icon: () => <Settings size={18} /> }} />
-                      </InputGroup>
-                    </FormItem>
-                    <FormItem label="候选组" name="candidateGroups">
-                      <InputGroup compact>
-                        <Input
-                          style="width: calc(100% - 40px)"
-                          v-model:value={formProp.value.candidateGroups}
-                          onChange={updateProps}
-                        />
-                        <Button v-slots={{ icon: () => <Settings size={18} /> }} />
-                      </InputGroup>
+                  <Form colon={false} model={formProp.value} labelCol={{ span: 6 }} validateTrigger="blur">
+                    <FormItem name="assignee" >
+                       <div>
+                        <Row>
+                          <Col span={6}>
+                            <FormItemRest>
+                               <Select onChange={assigneeTypeChange} v-model:value={formProp.value.assigneeType} options={assigneeTypeOption.value}/>
+                            </FormItemRest>
+                          </Col>
+                          <Col span={18}>
+                            <Input v-model:value={formProp.value.assigneeValue} onChange={updateProps} 
+                            v-slots={{ addonAfter: () => (<SelectableDrawer v-model:value={formProp.value.dueDate}/>)}}/>
+                          </Col>
+                        </Row>
+                       </div>
                     </FormItem>
                     <FormItem label="到期日" name="dueDate">
-                      <InputGroup compact>
-                        <Input
-                          style="width: calc(100% - 40px)"
+                      <Input
                           v-model:value={formProp.value.dueDate}
                           onChange={updateProps}
+                          v-slots={{ addonAfter: () => (<Settings style="cursor: pointer;" size={18} />) }}
                         />
-                        <Button v-slots={{ icon: () => <Settings size={18} /> }} />
-                      </InputGroup>
                     </FormItem>
                   </Form>
                 )}

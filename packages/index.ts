@@ -39,9 +39,10 @@ import Designer from './Designer'
 import Panel from './Panel'
 import Toolbar from './Toolbar'
 import BpmnDesigner from './BpmnDesigner'
+import SelectableDrawer from './SelectableDrawer'
 
 // 所有组件列表
-const components = [Designer, Panel, Toolbar, BpmnDesigner]
+const components = [Designer, Panel, Toolbar, BpmnDesigner, SelectableDrawer]
 import type { App } from 'vue'
 // 定义 install 方法
 const install = function (app: App) {
@@ -55,7 +56,7 @@ const install = function (app: App) {
   */
   components.forEach((component) => app.component(component.name as string, component))
 }
-export { Designer, Panel, Toolbar, BpmnDesigner }
+export { Designer, Panel, Toolbar, BpmnDesigner, SelectableDrawer }
 export default {
   install
 }

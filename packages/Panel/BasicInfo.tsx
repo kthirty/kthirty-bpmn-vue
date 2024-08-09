@@ -56,24 +56,18 @@ export default defineComponent({
 
     return () => (
       <CollapsePanel
-        name="basic"
+        key="basic"
         v-slots={{
           header: () => '基础属性',
           default: () => (
             <>
               {basicInfo.value && (
-                <Form
-                  ref={formRef}
-                  model={basicInfo.value}
-                  autocomplete="off"
-                  labelCol={{ span: 6 }}
-                  validateTrigger="blur"
-                >
+                <Form colon={false} ref={formRef} model={basicInfo.value} labelCol={{ span: 6 }} validateTrigger="blur">
                   <FormItem required={true} label="ID" name="id">
-                    <Input maxlengt={32} v-model:value={basicInfo.value.id} onChange={updateProperties} />
+                    <Input maxlength={32} v-model:value={basicInfo.value.id} onChange={updateProperties} />
                   </FormItem>
                   <FormItem required={true} label="节点名称" name="name">
-                    <Input maxlengt={32} v-model:value={basicInfo.value.name} onChange={updateProperties} />
+                    <Input maxlength={32} v-model:value={basicInfo.value.name} onChange={updateProperties} />
                   </FormItem>
                   <FormItem label="节点描述" name="doc">
                     <Textarea v-model:value={basicInfo.value.doc} onChange={updateProperties} />

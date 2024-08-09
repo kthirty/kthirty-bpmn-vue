@@ -13,10 +13,13 @@ export const routes = [
         path: '/home',
         name: 'Home',
         meta: { title: '首页' },
-        // route level code-splitting
-        // this generates a separate chunk (Home.[hash].js) for this route
-        // which is lazy-loaded when the route is visited.
         component: () => import('@/views/guide/Home.vue')
+      },
+      {
+        path: '/selectTable',
+        name: 'SelectTable',
+        meta: { title: 'Table选择' },
+        component: () => import('@/views/guide/SelectTable.vue')
       }
     ]
   },

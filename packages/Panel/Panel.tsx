@@ -39,6 +39,7 @@ export default defineComponent({
       }
       // 缓存当前节点信息
       setCurrentElement(markRaw(activatedElement))
+      console.log('activatedElement', activatedElement)
       currentElement.value = activatedElement
       // 推送事件消息
       EventEmitter.emit('element-update', activatedElement)
