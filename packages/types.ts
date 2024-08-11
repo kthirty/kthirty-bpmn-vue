@@ -92,3 +92,15 @@ export interface TaskListener {
   class: string
   [key: string]: any
 }
+export type ListenerType = 'TaskListener' | 'ExecutionListener' | 'EventListener'
+export interface ListenerConfig {
+  event?: string | string[]
+  type?: 'class' | 'expression' | 'delegateExpression'
+  value?: string
+  field?: ListenerFieldConfig[]
+}
+export interface ListenerFieldConfig {
+  name: string
+  type: 'string' | 'expression'
+  value?: string
+}

@@ -40,9 +40,7 @@ export default defineComponent({
 
     return () => (
       <>
-        <div onClick={openDrawer}>
-          {slots.default ? slots.default() : <Settings style="cursor: pointer;" size={18} />}
-        </div>
+        <div onClick={openDrawer}>{slots.default ? slots.default() : <Settings style="cursor: pointer;" size={18} />}</div>
         <Drawer width="40%" visible={drawerVisible.value} onClose={closeDrawer} title="请选择">
           <Table
             customRow={(record) => {

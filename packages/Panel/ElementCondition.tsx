@@ -53,13 +53,7 @@ export default defineComponent({
           v-slots={{
             header: () => '流转条件',
             default: () => (
-              <Form
-                ref={formRef}
-                model={conditionForm.value}
-                autocomplete="off"
-                labelCol={{ span: 6 }}
-                validateTrigger="blur"
-              >
+              <Form ref={formRef} model={conditionForm.value} autocomplete="off" labelCol={{ span: 6 }} validateTrigger="blur">
                 <FormItem required={true} label="类型" name="type">
                   <Select onChange={updateProperties} options={options} v-model:value={conditionForm.value.type} />
                 </FormItem>

@@ -5,14 +5,7 @@ import Modeling from 'bpmn-js/lib/features/modeling/Modeling.js'
 import EventEmitter from '../utils/EventEmitter'
 import { message } from '../utils/BpmnElementHelper'
 import { Button, Divider, Popover } from 'ant-design-vue'
-import {
-  AlignStartVertical,
-  AlignCenterVertical,
-  AlignEndVertical,
-  AlignStartHorizontal,
-  AlignCenterHorizontal,
-  AlignEndHorizontal
-} from 'lucide-vue-next'
+import { AlignStartVertical, AlignCenterVertical, AlignEndVertical, AlignStartHorizontal, AlignCenterHorizontal, AlignEndHorizontal } from 'lucide-vue-next'
 
 const Aligns = defineComponent({
   name: 'Aligns',

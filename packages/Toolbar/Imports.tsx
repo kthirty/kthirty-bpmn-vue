@@ -32,13 +32,7 @@ const Imports = defineComponent({
             <FolderInput size={18} />
           </Button>
         </Popover>
-        <input
-          type="file"
-          ref={importRef}
-          style="display: none"
-          accept=".xml,.bpmn"
-          onChange={changeImportFile}
-        ></input>
+        <input type="file" ref={importRef} style="display: none" accept=".xml,.bpmn" onChange={changeImportFile}></input>
       </span>
     )
   }

@@ -6,12 +6,7 @@ import { getModdle, getModeler, getModeling, getProcessEngine } from './BpmnHold
 import { isArray } from 'ant-design-vue/es/_util/util'
 
 // 创建元素
-export function createElement(
-  moddle: Moddle,
-  elementType: string,
-  properties: Record<string, any>,
-  parent?: Element
-): Element {
+export function createElement(moddle: Moddle, elementType: string, properties: Record<string, any>, parent?: Element): Element {
   const element = moddle.create(elementType, properties)
   parent && (element.$parent = parent)
   return element
@@ -157,11 +152,7 @@ export function updateExPropValue(element: Element, propKey: string, value: any)
 /**
  * Add one or more extension elements. Create bpmn:ExtensionElements if it doesn't exist.
  */
-export function addExtensionElements(
-  element: Element,
-  businessObject: ModdleElement,
-  extensionElementToAdd: ModdleElement
-) {
+export function addExtensionElements(element: Element, businessObject: ModdleElement, extensionElementToAdd: ModdleElement) {
   const modeling = getModeling()
   let extensionElements = businessObject.get('extensionElements')
 
@@ -181,11 +172,7 @@ export function addExtensionElements(
 /**
  * Remove one or more extension elements. Remove bpmn:ExtensionElements afterwards if it's empty.
  */
-export function removeExtensionElements(
-  element: Element,
-  businessObject: ModdleElement,
-  extensionElementsToRemove: ModdleElement | ModdleElement[]
-) {
+export function removeExtensionElements(element: Element, businessObject: ModdleElement, extensionElementsToRemove: ModdleElement | ModdleElement[]) {
   if (!isArray(extensionElementsToRemove)) {
     extensionElementsToRemove = [extensionElementsToRemove]
   }

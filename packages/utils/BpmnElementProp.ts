@@ -1,21 +1,13 @@
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil'
-import type { Connection, Element, ModdleElement } from 'bpmn-js/lib/model/Types'
+import type { Connection, Element, ModdleElement, ModdleExtension } from 'bpmn-js/lib/model/Types'
 import { isAny } from 'bpmn-js/lib/features/modeling/util/ModelingUtil'
 import BpmnFactory from 'bpmn-js/lib/features/modeling/BpmnFactory'
-import {
-  createElement,
-  message,
-  getEventDefinition,
-  createCategoryValue,
-  without,
-  createModdleElement,
-  addExtensionElements,
-  removeExtensionElements,
-  getExtensionElementsList
-} from './BpmnElementHelper'
+import { createElement, message, getEventDefinition, createCategoryValue, without, createModdleElement } from './BpmnElementHelper'
 import { getModdle, getModeler, getModeling, getProcessEngine } from './BpmnHolder'
-import type { BpmnScript, ExecutionListenerForm, ScriptForm, TaskListener } from '../types'
+import type { BpmnScript, ListenerConfig, ListenerFieldConfig, ListenerType, ScriptForm, TaskListener } from '../types'
 import { isUserTask } from './BpmnElementType'
+import type Modeling from 'bpmn-js/lib/features/modeling/Modeling'
+import Logger from './Logger'
 
 /**
  * Conditional 工具类，包含处理 BPMN 条件相关的方法
@@ -82,9 +74,7 @@ export class Conditional {
     const attributes = {
       language: value === 'script' ? '' : undefined
     }
-    const parent = is(element, 'bpmn:SequenceFlow')
-      ? getBusinessObject(element)
-      : (this.getConditionalEventDefinition(element) as Element)
+    const parent = is(element, 'bpmn:SequenceFlow') ? getBusinessObject(element) : (this.getConditionalEventDefinition(element) as Element)
     const moddle = getModdle()
     const formalExpressionElement = createElement(moddle, 'bpmn:FormalExpression', attributes, parent)
     this.updateCondition(element, formalExpressionElement)
@@ -164,9 +154,7 @@ export class Conditional {
     }
   }
   static setConditionExpressionValue(element: Element, body: string | undefined) {
-    const parent = is(element, 'bpmn:SequenceFlow')
-      ? getBusinessObject(element)
-      : (this.getConditionalEventDefinition(element) as ModdleElement)
+    const parent = is(element, 'bpmn:SequenceFlow') ? getBusinessObject(element) : (this.getConditionalEventDefinition(element) as ModdleElement)
     const formalExpressionElement = createModdleElement('bpmn:FormalExpression', { body }, parent)
     this.updateCondition(element, formalExpressionElement)
   }
@@ -400,64 +388,113 @@ export function getListenersContainer(element: Element): ModdleElement {
  * 监听器
  */
 export class Listener {
-  static addExecutionListener(element: Element, props: ExecutionListenerForm) {
-    const prefix = getProcessEngine()
-    const moddle = getModdle()
-    const businessObject = getListenersContainer(element)
-    const listener = moddle!.create(`${prefix}:ExecutionListener`, {})
-    this.updateListenerProperty(element, listener, props)
-    addExtensionElements(element, businessObject, listener)
-  }
-  static updateListenerProperty(element: Element, listener: ModdleElement, props: ExecutionListenerForm) {
-    const modeling = getModeling()
-    const prefix = getProcessEngine()
-    const { event, class: listenerClass, expression, delegateExpression, script } = props
-    const updateProperty = (key: any, value: any) =>
-      modeling?.updateModdleProperties(element, listener, { [`${prefix}:${key}`]: value })
+  static addListener(element: Element, listenerType: ListenerType, listenerConfig: ListenerConfig): void {
+    const modeler = getModeler()
+    const bpmnFactory = modeler!.get<BpmnFactory>('bpmnFactory')
+    const processEngine = getProcessEngine()
+    const businessObject = element.businessObject
+    const extensionElements = businessObject.extensionElements || bpmnFactory.create('bpmn:ExtensionElements')
 
-    event && updateProperty('event', event)
-    listenerClass && updateProperty('class', listenerClass)
-    expression && updateProperty('expression', expression)
-    delegateExpression && updateProperty('delegateExpression', delegateExpression)
+    const prop: any = {}
+    // 事件监听器额外处理event
+    if (listenerType === 'EventListener') {
+      prop.events = listenerConfig.event
+    } else {
+      prop.events = listenerConfig.event
+    }
+    if (listenerConfig.type === 'class') prop.class = listenerConfig.value
+    if (listenerConfig.type === 'expression') prop.expression = listenerConfig.value
+    if (listenerConfig.type === 'delegateExpression') prop.delegateExpression = listenerConfig.value
+    const listener = bpmnFactory.create(`${processEngine}:${listenerType}`, prop)
 
-    if (script) {
-      const bpmnScript = Script.createScript(script)
-      modeling?.updateModdleProperties(element, listener, { script: bpmnScript })
+    // 如果有 field 配置，则添加 field 子元素
+    if (listenerConfig.field) {
+      listener.field = listenerConfig.field.map((fieldConfig) => {
+        const fieldElement = bpmnFactory.create(`${processEngine}:field`, { name: fieldConfig.name })
+        if (fieldConfig.type === 'string') {
+          fieldElement.string = bpmnFactory.create(`${processEngine}:string`, { value: fieldConfig.value })
+        }
+        if (fieldConfig.type === 'expression')
+          fieldElement.expression = bpmnFactory.create(`${processEngine}:expression`, {
+            value: fieldConfig.value
+          })
+        return fieldElement
+      })
     }
+
+    extensionElements.values.push(listener)
+    businessObject.extensionElements = extensionElements
+
+    modeler!.get<Modeling>('modeling').updateProperties(element, {
+      extensionElements: extensionElements
+    })
   }
-  static updateExecutionListener(element: Element, props: ExecutionListenerForm, listener: ModdleElement) {
-    removeExtensionElements(element, getListenersContainer(element), listener)
-    Listener.addExecutionListener(element, props)
-  }
-  static getExecutionListenerTypes(element: Element) {
-    if (is(element, 'bpmn:SequenceFlow')) {
-      return [{ label: 'Take', value: 'take' }]
+  static removeListener(element: ModdleElement, listenerType: ListenerType): void {
+    const processEngine = getProcessEngine()
+    const modeler = getModeler()
+
+    const businessObject = element.businessObject
+    if (!businessObject.extensionElements) {
+      return
     }
-    return [
-      { label: 'Start', value: 'start' },
-      { label: 'End', value: 'end' }
-    ]
+    businessObject.extensionElements.values = businessObject.extensionElements.values.filter((ext: ModdleElement) => {
+      return !(ext.$type === `${processEngine}:${listenerType}`)
+    })
+
+    modeler!.get<Modeling>('modeling').updateProperties(element, {
+      extensionElements: businessObject.extensionElements
+    })
   }
-  static getExecutionListeners(element: Element): ModdleElement[] {
-    const prefix = getProcessEngine()
-    const businessObject = getListenersContainer(element)
-    return getExtensionElementsList(businessObject, `${prefix}:ExecutionListener`)
-  }
-  static getDefaultEvent(element: Element) {
-    return is(element, 'bpmn:SequenceFlow') ? 'take' : 'start'
-  }
-  static getExecutionListenerType(listener: ModdleElement): string {
-    const prefix = getProcessEngine()
-    if (isAny(listener, [`${prefix}:ExecutionListener`])) {
-      if (listener.get(`${prefix}:class`)) return 'class'
-      if (listener.get(`${prefix}:expression`)) return 'expression'
-      if (listener.get(`${prefix}:delegateExpression`)) return 'delegateExpression'
-      if (listener.get('script')) return 'script'
+  static getListeners(element: ModdleElement, listenerType: ListenerType): ListenerConfig[] {
+    const processEngine = getProcessEngine()
+    const businessObject = getBusinessObject(element)
+    if (!businessObject.extensionElements) {
+      return []
     }
-    return ''
-  }
-  static removeExecutionListener(element: Element, listener: ModdleElement) {
-    removeExtensionElements(element, getListenersContainer(element), listener)
+    const listeners = businessObject.extensionElements.values.filter((ext: ModdleElement) => {
+      return ext.$type === `${processEngine}:${listenerType}`
+    })
+
+    const listenerConfigs: ListenerConfig[] = listeners.map((listener: any) => {
+      const config: ListenerConfig = {
+        event: listener.event || listener.events,
+        type: 'class'
+      }
+
+      if (listener.class) {
+        config.value = listener.class
+        config.type = 'class'
+      }
+      if (listener.expression) {
+        config.value = listener.expression
+        config.type = 'expression'
+      }
+      if (listener.delegateExpression) {
+        config.value = listener.delegateExpression
+        config.type = 'delegateExpression'
+      }
+
+      if (listener.field) {
+        config.field = listener.field.map((field: any) => {
+          const fieldConfig: ListenerFieldConfig = {
+            name: field.name,
+            type: 'string'
+          }
+          if (field.string) {
+            fieldConfig.value = field.string
+            fieldConfig.type = 'string'
+          }
+          if (field.expression) {
+            fieldConfig.value = field.expression
+            fieldConfig.type = 'expression'
+          }
+          return fieldConfig
+        })
+      }
+
+      return config
+    })
+    return listenerConfigs
   }
 }
 export class Script {

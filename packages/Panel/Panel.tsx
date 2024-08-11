@@ -19,7 +19,7 @@ const components = Object.keys(modules)
     },
     {} as Record<string, ReturnType<typeof defineComponent>>
   )
-Logger.prettyInfo('Load Panel Sub Component', { components, modules })
+Logger.prettyInfo('Load Panel Sub Component', modules)
 
 export default defineComponent({
   name: 'Panel',
@@ -32,14 +32,11 @@ export default defineComponent({
       let activatedElement: Element | null = element
       // 验证当前选中节点
       if (!activatedElement) {
-        activatedElement =
-          elementRegistry?.find((el: Element) => el.type === 'bpmn:Process') ||
-          elementRegistry?.find((el: Element) => el.type === 'bpmn:Collaboration')
+        activatedElement = elementRegistry?.find((el: Element) => el.type === 'bpmn:Process') || elementRegistry?.find((el: Element) => el.type === 'bpmn:Collaboration')
         if (!activatedElement) return Logger.prettyError('No Element found!')
       }
       // 缓存当前节点信息
       setCurrentElement(markRaw(activatedElement))
-      console.log('activatedElement', activatedElement)
       currentElement.value = activatedElement
       // 推送事件消息
       EventEmitter.emit('element-update', activatedElement)
@@ -58,10 +55,7 @@ export default defineComponent({
 
     return () => (
       <div>
-        <PageHeader
-          title={currentElement?.value?.type?.split(':')[1] || 'Process'}
-          subTitle={customTranslate(currentElement?.value?.type?.split(':')[1] || 'Process', {})}
-        />
+        <PageHeader title={currentElement?.value?.type?.split(':')[1] || 'Process'} subTitle={customTranslate(currentElement?.value?.type?.split(':')[1] || 'Process', {})} />
         {!!currentElement.value && (
           <Collapse ghost accordion>
             {Object.entries(components).map(([name, component]) => (

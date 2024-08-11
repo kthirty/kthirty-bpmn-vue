@@ -72,14 +72,7 @@ export function dateFormat(value: number | string | Date = Date.now(), format = 
  * @param suffix 数字后的字符串，默认为空。
  * @returns 格式化后的字符串。如果输入值不是数字或字符串，则抛出类型错误。
  */
-export function formatNumber(
-  value: number | string,
-  precision = 2,
-  separator = ',',
-  decimal = '.',
-  prefix = '',
-  suffix = ''
-): string {
+export function formatNumber(value: number | string, precision = 2, separator = ',', decimal = '.', prefix = '', suffix = ''): string {
   // 类型检查
   if (typeof value !== 'number' && typeof value !== 'string') {
     throw new TypeError('Expected value to be of type number or string')
@@ -99,8 +92,7 @@ export function formatNumber(
   // 如果separator是数值而非字符串，会导致错误，此处进行检查
   if (typeof separator === 'string' && separator !== '') {
     const [integerPart, decimalPart] = formatValue.split('.')
-    formatValue =
-      integerPart.replace(/(\d)(?=(\d{3})+$)/g, '$1' + separator) + (decimalPart ? decimal + decimalPart : '')
+    formatValue = integerPart.replace(/(\d)(?=(\d{3})+$)/g, '$1' + separator) + (decimalPart ? decimal + decimalPart : '')
   }
   return prefix + formatValue + suffix
 }
@@ -341,11 +333,7 @@ export function useEventListener(target: HTMLElement | Window | Document, event:
  *  attributes: 是否观察所有监听的节点属性值的变化
  *  attributeFilter: 声明哪些属性名会被监听的数组；如果不声明该属性，所有属性的变化都将触发通知
  */
-export function useMutationObserver(
-  target: Ref | Ref[] | HTMLElement | HTMLElement[],
-  callback: MutationCallback,
-  options = {}
-) {
+export function useMutationObserver(target: Ref | Ref[] | HTMLElement | HTMLElement[], callback: MutationCallback, options = {}) {
   const stopObservation = ref(false)
   let observer: MutationObserver | undefined
   const targets = computed(() => {
@@ -497,11 +485,7 @@ export function useMediaQuery(mediaQuery: string) {
  * @param options ResizeObserver 选项，用于定制观察行为
  * @returns 返回一个对象，包含停止和开始观察的方法，使用者可以调用 start 方法开始观察，调用 stop 方法停止观察
  */
-export function useResizeObserver(
-  target: Ref | Ref[] | HTMLElement | HTMLElement[],
-  callback: ResizeObserverCallback,
-  options = {}
-) {
+export function useResizeObserver(target: Ref | Ref[] | HTMLElement | HTMLElement[], callback: ResizeObserverCallback, options = {}) {
   let observer: ResizeObserver | undefined
   const stopObservation = ref(false)
   const targets = computed(() => {

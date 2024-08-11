@@ -42,9 +42,7 @@ class EventEmitter {
   }
 
   static hasListener(type: string, fn: any) {
-    return (
-      EventEmitter._events[type] && EventEmitter._events[type].indexOf && EventEmitter._events[type].indexOf(fn) > -1
-    )
+    return EventEmitter._events[type] && EventEmitter._events[type].indexOf && EventEmitter._events[type].indexOf(fn) > -1
   }
 
   static on(type: string, fn: any, context?: any) {

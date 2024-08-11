@@ -19,41 +19,44 @@ export default defineComponent({
   setup(props) {
     const visible = ref<boolean>(false)
     const formProp = ref<{
-      assigneeType: string,
-      assigneeValue?: string,
+      assigneeType: string
+      assigneeValue?: string
       dueDate?: string
-    }>({ assigneeType: 'assignee'})
+      skipExpression?: string
+    }>({ assigneeType: 'assignee' })
     const assigneeTypeOption = ref<DefaultOptionType[]>([
       { value: 'assignee', label: '任务人' },
       { value: 'candidateUsers', label: '候选人' },
-      { value: 'candidateGroups', label: '候选组' },
+      { value: 'candidateGroups', label: '候选组' }
     ])
-    
 
     const loadProps = () => {
       visible.value = isUserTask(props.element)
       if (!visible.value) return
-      const assignee = getExPropValue<string>(props.element, 'assignee');
-      const candidateUsers = getExPropValue<string>(props.element, 'candidateUsers');
-      const candidateGroups = getExPropValue<string>(props.element, 'candidateGroups');
-      if (assignee){
-        formProp.value.assigneeType = 'assignee';
-        formProp.value.assigneeValue = assignee;
+      const assignee = getExPropValue<string>(props.element, 'assignee')
+      const candidateUsers = getExPropValue<string>(props.element, 'candidateUsers')
+      const candidateGroups = getExPropValue<string>(props.element, 'candidateGroups')
+      const skipExpression = getExPropValue<string>(props.element, 'skipExpression')
+      if (assignee) {
+        formProp.value.assigneeType = 'assignee'
+        formProp.value.assigneeValue = assignee
       }
       if (candidateUsers) {
-        formProp.value.assigneeType = 'candidateUsers';
-        formProp.value.assigneeValue = candidateUsers;
+        formProp.value.assigneeType = 'candidateUsers'
+        formProp.value.assigneeValue = candidateUsers
       }
       if (candidateGroups) {
-        formProp.value.assigneeType = 'candidateGroups';
-        formProp.value.assigneeValue = candidateGroups;
+        formProp.value.assigneeType = 'candidateGroups'
+        formProp.value.assigneeValue = candidateGroups
       }
       formProp.value.dueDate = getExPropValue<string>(props.element, 'dueDate')
+      formProp.value.skipExpression = skipExpression
     }
     const updateProps = () => {
-      if (!visible.value) return     
+      if (!visible.value) return
       updateExPropValue(props.element, formProp.value.assigneeType, formProp.value.assigneeValue)
       updateExPropValue(props.element, 'dueDate', formProp.value.dueDate)
+      updateExPropValue(props.element, 'skipExpression', formProp.value.skipExpression)
     }
 
     onMounted(loadProps)
@@ -75,27 +78,31 @@ export default defineComponent({
               <>
                 {formProp.value && (
                   <Form colon={false} model={formProp.value} labelCol={{ span: 6 }} validateTrigger="blur">
-                    <FormItem name="assignee" >
-                       <div>
+                    <FormItem name="assignee">
+                      <div>
                         <Row>
                           <Col span={6}>
                             <FormItemRest>
-                               <Select onChange={assigneeTypeChange} v-model:value={formProp.value.assigneeType} options={assigneeTypeOption.value}/>
+                              <Select onChange={assigneeTypeChange} v-model:value={formProp.value.assigneeType} options={assigneeTypeOption.value} />
                             </FormItemRest>
                           </Col>
                           <Col span={18}>
-                            <Input v-model:value={formProp.value.assigneeValue} onChange={updateProps} 
-                            v-slots={{ addonAfter: () => (<SelectableDrawer v-model:value={formProp.value.dueDate}/>)}}/>
+                            <Input
+                              v-model:value={formProp.value.assigneeValue}
+                              onChange={updateProps}
+                              v-slots={{
+                                addonAfter: () => <SelectableDrawer v-model:value={formProp.value.dueDate} />
+                              }}
+                            />
                           </Col>
                         </Row>
-                       </div>
+                      </div>
                     </FormItem>
                     <FormItem label="到期日" name="dueDate">
-                      <Input
-                          v-model:value={formProp.value.dueDate}
-                          onChange={updateProps}
-                          v-slots={{ addonAfter: () => (<Settings style="cursor: pointer;" size={18} />) }}
-                        />
+                      <Input v-model:value={formProp.value.dueDate} onChange={updateProps} v-slots={{ addonAfter: () => <Settings style="cursor: pointer;" size={18} /> }} />
+                    </FormItem>
+                    <FormItem label="跳过表达式" name="skipExpression">
+                      <Input v-model:value={formProp.value.skipExpression} onChange={updateProps} />
                     </FormItem>
                   </Form>
                 )}

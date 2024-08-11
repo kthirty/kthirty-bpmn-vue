@@ -7,6 +7,16 @@
   },
   "associations": [],
   "types": [
+    { "name": "string" },
+    { "name": "expression" },
+    {
+      "name": "field",
+      "properties": [
+        { "name": "name", "type": "String", "isAttr": true },
+        { "name": "string", "type": "string" },
+        { "name": "expression", "type": "expression" }
+      ]
+    },
     {
       "name": "InOutBinding",
       "superClass": ["Element"],
@@ -752,12 +762,7 @@
       "name": "Field",
       "superClass": ["Element"],
       "meta": {
-        "allowedIn": [
-          "flowable:ServiceTaskLike",
-          "flowable:ExecutionListener",
-          "flowable:TaskListener",
-          "bpmn:ServiceTask"
-        ]
+        "allowedIn": ["flowable:ServiceTaskLike", "flowable:ExecutionListener", "flowable:TaskListener", "flowable:EventListener", "bpmn:ServiceTask"]
       },
       "properties": [
         {
@@ -770,17 +775,8 @@
           "type": "String"
         },
         {
-          "name": "stringValue",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
           "name": "string",
           "type": "String"
-        },
-        {
-          "name": "htmlVar",
-          "type": "Expression"
         }
       ]
     },
@@ -938,7 +934,7 @@
           "type": "Script"
         },
         {
-          "name": "fields",
+          "name": "field",
           "type": "Field",
           "isMany": true
         }
@@ -976,7 +972,45 @@
           "type": "Script"
         },
         {
-          "name": "fields",
+          "name": "field",
+          "type": "Field",
+          "isMany": true
+        }
+      ]
+    },
+    {
+      "name": "EventListener",
+      "superClass": ["Element"],
+      "meta": {
+        "allowedIn": ["bpmn:Process"]
+      },
+      "properties": [
+        {
+          "name": "expression",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "class",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "delegateExpression",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "events",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
+          "name": "script",
+          "type": "Script"
+        },
+        {
+          "name": "field",
           "type": "Field",
           "isMany": true
         }
@@ -986,7 +1020,7 @@
       "name": "FormProperty",
       "superClass": ["Element"],
       "meta": {
-        "allowedIn": ["bpmn:StartEvent", "bpmn:UserTask"]
+        "allowedIn": ["bpmn:StartEvent", "bpmn:UserTask", "bpmn:Process"]
       },
       "properties": [
         {

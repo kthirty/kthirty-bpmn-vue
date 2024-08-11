@@ -9,8 +9,7 @@ export function isStartEvent(element: Element): boolean {
 export function isCanSetConditional(element: Element): boolean {
   return (
     // @ts-ignore
-    (is(element, 'bpmn:SequenceFlow') && isConditionalSource((element as Connection)?.source)) ||
-    isConditionEventDefinition(element)
+    (is(element, 'bpmn:SequenceFlow') && isConditionalSource((element as Connection)?.source)) || isConditionEventDefinition(element)
   )
 }
 // 元素是否符合可以设置Initiator的条件
@@ -36,14 +35,7 @@ export function isUserTask(element: Element): boolean {
 }
 // 是否支持设置监听器
 export function isExecutable(element: Element): boolean {
-  const LISTENER_ALLOWED_TYPES = [
-    'bpmn:Activity',
-    'bpmn:Event',
-    'bpmn:Gateway',
-    'bpmn:SequenceFlow',
-    'bpmn:Process',
-    'bpmn:Participant'
-  ]
+  const LISTENER_ALLOWED_TYPES = ['bpmn:Activity', 'bpmn:Event', 'bpmn:Gateway', 'bpmn:SequenceFlow', 'bpmn:Process', 'bpmn:Participant']
   if (isAny(element, LISTENER_ALLOWED_TYPES)) return true
   if (is(element, 'bpmn:Participant')) {
     return !!element.businessObject.processRef
