@@ -11,7 +11,6 @@ const Scales = defineComponent({
     let canvas: any | null = null
 
     EventEmitter.on('modeler-init', (modeler: Modeler) => {
-      console.log('modeler-init', modeler)
       try {
         canvas = modeler.get<any>('canvas')
         currentScale.value = canvas.zoom()

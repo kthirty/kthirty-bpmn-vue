@@ -31,7 +31,6 @@ const menus = ref(routes[0].children)
 const current = ref([route.name])
 function onClick(e: any): void {
   console.log(`${e.item.title} ${e.key}`)
-  // console.log(e.keyPath)
 }
 const routerViewRef = ref()
 </script>

@@ -13,14 +13,10 @@ const xml = ref<string>('')
 watch(() => xml.value, () => {
   Logger.prettyPrimary('xml changed', xml.value)
 })
-const handleClick = () => {
-  console.log('xml', xml.value)
-}
 
 </script>
 <template>
   <div class="designer-div">
-    <a-float-button @click="handleClick" />
     <bpmn-designer v-model:xml="xml" />
   </div>
 </template>
