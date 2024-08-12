@@ -20,9 +20,9 @@ pnpm publish
 # pnpm up kthirty-boot-vue@$version
 
 # 提交版本更新代码到 github
-git add .
-git commit -m "update $version"
-git push
+# git add .
+# git commit -m "update $version"
+# git push
 
 # 重新部署文档
 pnpm docs:deploy
