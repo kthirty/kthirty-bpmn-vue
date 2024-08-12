@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import Logger from '../../../packages/utils/Logger';
-import { ref, watch } from 'vue';
+import Logger from '../../../packages/utils/Logger'
+import { ref, watch } from 'vue'
 
 // import.meta.glob 都支持以字符串形式导入文件，类似于 以字符串形式导入资源
 const modules = import.meta.glob('../../../package.json', { eager: true })
@@ -10,10 +10,12 @@ const dependencies = (modules as Recordable)[url].dependencies
 console.log('dependencies', dependencies)
 
 const xml = ref<string>('')
-watch(() => xml.value, () => {
-  Logger.prettyPrimary('xml changed', xml.value)
-})
-
+watch(
+  () => xml.value,
+  () => {
+    Logger.prettyPrimary('xml changed', xml.value)
+  }
+)
 </script>
 <template>
   <div class="designer-div">
