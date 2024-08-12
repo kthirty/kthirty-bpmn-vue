@@ -7,12 +7,17 @@ import { EmptyXml } from '../utils/BpmnElementHelper'
 import { getModeler, setModeler } from '../utils/BpmnHolder'
 import Logger from '../utils/Logger'
 import config from './config'
+import type { DesignerOption } from 'packages/types'
 
 const Designer = defineComponent({
   name: 'Designer',
   props: {
     xml: {
       type: String as PropType<string>
+    },
+    option: {
+      type: Object as PropType<DesignerOption>,
+      required: false
     }
   },
   emits: ['update:xml', 'command-stack-changed'],
@@ -27,9 +32,13 @@ const Designer = defineComponent({
           setModeler(undefined)
         }
         // 初始化参数
+        let designerConfig = { ...config }
+        if (props.option?.configEnhance) {
+          designerConfig = props.option.configEnhance(designerConfig)
+        }
         const options: BaseViewerOptions = {
           container: designer!.value as HTMLElement,
-          ...config
+          ...designerConfig
         }
         // 开始初始化Modeler
         const modeler: Modeler = new Modeler(options)

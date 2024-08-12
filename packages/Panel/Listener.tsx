@@ -160,11 +160,14 @@ export default defineComponent({
         fieldAction.show.value = true
       },
       save: () => {
+        if (!editForm.value.field) {
+          editForm.value.field = []
+        }
         if (fieldAction.isEdit.value) {
-          const index = editForm.value.field!.indexOf(fieldCurrentSelected.value.rows[0])
-          editForm.value.field![index] = fieldAction.form.value
+          const index = editForm.value.field.indexOf(fieldCurrentSelected.value.rows[0])
+          editForm.value.field[index] = fieldAction.form.value
         } else {
-          editForm.value.field!.push(fieldAction.form.value)
+          editForm.value.field.push(fieldAction.form.value)
         }
         fieldAction.show.value = false
       },

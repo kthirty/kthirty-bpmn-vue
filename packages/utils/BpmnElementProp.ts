@@ -412,7 +412,7 @@ export class Listener {
       listener.field = listenerConfig.field.map((fieldConfig) => {
         const fieldElement = bpmnFactory.create(`${processEngine}:field`, { name: fieldConfig.name })
         if (fieldConfig.type === 'string') {
-          fieldElement.string = bpmnFactory.create(`${processEngine}:string`, { value: fieldConfig.value })
+          fieldElement.string = bpmnFactory.create(`${processEngine}:string`, fieldConfig.value)
         }
         if (fieldConfig.type === 'expression')
           fieldElement.expression = bpmnFactory.create(`${processEngine}:expression`, {
@@ -421,7 +421,9 @@ export class Listener {
         return fieldElement
       })
     }
-
+    if (!extensionElements.values) {
+      extensionElements.values = []
+    }
     extensionElements.values.push(listener)
     businessObject.extensionElements = extensionElements
 

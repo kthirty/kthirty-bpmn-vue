@@ -9,10 +9,9 @@ export default defineComponent({
   components: { Toolbar, Panel, Designer },
   setup() {
     return () => (
-      <Layout theme="light" style="height: 100%" hasSider={true}>
+      <Layout style="height: 100%" hasSider={true}>
         <Layout>
           <LayoutHeader
-            theme="light"
             style={{
               height: '5%',
               lineHeight: '5%',
@@ -23,7 +22,7 @@ export default defineComponent({
           >
             <Toolbar />
           </LayoutHeader>
-          <LayoutContent theme="light" style={{ height: '95%' }}>
+          <LayoutContent style={{ height: '95%' }}>
             <Designer />
           </LayoutContent>
         </Layout>

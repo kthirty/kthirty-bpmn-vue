@@ -1,3 +1,4 @@
+import type { BaseViewerOptions } from 'bpmn-js/lib/BaseViewer'
 import type { JSX } from 'vue/jsx-runtime'
 
 export interface EditorSettings {
@@ -122,4 +123,7 @@ export interface PanelOption {
 }
 export const defaultPanelOption: PanelOption = {
   items: ['BasicInfo', 'Condition', 'Listener', 'StartInitiator', 'UserTask']
+}
+export interface DesignerOption {
+  configEnhance?: (config: BaseViewerOptions) => BaseViewerOptions
 }

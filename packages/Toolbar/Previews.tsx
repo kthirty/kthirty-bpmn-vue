@@ -33,7 +33,7 @@ const Previews = defineComponent({
           overflowY: 'auto'
         },
         content: () => (
-          <div class="preview-model" style={{ height: '100%' }}>
+          <div style={{ height: '100%' }}>
             <Textarea bordered={false} readonly autoSize v-model:value={previewText.value} />
           </div>
         )
