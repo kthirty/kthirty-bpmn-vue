@@ -5,6 +5,8 @@ import Exports from './Exports'
 import Previews from './Previews'
 import LintToggle from './LintToggle'
 import Aligns from './Aligns'
+import Scales from './Scales'
+import Commands from './Commands'
 
 import { Space } from 'ant-design-vue'
 import { defaultToobarOption, type ToobarOption } from '../types'
@@ -26,6 +28,8 @@ const Toolbar = defineComponent({
         {props.option.items.includes('Previews') && <Previews />}
         {props.option.items.includes('LintToggle') && <LintToggle />}
         {props.option.items.includes('Aligns') && <Aligns />}
+        {props.option.items.includes('Scales') && <Scales />}
+        {props.option.items.includes('Commands') && <Commands />}
         {props.option.extra && props.option.extra()}
       </Space>
     )

@@ -10,6 +10,7 @@ declare module 'vue' {
     ABackTop: typeof import('ant-design-vue/es')['BackTop']
     ACol: typeof import('ant-design-vue/es')['Col']
     AConfigProvider: typeof import('ant-design-vue/es')['ConfigProvider']
+    AFloatButton: typeof import('ant-design-vue/es')['FloatButton']
     AMenu: typeof import('ant-design-vue/es')['Menu']
     AMenuItem: typeof import('ant-design-vue/es')['MenuItem']
     ARow: typeof import('ant-design-vue/es')['Row']

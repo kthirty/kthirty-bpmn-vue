@@ -16,6 +16,11 @@ export const listenerValueTypeOptions: { label: string; value: string }[] = [
   { label: '表达式', value: 'expression' },
   { label: '代理表达式', value: 'delegateExpression' }
 ]
+
+export const fieldTypeOptions: { label: string; value: string }[] = [
+  { label: '字符串', value: 'string' },
+  { label: '表达式', value: 'expression' }
+]
 // 执行监听器事件类型
 export const executionEventOptions: Record<string, string>[] = [
   { label: '开始', value: 'start' },
@@ -83,3 +88,24 @@ export const eventEventOptions: Record<string, string>[] = [
   { label: '变量删除', value: 'VARIABLE_DELETED' },
   { label: '变量更新', value: 'VARIABLE_UPDATED' }
 ]
+
+export const emptyXml = (key?: string, name?: string): string => {
+  const timestamp = Date.now()
+  const newId: string = key ? key : `Process_${timestamp}`
+  const newName: string = name || `业务流程_${timestamp}`
+
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+  targetNamespace="http://bpmn.io/schema/bpmn"
+  id="Definitions_${newId}">
+  <bpmn:process id="${newId}" name="${newName}" isExecutable="true"></bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="${newId}"></bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>`
+}

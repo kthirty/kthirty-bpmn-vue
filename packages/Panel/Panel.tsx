@@ -20,7 +20,7 @@ const components = Object.keys(modules)
     },
     {} as Record<string, ReturnType<typeof defineComponent>>
   )
-Logger.prettyInfo('Load Panel Sub Component', modules)
+Logger.prettyPrimary('Load Panel Sub Component', Object.keys(modules).join('  '))
 
 export default defineComponent({
   name: 'Panel',

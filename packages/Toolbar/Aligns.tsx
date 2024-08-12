@@ -58,7 +58,6 @@ const Aligns = defineComponent({
             ></Popover>
           )
         })}
-        <Divider type="vertical" />
       </div>
     )
   }

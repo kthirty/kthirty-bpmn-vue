@@ -2,6 +2,7 @@ import { defineComponent, ref } from 'vue'
 import { Button, Popover } from 'ant-design-vue'
 import { getModeler } from '../utils/BpmnHolder'
 import { FolderInput } from 'lucide-vue-next'
+import EventEmitter from '../utils/EventEmitter'
 
 const Imports = defineComponent({
   name: 'Imports',
@@ -17,9 +18,10 @@ const Imports = defineComponent({
         const file = importRef.value.files[0]
         const reader = new FileReader()
         reader.readAsText(file)
-        reader.onload = function () {
+        reader.onload = async function () {
           const xmlStr = this.result
-          getModeler()!.importXML(xmlStr as string)
+          await getModeler()!.importXML(xmlStr as string)
+          EventEmitter.emit('xml-change', xmlStr as string)
         }
         importRef.value.value = ''
         importRef.value.files = null

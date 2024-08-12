@@ -44,11 +44,12 @@ const Designer = defineComponent({
         const modeler: Modeler = new Modeler(options)
         setModeler(markRaw(modeler))
         EventEmitter.emit('modeler-init', modeler)
+        EventEmitter.on('xml-change', (xml: string) => emit('update:xml', xml))
         // 添加监听事件
         modeler.on('commandStack.changed', async (event) => {
           try {
             const { xml } = await modeler.saveXML({ format: true })
-            emit('update:xml', xml)
+            EventEmitter.emit('xml-change', xml)
             emit('command-stack-changed', event)
           } catch (error) {
             Logger.prettyError('commandStack.changed event handle error', error)

@@ -7,8 +7,8 @@
   },
   "associations": [],
   "types": [
-    { "name": "string","properties": [{"name": "value","type": "string","isBody": true}] },
-    { "name": "expression","properties": [{"name": "value","type": "Expression","isBody": true}]   },
+    { "name": "string", "properties": [{ "name": "value", "type": "String", "isBody": true }] },
+    { "name": "expression", "properties": [{ "name": "value", "type": "Expression", "isBody": true }] },
     {
       "name": "field",
       "properties": [

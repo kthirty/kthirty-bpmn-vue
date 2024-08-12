@@ -108,13 +108,13 @@ export interface ListenerFieldConfig {
   value?: string
 }
 
-export type ToobarItem = 'Imports' | 'Exports' | 'Previews' | 'LintToggle' | 'Aligns'
+export type ToobarItem = 'Imports' | 'Exports' | 'Previews' | 'LintToggle' | 'Aligns' | 'Scales' | 'Commands'
 export interface ToobarOption {
   items: ToobarItem[]
   extra?: () => JSX.Element
 }
 export const defaultToobarOption: ToobarOption = {
-  items: ['Imports', 'Exports', 'Previews', 'LintToggle', 'Aligns']
+  items: ['Imports', 'Exports', 'Previews', 'LintToggle', 'Aligns', 'Scales', 'Commands']
 }
 export type PanelItem = 'BasicInfo' | 'Condition' | 'Listener' | 'StartInitiator' | 'UserTask'
 export interface PanelOption {
@@ -126,4 +126,9 @@ export const defaultPanelOption: PanelOption = {
 }
 export interface DesignerOption {
   configEnhance?: (config: BaseViewerOptions) => BaseViewerOptions
+}
+export interface BpmnDesignerOption {
+  designer?: DesignerOption
+  panel?: PanelOption
+  toolbar?: ToobarOption
 }

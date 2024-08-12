@@ -22,21 +22,9 @@ import { isProcess, isUserTask } from '../utils/BpmnElementType'
 import { Listener } from '../utils/BpmnElementProp'
 import type { ListenerConfig, ListenerFieldConfig, ListenerType } from '../types'
 import type { DefaultOptionType } from 'ant-design-vue/es/select'
-import { eventEventOptions, executionEventOptions, listenerValueTypeOptions, taskEventOptions } from '../utils/BpmnElementData'
+import { eventEventOptions, executionEventOptions, fieldTypeOptions, listenerValueTypeOptions, taskEventOptions } from '../utils/BpmnElementData'
 import type { Key } from 'ant-design-vue/es/table/interface'
 import { message } from '../utils/BpmnElementHelper'
-import Logger from '../utils/Logger'
-
-const columns: TableColumnType[] = [
-  { title: '事件', dataIndex: 'event', key: 'event', align: 'center' },
-  { title: '类型', dataIndex: 'type', key: 'type', align: 'center' },
-  { title: '监听器', dataIndex: 'value', key: 'value', align: 'center' }
-]
-const fieldColumns: TableColumnType[] = [
-  { title: '字段名', dataIndex: 'name', key: 'name', align: 'center' },
-  { title: '字段类型', dataIndex: 'type', key: 'type', align: 'center' },
-  { title: '字段值', dataIndex: 'value', key: 'value', align: 'center' }
-]
 
 export default defineComponent({
   name: 'Listener',
@@ -47,6 +35,29 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const columns: TableColumnType[] = [
+      {
+        title: '事件',
+        dataIndex: 'event',
+        key: 'event',
+        align: 'center',
+        customRender: ({ text }) => eventOptions.value.filter((it) => it.value === text)[0]?.label
+      },
+      {
+        title: '类型',
+        dataIndex: 'type',
+        key: 'type',
+        align: 'center',
+        customRender: ({ text }) => listenerValueTypeOptions.filter((it) => it.value === text)[0].label
+      },
+      { title: '监听器', dataIndex: 'value', key: 'value', align: 'center' }
+    ]
+    const fieldColumns: TableColumnType[] = [
+      { title: '字段名', dataIndex: 'name', key: 'name', align: 'center' },
+      { title: '字段类型', dataIndex: 'type', key: 'type', align: 'center', customRender: ({ text }) => fieldTypeOptions.filter((it) => it.value === text)[0].label },
+      { title: '字段值', dataIndex: 'value', key: 'value', align: 'center' }
+    ]
+
     const activeTab = ref<ListenerType>('ExecutionListener')
     const taskList = ref<ListenerConfig[]>([])
     const eventList = ref<ListenerConfig[]>([])
@@ -61,18 +72,9 @@ export default defineComponent({
     }
     const updateProps = () => {
       Listener.removeListener(props.element, activeTab.value)
-      if (activeTab.value === 'TaskListener') {
-        Logger.prettyInfo('更新监听器数据', taskList.value)
-        taskList.value.forEach((it) => Listener.addListener(props.element, activeTab.value, it))
-      }
-      if (activeTab.value === 'EventListener') {
-        Logger.prettyInfo('更新监听器数据', eventList.value)
-        eventList.value.forEach((it) => Listener.addListener(props.element, activeTab.value, it))
-      }
-      if (activeTab.value === 'ExecutionListener') {
-        Logger.prettyInfo('更新监听器数据', executionList.value)
-        executionList.value.forEach((it) => Listener.addListener(props.element, activeTab.value, it))
-      }
+      if (activeTab.value === 'TaskListener') taskList.value.forEach((it) => Listener.addListener(props.element, activeTab.value, it))
+      if (activeTab.value === 'EventListener') eventList.value.forEach((it) => Listener.addListener(props.element, activeTab.value, it))
+      if (activeTab.value === 'ExecutionListener') executionList.value.forEach((it) => Listener.addListener(props.element, activeTab.value, it))
     }
 
     onMounted(loadProps)
@@ -117,9 +119,9 @@ export default defineComponent({
       const currentList = activeTab.value === 'EventListener' ? eventList : activeTab.value === 'ExecutionListener' ? executionList : taskList
       if (currentIsEdit.value) {
         const index = currentList.value.indexOf(currentSelect.value[0])
-        currentList.value[index] = editForm.value
+        currentList.value[index] = { ...editForm.value }
       } else {
-        currentList.value.push(editForm.value)
+        currentList.value.push({ ...editForm.value })
       }
       updateProps()
       closeDrawer()
@@ -165,9 +167,9 @@ export default defineComponent({
         }
         if (fieldAction.isEdit.value) {
           const index = editForm.value.field.indexOf(fieldCurrentSelected.value.rows[0])
-          editForm.value.field[index] = fieldAction.form.value
+          editForm.value.field[index] = { ...fieldAction.form.value }
         } else {
-          editForm.value.field.push(fieldAction.form.value)
+          editForm.value.field.push({ ...fieldAction.form.value })
         }
         fieldAction.show.value = false
       },
@@ -309,13 +311,7 @@ export default defineComponent({
                           <Input v-model:value={fieldAction.form.value.name} />
                         </FormItem>
                         <FormItem name="type" label="字段类型">
-                          <RadioGroup
-                            v-model:value={fieldAction.form.value.type}
-                            options={[
-                              { label: '字符串', value: 'string' },
-                              { label: '表达式', value: 'expression' }
-                            ]}
-                          />
+                          <RadioGroup v-model:value={fieldAction.form.value.type} options={fieldTypeOptions} />
                         </FormItem>
                         <FormItem name="value" label="字段值">
                           <Input v-model:value={fieldAction.form.value.value} />

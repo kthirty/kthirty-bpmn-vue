@@ -73,12 +73,12 @@ export default defineComponent({
                     <Textarea v-model:value={basicInfo.value.doc} onChange={updateProperties} />
                   </FormItem>
                   {currentIsProcess.value && (
-                    <FormItem label="版本号" name="version">
+                    <FormItem label="版本号" tooltip="仅文本备注作用" name="version">
                       <Input v-model:value={basicInfo.value.version} onChange={updateProperties} />
                     </FormItem>
                   )}
                   {currentIsProcess.value && (
-                    <FormItem label="可执行" name="executable">
+                    <FormItem label="可执行" tooltip="描述类流程可设置为不可执行" name="executable">
                       <Switch v-model:checked={basicInfo.value.executable} onChange={updateProperties} />
                     </FormItem>
                   )}
