@@ -10,7 +10,7 @@ version=`jq -r .version package.json`
 pnpm build
 
 git add .
-git commit -m "update"
+git commit -m "update $version"
 git push
 
 # 发布到 npm，pnpm(高性能的npm)
