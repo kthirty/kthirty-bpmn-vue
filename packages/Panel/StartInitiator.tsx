@@ -6,7 +6,7 @@ import { CollapsePanel, FormItem, Input } from 'ant-design-vue'
 import { isCanSetInitiator } from '../utils/BpmnElementType'
 
 export default defineComponent({
-  name: 'ElementStartInitiator',
+  name: 'StartInitiator',
   props: {
     element: {
       type: Object as PropType<Element>,
@@ -28,7 +28,7 @@ export default defineComponent({
     return () =>
       show.value ? (
         <CollapsePanel
-          name="StartInitiator"
+          key="StartInitiator"
           v-slots={{
             header: () => '启动配置',
             default: () => (

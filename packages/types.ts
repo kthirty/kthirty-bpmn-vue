@@ -1,3 +1,5 @@
+import type { JSX } from 'vue/jsx-runtime'
+
 export interface EditorSettings {
   language: string
   processName: string
@@ -103,4 +105,21 @@ export interface ListenerFieldConfig {
   name: string
   type: 'string' | 'expression'
   value?: string
+}
+
+export type ToobarItem = 'Imports' | 'Exports' | 'Previews' | 'LintToggle' | 'Aligns'
+export interface ToobarOption {
+  items: ToobarItem[]
+  extra?: () => JSX.Element
+}
+export const defaultToobarOption: ToobarOption = {
+  items: ['Imports', 'Exports', 'Previews', 'LintToggle', 'Aligns']
+}
+export type PanelItem = 'BasicInfo' | 'Condition' | 'Listener' | 'StartInitiator' | 'UserTask'
+export interface PanelOption {
+  items: PanelItem[]
+  extra?: (() => JSX.Element)[]
+}
+export const defaultPanelOption: PanelOption = {
+  items: ['BasicInfo', 'Condition', 'Listener', 'StartInitiator', 'UserTask']
 }

@@ -1,4 +1,4 @@
-import { defineComponent, markRaw, ref } from 'vue'
+import { defineComponent, markRaw, ref, type PropType } from 'vue'
 import { Collapse, PageHeader } from 'ant-design-vue'
 import EventEmitter from '../utils/EventEmitter'
 import { getModeler, setCurrentElement } from '../utils/BpmnHolder'
@@ -6,11 +6,12 @@ import { debounce } from '../utils/BpmnElementHelper'
 import type { Element } from 'bpmn-js/lib/model/Types'
 import Logger from '../utils/Logger'
 import { customTranslate } from '../Designer/config/modules/Translate'
+import { defaultPanelOption, defaultToobarOption, type PanelItem, type PanelOption } from '../types'
 
 // 引入子组件
 const modules = import.meta.glob('./*.tsx', { eager: true })
 const components = Object.keys(modules)
-  .filter((path) => path !== './index.tsx')
+  .filter((path) => path !== './Panel.tsx')
   .reduce(
     (acc, path) => {
       const componentName = path.match(/\.\/(.*)\.tsx$/)?.[1]
@@ -23,7 +24,14 @@ Logger.prettyInfo('Load Panel Sub Component', modules)
 
 export default defineComponent({
   name: 'Panel',
-  setup() {
+  props: {
+    option: {
+      type: Object as PropType<PanelOption>,
+      required: false,
+      default: defaultPanelOption
+    }
+  },
+  setup(props) {
     const currentElement = ref<Element | null>(null)
     // 设置选中元素，更新 store
     const changeElement = debounce((element: Element | null) => {
@@ -58,9 +66,12 @@ export default defineComponent({
         <PageHeader title={currentElement?.value?.type?.split(':')[1] || 'Process'} subTitle={customTranslate(currentElement?.value?.type?.split(':')[1] || 'Process', {})} />
         {!!currentElement.value && (
           <Collapse ghost accordion>
-            {Object.entries(components).map(([name, component]) => (
-              <component is={component} v-model:element={currentElement.value} />
-            ))}
+            {Object.entries(components)
+              .filter(([name, component]) => props.option.items.includes(name as PanelItem))
+              .map(([name, component]) => (
+                <component is={component} v-model:element={currentElement.value} />
+              ))}
+            {props.option.extra && props.option.extra.map((it) => it())}
           </Collapse>
         )}
       </div>

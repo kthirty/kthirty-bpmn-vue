@@ -9,7 +9,7 @@ import type { DefaultOptionType } from 'ant-design-vue/es/select'
 import SelectableDrawer from '../SelectableDrawer'
 
 export default defineComponent({
-  name: 'ElementUserTask',
+  name: 'UserTask',
   props: {
     element: {
       type: Object as PropType<Element>,

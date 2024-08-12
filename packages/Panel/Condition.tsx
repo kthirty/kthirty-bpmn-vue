@@ -17,7 +17,7 @@ const options = [
 ]
 
 export default defineComponent({
-  name: 'ElementCondition',
+  name: 'Condition',
   props: {
     element: {
       type: Object as PropType<Element>,
@@ -49,7 +49,7 @@ export default defineComponent({
     return () =>
       visible.value ? (
         <CollapsePanel
-          name="ElementCondition"
+          key="ElementCondition"
           v-slots={{
             header: () => '流转条件',
             default: () => (

@@ -105,6 +105,7 @@ export default defineComponent({
         currentSelectKeys.value = []
       }
     )
+    onMounted(loadEventOptions)
     // 表格数据修改
     const del = () => {
       activeTab.value === 'EventListener' && (eventList.value = eventList.value.filter((it) => !currentSelect.value.includes(it)))

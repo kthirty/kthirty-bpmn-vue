@@ -14,7 +14,7 @@ interface BasicInfo {
 }
 
 export default defineComponent({
-  name: 'ElementBaseInfo',
+  name: 'BasicInfo',
   props: {
     element: {
       type: Object as PropType<Element>,
