@@ -3,7 +3,7 @@ import { Button, Drawer, Form, FormItem, Input, Table, type TableColumnType } fr
 import type { Key } from 'ant-design-vue/es/table/interface'
 import { Settings } from 'lucide-vue-next'
 import type { DataSourceExtraParam, DataSourceItem } from '../types'
-import { format } from 'packages/utils/BpmnElementHelper'
+import { format } from '../utils/BpmnElementHelper'
 
 export default defineComponent({
   name: 'SelectableDrawer',
@@ -54,17 +54,18 @@ export default defineComponent({
       model: {},
       columns: []
     })
-    const extraClose = () => extra.value.visible = false
-    const extraSave =  () => {
-      extraFormRef.value.validate()
-      .then(() => {
-        const currentKey = format(extra.value.row!.value, extra.value.model)
-         emit('update:value', currentKey)
-         emit('select', currentKey, extra.value.row)
-         extraClose()
-         closeDrawer()
-      }).catch(() => {})
-
+    const extraClose = () => (extra.value.visible = false)
+    const extraSave = () => {
+      extraFormRef.value
+        .validate()
+        .then(() => {
+          const currentKey = format(extra.value.row!.value, extra.value.model)
+          emit('update:value', currentKey)
+          emit('select', currentKey, extra.value.row)
+          extraClose()
+          closeDrawer()
+        })
+        .catch(() => {})
     }
     return () => (
       <>

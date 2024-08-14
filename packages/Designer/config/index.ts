@@ -1,16 +1,16 @@
 import type { BaseViewerOptions } from 'bpmn-js/lib/BaseViewer'
 import Translate from './modules/Translate'
 import flowableModdleDescriptors from './descriptors/flowable.json'
+import activitieModdleDescriptors from './descriptors/activiti.json'
 import { CreateAppendAnythingModule } from 'bpmn-js-create-append-anything'
 import BpmnColorPickerModule from 'bpmn-js-color-picker'
 import lintModule from 'bpmn-js-bpmnlint'
 import bpmnlint from './modules/bpmnlint'
+import { getProcessEngine } from '../../utils/BpmnHolder'
 
 const config: BaseViewerOptions = {
   additionalModules: [Translate, CreateAppendAnythingModule, BpmnColorPickerModule, lintModule],
-  moddleExtensions: {
-    flowable: flowableModdleDescriptors
-  },
+  moddleExtensions: {},
   keyboard: {
     bindTo: window
   },
@@ -19,4 +19,7 @@ const config: BaseViewerOptions = {
     bpmnlint: bpmnlint
   }
 }
+const processEngine = getProcessEngine()
+if (processEngine === 'flowable') config!.moddleExtensions!['flowable'] = flowableModdleDescriptors
+if (processEngine === 'activiti') config!.moddleExtensions!['activiti'] = activitieModdleDescriptors
 export default config

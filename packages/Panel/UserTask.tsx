@@ -101,9 +101,9 @@ export default defineComponent({
                               v-model:value={formProp.value.assigneeValue}
                               onChange={updateProps}
                               v-slots={
-                                dataSource.value.assigneeDataSource.length > 0 && {
-                                  addonAfter: () => <SelectableDrawer v-model:value={formProp.value.assigneeValue} dataSource={() => dataSource.value.assigneeDataSource} />
-                                }
+                                dataSource.value.assigneeDataSource.length > 0
+                                  ? { addonAfter: () => <SelectableDrawer v-model:value={formProp.value.assigneeValue} dataSource={() => dataSource.value.assigneeDataSource} /> }
+                                  : undefined
                               }
                             />
                           </Col>
@@ -115,9 +115,11 @@ export default defineComponent({
                         v-model:value={formProp.value.dueDate}
                         onChange={updateProps}
                         v-slots={
-                          dataSource.value.dueDateDataSource.length > 0 && {
-                            addonAfter: () => <SelectableDrawer v-model:value={formProp.value.dueDate} dataSource={() => dataSource.value.dueDateDataSource} />
-                          }
+                          dataSource.value.dueDateDataSource.length > 0
+                            ? {
+                                addonAfter: () => <SelectableDrawer v-model:value={formProp.value.dueDate} dataSource={() => dataSource.value.dueDateDataSource} />
+                              }
+                            : undefined
                         }
                       />
                     </FormItem>
@@ -125,11 +127,13 @@ export default defineComponent({
                       <Input
                         v-model:value={formProp.value.skipExpression}
                         onChange={updateProps}
-                        v-slots={dataSource.value.skipExpressionDataSource.length > 0 &&{
-                          addonAfter: () => (
-                            <SelectableDrawer v-model:value={formProp.value.skipExpression} dataSource={() => dataSource.value.skipExpressionDataSource} />
-                          )
-                        }}
+                        v-slots={
+                          dataSource.value.skipExpressionDataSource.length > 0
+                            ? {
+                                addonAfter: () => <SelectableDrawer v-model:value={formProp.value.skipExpression} dataSource={() => dataSource.value.skipExpressionDataSource} />
+                              }
+                            : undefined
+                        }
                       />
                     </FormItem>
                   </Form>
