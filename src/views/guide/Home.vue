@@ -16,10 +16,33 @@ watch(
     Logger.prettyPrimary('xml changed', xml.value)
   }
 )
+const listenerDataSource = [
+  {
+    value: '${com.kthirty.demo.TableStatusChange({tableName},{tableColumn},{columnValue})}',
+    label: '表字段修改监听',
+    description: '修改表字段为指定值',
+    extraParam: [
+      { value: 'tableName', label: '表名' ,required: true },
+      { value: 'tableColumn', label: '表字段' ,required: true},
+      { value: 'columnValue', label: '值'  ,required: true,defaultValue: '1'}
+    ]
+  }
+]
 </script>
 <template>
   <div class="designer-div">
-    <bpmn-designer v-model:xml="xml" />
+    <bpmn-designer
+      v-model:xml="xml"
+      :option="{
+        panel: {
+          Listener: {
+            dataSource: () => {
+              return listenerDataSource
+            }
+          }
+        }
+      }"
+    />
   </div>
 </template>
 <style lang="less">

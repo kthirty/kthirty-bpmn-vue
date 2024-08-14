@@ -120,6 +120,14 @@ export type PanelItem = 'BasicInfo' | 'Condition' | 'Listener' | 'StartInitiator
 export interface PanelOption {
   items: PanelItem[]
   extra?: (() => JSX.Element)[]
+  UserTask?: {
+    assigneeDataSource?: (type: string) => DataSourceItem[]
+    dueDateDataSource?: () => DataSourceItem[]
+    skipExpressionDataSource?: () => DataSourceItem[]
+  }
+  Listener?: {
+    dataSource?: (type: ListenerType) => DataSourceItem[]
+  }
 }
 export const defaultPanelOption: PanelOption = {
   items: ['BasicInfo', 'Condition', 'Listener', 'StartInitiator', 'UserTask']
@@ -131,4 +139,19 @@ export interface BpmnDesignerOption {
   designer?: DesignerOption
   panel?: PanelOption
   toolbar?: ToobarOption
+}
+
+export interface DataSourceItem {
+  value: string
+  label: string
+  description?: string
+  extraParam?: DataSourceExtraParam[]
+}
+// 补充参数
+export interface DataSourceExtraParam {
+  value: string
+  label: string
+  description: string
+  required?: boolean
+  defaultValue?: string
 }

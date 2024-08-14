@@ -20,11 +20,12 @@ import {
 } from 'ant-design-vue'
 import { isProcess, isUserTask } from '../utils/BpmnElementType'
 import { Listener } from '../utils/BpmnElementProp'
-import type { ListenerConfig, ListenerFieldConfig, ListenerType } from '../types'
+import type { DataSourceItem, ListenerConfig, ListenerFieldConfig, ListenerType, PanelOption } from '../types'
 import type { DefaultOptionType } from 'ant-design-vue/es/select'
 import { eventEventOptions, executionEventOptions, fieldTypeOptions, listenerValueTypeOptions, taskEventOptions } from '../utils/BpmnElementData'
 import type { Key } from 'ant-design-vue/es/table/interface'
 import { message } from '../utils/BpmnElementHelper'
+import SelectableDrawer from '../SelectableDrawer'
 
 export default defineComponent({
   name: 'Listener',
@@ -32,6 +33,10 @@ export default defineComponent({
     element: {
       type: Object as PropType<Element>,
       required: true
+    },
+    option: {
+      type: Object as PropType<PanelOption>,
+      required: false
     }
   },
   setup(props) {
@@ -66,9 +71,10 @@ export default defineComponent({
     const currentSelectKeys = ref<Key[]>([])
 
     const loadProps = () => {
-      if (isUserTask(props.element)) taskList.value = Listener.getListeners(props.element, 'TaskListener')
-      if (isProcess(props.element)) eventList.value = Listener.getListeners(props.element, 'EventListener')
-      executionList.value = Listener.getListeners(props.element, 'ExecutionListener')
+      if (activeTab.value === 'TaskListener') taskList.value = Listener.getListeners(props.element, 'TaskListener')
+      if (activeTab.value === 'EventListener') eventList.value = Listener.getListeners(props.element, 'EventListener')
+      if (activeTab.value === 'ExecutionListener') executionList.value = Listener.getListeners(props.element, 'ExecutionListener')
+      templateDataSource.value = props.option?.Listener?.dataSource ? props.option?.Listener?.dataSource(activeTab.value) : []
     }
     const updateProps = () => {
       Listener.removeListener(props.element, activeTab.value)
@@ -179,6 +185,8 @@ export default defineComponent({
       }
     }
 
+    const templateDataSource = ref<DataSourceItem[]>([])
+
     return () => (
       <CollapsePanel
         key="Listener"
@@ -187,6 +195,11 @@ export default defineComponent({
           default: () => (
             <ConfigProvider componentSize="middle">
               <Space>
+                {templateDataSource.value.length > 0 && (
+                  <SelectableDrawer dataSource={() => templateDataSource.value}>
+                    <Button type="primary">选择预设</Button>
+                  </SelectableDrawer>
+                )}
                 <Button type="primary" onClick={openDrawer}>
                   新增
                 </Button>

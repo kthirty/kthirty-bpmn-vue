@@ -217,3 +217,9 @@ export function downloadFile(href: string, filename: string) {
     URL.revokeObjectURL(a.href) // 释放URL 对象
   }
 }
+// 字符串填充
+export function format(template:string, params:any) {
+  return template.replace(/{(\w+)}/g, function (match, key) {
+    return typeof params[key] !== 'undefined' ? params[key] : match
+  })
+}

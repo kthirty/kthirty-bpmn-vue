@@ -32,6 +32,7 @@ export default defineComponent({
     }
   },
   setup(props) {
+    const showItems = props.option.items || defaultPanelOption.items
     const currentElement = ref<Element | null>(null)
     // 设置选中元素，更新 store
     const changeElement = debounce((element: Element | null) => {
@@ -67,9 +68,9 @@ export default defineComponent({
         {!!currentElement.value && (
           <Collapse ghost accordion>
             {Object.entries(components)
-              .filter(([name, component]) => props.option.items.includes(name as PanelItem))
+              .filter(([name, component]) => showItems.includes(name as PanelItem))
               .map(([name, component]) => (
-                <component is={component} v-model:element={currentElement.value} />
+                <component is={component} v-model:element={currentElement.value} option={props.option}/>
               ))}
             {props.option.extra && props.option.extra.map((it) => it())}
           </Collapse>

@@ -1,12 +1,12 @@
-import { defineComponent, onMounted, ref, watch } from 'vue'
-import type { PropType } from 'vue'
-import type { Element } from 'bpmn-js/lib/model/Types'
-import { isUserTask } from '../utils/BpmnElementType'
-import { Button, Col, CollapsePanel, Form, FormItem, FormItemRest, Input, InputGroup, Row, Select } from 'ant-design-vue'
-import { Settings } from 'lucide-vue-next'
-import { getExPropValue, updateExPropValue } from '../utils/BpmnElementHelper'
+import { Col, CollapsePanel, Form, FormItem, FormItemRest, Input, Row, Select } from 'ant-design-vue'
 import type { DefaultOptionType } from 'ant-design-vue/es/select'
+import type { Element } from 'bpmn-js/lib/model/Types'
+import type { PropType } from 'vue'
+import { defineComponent, onMounted, ref, watch } from 'vue'
 import SelectableDrawer from '../SelectableDrawer'
+import type { DataSourceItem, PanelOption } from '../types'
+import { getExPropValue, updateExPropValue } from '../utils/BpmnElementHelper'
+import { isUserTask } from '../utils/BpmnElementType'
 
 export default defineComponent({
   name: 'UserTask',
@@ -14,6 +14,10 @@ export default defineComponent({
     element: {
       type: Object as PropType<Element>,
       required: true
+    },
+    option: {
+      type: Object as PropType<PanelOption>,
+      required: false
     }
   },
   setup(props) {
@@ -68,6 +72,12 @@ export default defineComponent({
       updateExPropValue(props.element, 'candidateGroups', undefined)
     }
 
+    const dataSource = ref({
+      assigneeDataSource: [],
+      dueDateDataSource: [],
+      skipExpressionDataSource: []
+    })
+
     return () =>
       visible.value ? (
         <CollapsePanel
@@ -90,19 +100,37 @@ export default defineComponent({
                             <Input
                               v-model:value={formProp.value.assigneeValue}
                               onChange={updateProps}
-                              v-slots={{
-                                addonAfter: () => <SelectableDrawer v-model:value={formProp.value.dueDate} />
-                              }}
+                              v-slots={
+                                dataSource.value.assigneeDataSource.length > 0 && {
+                                  addonAfter: () => <SelectableDrawer v-model:value={formProp.value.assigneeValue} dataSource={() => dataSource.value.assigneeDataSource} />
+                                }
+                              }
                             />
                           </Col>
                         </Row>
                       </div>
                     </FormItem>
                     <FormItem label="到期日" name="dueDate">
-                      <Input v-model:value={formProp.value.dueDate} onChange={updateProps} v-slots={{ addonAfter: () => <Settings style="cursor: pointer;" size={18} /> }} />
+                      <Input
+                        v-model:value={formProp.value.dueDate}
+                        onChange={updateProps}
+                        v-slots={
+                          dataSource.value.dueDateDataSource.length > 0 && {
+                            addonAfter: () => <SelectableDrawer v-model:value={formProp.value.dueDate} dataSource={() => dataSource.value.dueDateDataSource} />
+                          }
+                        }
+                      />
                     </FormItem>
                     <FormItem label="跳过表达式" name="skipExpression">
-                      <Input v-model:value={formProp.value.skipExpression} onChange={updateProps} />
+                      <Input
+                        v-model:value={formProp.value.skipExpression}
+                        onChange={updateProps}
+                        v-slots={dataSource.value.skipExpressionDataSource.length > 0 &&{
+                          addonAfter: () => (
+                            <SelectableDrawer v-model:value={formProp.value.skipExpression} dataSource={() => dataSource.value.skipExpressionDataSource} />
+                          )
+                        }}
+                      />
                     </FormItem>
                   </Form>
                 )}
