@@ -219,8 +219,10 @@ export function downloadFile(href: string, filename: string) {
 }
 // 属性模版填充
 export function format(template: any, params: any): any {
-  console.log('format', template, params)
   if (typeof template === 'string') {
+    if (!template.includes('$')) {
+      return template
+    }
     return template.replace(/\${(\w+)}/g, function (match, key) {
       return typeof params[key] !== 'undefined' ? params[key] : match
     })

@@ -102,7 +102,11 @@ export default defineComponent({
                               onChange={updateProps}
                               v-slots={
                                 dataSource.value.assigneeDataSource.length > 0
-                                  ? { addonAfter: () => <SelectableDrawer v-model:value={formProp.value.assigneeValue} dataSource={() => dataSource.value.assigneeDataSource} /> }
+                                  ? {
+                                      addonAfter: () => (
+                                        <SelectableDrawer dataSource={() => dataSource.value.assigneeDataSource} onSelect={(res) => (formProp.value.assigneeValue = res)} />
+                                      )
+                                    }
                                   : undefined
                               }
                             />
@@ -117,7 +121,7 @@ export default defineComponent({
                         v-slots={
                           dataSource.value.dueDateDataSource.length > 0
                             ? {
-                                addonAfter: () => <SelectableDrawer v-model:value={formProp.value.dueDate} dataSource={() => dataSource.value.dueDateDataSource} />
+                                addonAfter: () => <SelectableDrawer dataSource={() => dataSource.value.dueDateDataSource} onSelect={(res) => (formProp.value.dueDate = res)} />
                               }
                             : undefined
                         }
@@ -130,7 +134,9 @@ export default defineComponent({
                         v-slots={
                           dataSource.value.skipExpressionDataSource.length > 0
                             ? {
-                                addonAfter: () => <SelectableDrawer v-model:value={formProp.value.skipExpression} dataSource={() => dataSource.value.skipExpressionDataSource} />
+                                addonAfter: () => (
+                                  <SelectableDrawer dataSource={() => dataSource.value.skipExpressionDataSource} onSelect={(res) => (formProp.value.skipExpression = res)} />
+                                )
                               }
                             : undefined
                         }
