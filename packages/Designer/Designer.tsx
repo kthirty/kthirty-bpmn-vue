@@ -40,7 +40,6 @@ const Designer = defineComponent({
           container: designer!.value as HTMLElement,
           ...designerConfig
         }
-        console.log('options', options)
         // 开始初始化Modeler
         const modeler: Modeler = new Modeler(options)
         setModeler(markRaw(modeler))

@@ -217,9 +217,20 @@ export function downloadFile(href: string, filename: string) {
     URL.revokeObjectURL(a.href) // 释放URL 对象
   }
 }
-// 字符串填充
-export function format(template:string, params:any) {
-  return template.replace(/{(\w+)}/g, function (match, key) {
-    return typeof params[key] !== 'undefined' ? params[key] : match
-  })
+// 属性模版填充
+export function format(template: any, params: any): any {
+  console.log('format', template, params)
+  if (typeof template === 'string') {
+    return template.replace(/\${(\w+)}/g, function (match, key) {
+      return typeof params[key] !== 'undefined' ? params[key] : match
+    })
+  }
+  if (Array.isArray(template)) {
+    return template.map((it) => format(it, params))
+  }
+  if (typeof template === 'object') {
+    Object.keys(template).forEach((k) => (template[k] = format(template[k], params)))
+    return template
+  }
+  return template
 }

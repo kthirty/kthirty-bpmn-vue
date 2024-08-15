@@ -1,7 +1,7 @@
-import { defineComponent, markRaw, ref, type PropType } from 'vue'
+import { defineComponent, markRaw, ref, watch, type PropType } from 'vue'
 import { Collapse, PageHeader } from 'ant-design-vue'
 import EventEmitter from '../utils/EventEmitter'
-import { getModeler, setCurrentElement } from '../utils/BpmnHolder'
+import { getModeler, setCurrentElement, setProcessEngine } from '../utils/BpmnHolder'
 import { debounce } from '../utils/BpmnElementHelper'
 import type { Element } from 'bpmn-js/lib/model/Types'
 import Logger from '../utils/Logger'
@@ -32,6 +32,12 @@ export default defineComponent({
     }
   },
   setup(props) {
+    // 设置流程引擎
+    setProcessEngine(props.option.processEngine || 'flowable')
+    watch(
+      () => props.option.processEngine,
+      () => setProcessEngine(props.option.processEngine || 'flowable')
+    )
     const showItems = props.option.items || defaultPanelOption.items
     const currentElement = ref<Element | null>(null)
     // 设置选中元素，更新 store
@@ -70,7 +76,7 @@ export default defineComponent({
             {Object.entries(components)
               .filter(([name, component]) => showItems.includes(name as PanelItem))
               .map(([name, component]) => (
-                <component is={component} v-model:element={currentElement.value} option={props.option}/>
+                <component is={component} v-model:element={currentElement.value} option={props.option} />
               ))}
             {props.option.extra && props.option.extra.map((it) => it())}
           </Collapse>

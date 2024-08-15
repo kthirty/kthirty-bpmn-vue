@@ -24,7 +24,7 @@ import type { DataSourceItem, ListenerConfig, ListenerFieldConfig, ListenerType,
 import type { DefaultOptionType } from 'ant-design-vue/es/select'
 import { eventEventOptions, executionEventOptions, fieldTypeOptions, listenerValueTypeOptions, taskEventOptions } from '../utils/BpmnElementData'
 import type { Key } from 'ant-design-vue/es/table/interface'
-import { message } from '../utils/BpmnElementHelper'
+import { format, message } from '../utils/BpmnElementHelper'
 import SelectableDrawer from '../SelectableDrawer'
 
 export default defineComponent({
@@ -44,22 +44,24 @@ export default defineComponent({
       {
         title: '事件',
         dataIndex: 'event',
+        ellipsis: true,
         key: 'event',
         align: 'center',
-        customRender: ({ text }) => eventOptions.value.filter((it) => it.value === text)[0]?.label
+        customRender: ({ text }) => eventOptions.value.filter((it) => it.value === text)?.[0]?.label
       },
       {
         title: '类型',
         dataIndex: 'type',
+        ellipsis: true,
         key: 'type',
         align: 'center',
-        customRender: ({ text }) => listenerValueTypeOptions.filter((it) => it.value === text)[0].label
+        customRender: ({ text }) => listenerValueTypeOptions.filter((it) => it.value === text)?.[0].label
       },
-      { title: '监听器', dataIndex: 'value', key: 'value', align: 'center' }
+      { title: '监听器', dataIndex: 'value', key: 'value', align: 'center', ellipsis: true }
     ]
     const fieldColumns: TableColumnType[] = [
       { title: '字段名', dataIndex: 'name', key: 'name', align: 'center' },
-      { title: '字段类型', dataIndex: 'type', key: 'type', align: 'center', customRender: ({ text }) => fieldTypeOptions.filter((it) => it.value === text)[0].label },
+      { title: '字段类型', dataIndex: 'type', key: 'type', align: 'center', customRender: ({ text }) => fieldTypeOptions.filter((it) => it.value === text)?.[0].label },
       { title: '字段值', dataIndex: 'value', key: 'value', align: 'center' }
     ]
 
@@ -186,7 +188,11 @@ export default defineComponent({
     }
 
     const templateDataSource = ref<DataSourceItem[]>([])
-
+    const templateSelect = (selected: any) => {
+      const currentList = activeTab.value === 'EventListener' ? eventList : activeTab.value === 'ExecutionListener' ? executionList : taskList
+      currentList.value.push({ ...selected })
+      // updateProps()
+    }
     return () => (
       <CollapsePanel
         key="Listener"
@@ -196,7 +202,7 @@ export default defineComponent({
             <ConfigProvider componentSize="middle">
               <Space>
                 {templateDataSource.value.length > 0 && (
-                  <SelectableDrawer dataSource={() => templateDataSource.value}>
+                  <SelectableDrawer dataSource={() => templateDataSource.value} onSelect={templateSelect}>
                     <Button type="primary">选择预设</Button>
                   </SelectableDrawer>
                 )}

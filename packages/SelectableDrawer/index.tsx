@@ -1,9 +1,10 @@
-import { defineComponent, ref, watch, type PropType } from 'vue'
+import { defineComponent, markRaw, ref, toRefs, watch, type PropType } from 'vue'
 import { Button, Drawer, Form, FormItem, Input, Table, type TableColumnType } from 'ant-design-vue'
 import type { Key } from 'ant-design-vue/es/table/interface'
 import { Settings } from 'lucide-vue-next'
 import type { DataSourceExtraParam, DataSourceItem } from '../types'
 import { format } from '../utils/BpmnElementHelper'
+import { add } from './../utils/index'
 
 export default defineComponent({
   name: 'SelectableDrawer',
@@ -11,14 +12,9 @@ export default defineComponent({
     dataSource: {
       type: Function as PropType<() => DataSourceItem[]>,
       required: false
-    },
-    value: {
-      type: String,
-      required: false,
-      default: ''
     }
   },
-  emits: ['update:value', 'select'],
+  emits: ['select'],
   setup(props, { emit, slots }) {
     const dataSource = ref(props.dataSource?.())
     const drawerVisible = ref(false)
@@ -27,26 +23,22 @@ export default defineComponent({
       drawerVisible.value = true
     }
     const closeDrawer = () => (drawerVisible.value = false)
-    const handleSelectChange = (selectedRowKeys: Key[], selectRows: any[]) => {
-      const selectRow = selectRows[0] as DataSourceItem
-      if (selectRow.extraParam && selectRow.extraParam?.length > 0) {
+
+    const columns: TableColumnType[] = [
+      { title: '名称', dataIndex: 'label', key: 'label', width: 100, ellipsis: true, align: 'center' },
+      { title: '描述', dataIndex: 'description', key: 'description', width: 100, ellipsis: true, align: 'center' }
+    ]
+    const selectRow = (row: DataSourceItem) => {
+      extra.value.row = row
+      if (row.extraParam && row.extraParam.length > 0) {
         extra.value.model = {}
-        extra.value.columns = selectRow.extraParam
-        selectRow.extraParam.forEach((it) => it.defaultValue && (extra.value.model[it.value] = it.defaultValue))
-        extra.value.row = selectRow
-        extra.value.visible = true
+        extra.value.columns = row.extraParam
+        extraOpen()
       } else {
-        emit('update:value', selectedRowKeys[0])
-        emit('select', selectedRowKeys[0], selectRows[0])
-        closeDrawer()
+        emit('select', extra.value.row.value)
       }
     }
 
-    const columns: TableColumnType[] = [
-      { title: '名称', dataIndex: 'label', key: 'label', width: 100 },
-      { title: '值', dataIndex: 'value', key: 'value', width: 100 },
-      { title: '描述', dataIndex: 'description', key: 'description', width: 100 }
-    ]
     const extraFormRef = ref()
     const extra = ref<{ visible: boolean; model: any; columns: DataSourceExtraParam[]; row?: DataSourceItem }>({
       row: undefined,
@@ -55,13 +47,12 @@ export default defineComponent({
       columns: []
     })
     const extraClose = () => (extra.value.visible = false)
+    const extraOpen = () => (extra.value.visible = true)
     const extraSave = () => {
       extraFormRef.value
         .validate()
         .then(() => {
-          const currentKey = format(extra.value.row!.value, extra.value.model)
-          emit('update:value', currentKey)
-          emit('select', currentKey, extra.value.row)
+          emit('select', format({ ...extra.value.row?.value }, extra.value.model))
           extraClose()
           closeDrawer()
         })
@@ -70,26 +61,20 @@ export default defineComponent({
     return () => (
       <>
         <div onClick={openDrawer}>{slots.default ? slots.default() : <Settings style="cursor: pointer;" size={18} />}</div>
-        <Drawer width="40%" visible={drawerVisible.value} onClose={closeDrawer} destroyOnClose={true} title="请选择">
+        <Drawer visible={drawerVisible.value} onClose={closeDrawer} destroyOnClose={true} title="请选择">
           <Table
             customRow={(record) => {
-              return { onClick: () => handleSelectChange([record['value']], [record]) }
+              return { onClick: () => selectRow(record), style: 'cursor: pointer;' }
             }}
             columns={columns}
             dataSource={dataSource.value}
-            rowKey="value"
+            rowKey={(it) => JSON.stringify(it)}
             pagination={false}
-            rowSelection={{
-              type: 'radio',
-              selectedRowKeys: [props.value || ''],
-              onChange: handleSelectChange
-            }}
           />
         </Drawer>
         <Drawer
           visible={extra.value.visible}
           title="请补充信息"
-          size="large"
           onClose={extraClose}
           v-slots={{
             extra: () => (

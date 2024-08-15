@@ -1,46 +1,6 @@
 import type { BaseViewerOptions } from 'bpmn-js/lib/BaseViewer'
 import type { JSX } from 'vue/jsx-runtime'
 
-export interface EditorSettings {
-  language: string
-  processName: string
-  processId: string
-  processEngine: 'flowable' | 'activiti' | 'camunda'
-  paletteMode: 'default' | 'custom' | 'rewrite' | 'enhancement'
-  penalMode: 'default' | 'custom' | 'rewrite'
-  contextPadMode: 'default' | 'rewrite' | 'enhancement'
-  rendererMode: 'default' | 'rewrite' | 'enhancement'
-  bg: string
-  toolbar: boolean
-  miniMap: boolean
-  contextmenu: boolean
-  customContextmenu: boolean
-  otherModule: boolean
-  templateChooser: boolean
-  useLint: boolean
-  customTheme: Record<string, string | number>
-}
-
-export const defaultSettings: EditorSettings = {
-  language: 'zh',
-  processId: `Process_${new Date().getTime()}`,
-  processName: `业务流程`,
-  processEngine: 'flowable',
-  paletteMode: 'enhancement',
-  penalMode: 'custom',
-  contextPadMode: 'enhancement',
-  rendererMode: 'rewrite',
-  bg: 'grid-image',
-  toolbar: true,
-  miniMap: true,
-  contextmenu: true,
-  customContextmenu: true,
-  otherModule: true,
-  templateChooser: true,
-  useLint: false,
-  customTheme: {}
-}
-
 // bpmn.js 事件参数
 // 1. canvas 事件
 export type CanvasEventParams = {
@@ -90,11 +50,6 @@ export interface FormItemVisible {
   listenerType: string
   scriptType: string
 }
-export interface TaskListener {
-  event: string
-  class: string
-  [key: string]: any
-}
 export type ListenerType = 'TaskListener' | 'ExecutionListener' | 'EventListener'
 export interface ListenerConfig {
   event?: string | string[]
@@ -118,6 +73,7 @@ export const defaultToobarOption: ToobarOption = {
 }
 export type PanelItem = 'BasicInfo' | 'Condition' | 'Listener' | 'StartInitiator' | 'UserTask'
 export interface PanelOption {
+  processEngine?: 'flowable' | 'activiti'
   items: PanelItem[]
   extra?: (() => JSX.Element)[]
   UserTask?: {
@@ -142,9 +98,10 @@ export interface BpmnDesignerOption {
 }
 
 export interface DataSourceItem {
-  value: string
+  value: any
   label: string
   description?: string
+  // 需要补充的参数
   extraParam?: DataSourceExtraParam[]
 }
 // 补充参数
