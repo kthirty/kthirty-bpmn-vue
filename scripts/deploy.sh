@@ -13,15 +13,16 @@ pnpm docs:build
 cd docs/.vitepress/dist
 
 # 提交打包静态网站到 github-pages 分支
+rm -rf .git
 git init
 git add .
 git commit -m 'deploy'
 
 # 部署到 https://<username>.github.io/<repo>
-git push -f git@github.com:kthirty/kthirty-boot-vue.git master:github-pages
+git push -f git@github.com:kthirty/kthirty-bpmn-vue.git main:github-pages
 
 # 提交所有代码到 github
-cd ../../../
-git add .
-git commit -m 'update'
-git push
+# cd ../../../
+# git add .
+# git commit -m 'update'
+# git push
