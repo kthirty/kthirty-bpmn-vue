@@ -24,6 +24,8 @@
     "docs:dev": "vitepress dev docs --port 8000 --open",
     "docs:build": "vitepress build docs",
     "docs:deploy": "sh scripts/deploy.sh",
+    "build:example": "vite build --mode example",
+    "publish:page": "sh scripts/page.sh",
     "dev": "vite",
     "pub": "sh scripts/publish.sh",
     "push": "sh scripts/push.sh",
@@ -34,7 +36,7 @@
     "type-check": "vue-tsc --noEmit",
     "build:es": "vite build",
     "build:browser": "vite -f iife build",
-    "preview": "vite preview",
+    "preview": "vite preview --outDir dist/docs --base /kthirty-bpmn-vue/",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-pattern .gitignore"
   },
   "dependencies": {

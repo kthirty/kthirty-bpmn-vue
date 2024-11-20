@@ -3,7 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: `KThirty Bpmn Vue`,
   description: '可视化流程编辑器',
-  base: '/kthirty-bpmn-js/',
+  base: '/kthirty-bpmn-vue/docs/',
 
   head: [ // 网站图标
     ['link', { rel: 'icon', type: 'image/svg+xml', href: 'https://cn.vitejs.dev/viteconf.svg' }]

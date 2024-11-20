@@ -12,6 +12,6 @@ for (let index = 0; index < 10; index++) {
 <template>
   <div>
     <div>当前值为：{{ val }}</div>
-    <selectable-drawer v-model:value="val" :dataSource="dataSource"></selectable-drawer>
+
   </div>
 </template>
