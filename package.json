@@ -1,6 +1,6 @@
 {
-  "name": "kthirty-demo2",
-  "version": "0.0.12",
+  "name": "kthirty-bpmn-vue",
+  "version": "0.0.1",
   "private": false,
   "type": "module",
   "files": [

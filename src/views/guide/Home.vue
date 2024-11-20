@@ -25,7 +25,7 @@ const listenerDataSource = [
       field: [
         { name: 'tableName', type: 'string', value: '${tableName}' },
         { name: 'tableColumn', type: 'string', value: '${tableColumn}' },
-        { name: 'columnValue', type: 'string', value: '${columnValue}' },
+        { name: 'columnValue', type: 'string', value: '${columnValue}' }
       ]
     },
     label: '表字段修改监听',
@@ -40,16 +40,19 @@ const listenerDataSource = [
 </script>
 <template>
   <div class="designer-div">
-    <bpmn-designer v-model:xml="xml" :option="{
-      panel: {
-        processEngine: 'flowable',
-        Listener: {
-          dataSource: () => {
-            return listenerDataSource
+    <bpmn-designer
+      v-model:xml="xml"
+      :option="{
+        panel: {
+          processEngine: 'flowable',
+          Listener: {
+            dataSource: () => {
+              return listenerDataSource
+            }
           }
         }
-      }
-    }" />
+      }"
+    />
   </div>
 </template>
 <style lang="less">
