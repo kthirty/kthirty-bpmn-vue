@@ -73,7 +73,6 @@ export const defaultToobarOption: ToobarOption = {
 }
 export type PanelItem = 'BasicInfo' | 'Condition' | 'Listener' | 'StartInitiator' | 'UserTask'
 export interface PanelOption {
-  processEngine?: 'flowable' | 'activiti'
   items: PanelItem[]
   extra?: (() => JSX.Element)[]
   UserTask?: {
@@ -89,6 +88,7 @@ export const defaultPanelOption: PanelOption = {
   items: ['BasicInfo', 'Condition', 'Listener', 'StartInitiator', 'UserTask']
 }
 export interface DesignerOption {
+  processEngine?: 'flowable' | 'activiti',
   configEnhance?: (config: BaseViewerOptions) => BaseViewerOptions
 }
 export interface BpmnDesignerOption {

@@ -32,12 +32,6 @@ export default defineComponent({
     }
   },
   setup(props) {
-    // 设置流程引擎
-    setProcessEngine(props.option.processEngine || 'flowable')
-    watch(
-      () => props.option.processEngine,
-      () => setProcessEngine(props.option.processEngine || 'flowable')
-    )
     const showItems = props.option.items || defaultPanelOption.items
     const currentElement = ref<Element | null>(null)
     // 设置选中元素，更新 store

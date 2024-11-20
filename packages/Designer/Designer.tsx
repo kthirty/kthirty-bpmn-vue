@@ -1,12 +1,12 @@
-import { defineComponent, ref, toRefs, onMounted, markRaw } from 'vue'
+import {defineComponent, ref, toRefs, onMounted, markRaw, watch} from 'vue'
 import type { PropType } from 'vue'
 import type { BaseViewerOptions } from 'bpmn-js/lib/BaseViewer'
 import Modeler from 'bpmn-js/lib/Modeler'
 import EventEmitter from '../utils/EventEmitter'
 import { EmptyXml } from '../utils/BpmnElementHelper'
-import { getModeler, setModeler } from '../utils/BpmnHolder'
+import {getModeler, getProcessEngine, setModeler, setProcessEngine} from '../utils/BpmnHolder'
 import Logger from '../utils/Logger'
-import config from './config'
+import {getConfig } from './config'
 import type { DesignerOption } from 'packages/types'
 
 const Designer = defineComponent({
@@ -22,6 +22,16 @@ const Designer = defineComponent({
   },
   emits: ['update:xml', 'command-stack-changed'],
   setup(props, { emit }) {
+    // 设置流程引擎
+    setProcessEngine(props.option?.processEngine || 'flowable')
+    watch(
+        () => props.option?.processEngine,
+        () => {
+          setProcessEngine(props.option?.processEngine || 'flowable');
+          location.reload();
+        }
+    )
+
     const { xml } = toRefs(props)
     const designer = ref<HTMLDivElement>()
     onMounted(async () => {
@@ -32,10 +42,11 @@ const Designer = defineComponent({
           setModeler(undefined)
         }
         // 初始化参数
-        let designerConfig = { ...config }
+        let designerConfig = { ...getConfig(getProcessEngine()) }
         if (props.option?.configEnhance) {
           designerConfig = props.option.configEnhance(designerConfig)
         }
+        Logger.prettyPrimary('Designer Init ', designerConfig);
         const options: BaseViewerOptions = {
           container: designer!.value as HTMLElement,
           ...designerConfig

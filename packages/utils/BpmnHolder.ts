@@ -7,7 +7,9 @@ export const getModeler = (): Modeler | undefined => (window as any)?.__kthirty?
 export const setModeler = (modeler: Modeler | undefined) => ((window as any).__kthirty.modeler = modeler)
 export const getModeling = (): Modeling | undefined => getModeler()?.get<Modeling>('modeling')
 export const getModdle = (): Moddle | undefined => getModeler()?.get<Moddle>('moddle')
-export const setProcessEngine = (processEngine: string) => ((window as any).__kthirty.processEngine = processEngine)
+export const setProcessEngine = (processEngine: string) => {
+    console.log('setProcessEngine', processEngine); (window as any).__kthirty.processEngine = processEngine
+}
 export const getProcessEngine = (): string => (window as any)?.__kthirty?.processEngine || 'activiti'
 export const setCurrentElement = (currentElement: Element) => ((window as any).__kthirty.currentElement = currentElement)
 export const getCurrentElement = () => (window as any).__kthirty.currentElement

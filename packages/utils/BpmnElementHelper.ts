@@ -137,8 +137,9 @@ export function createModdleElement(elementType: string, properties: Record<stri
 
 // 获取节点属性
 export function getExPropValue<T>(element: any, propKey: string): T {
+  const ele = element.businessObject ? element.businessObject : element;
   const exPropKey = `${getProcessEngine()}:${propKey}`
-  return element && element.get ? element.get(exPropKey) : element ? element[exPropKey] : element
+  return ele && ele.get ? ele.get(exPropKey) : ele[exPropKey];
 }
 
 // 修改节点属性

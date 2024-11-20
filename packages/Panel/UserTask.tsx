@@ -44,20 +44,22 @@ export default defineComponent({
       if (assignee) {
         formProp.value.assigneeType = 'assignee'
         formProp.value.assigneeValue = assignee
-      }
-      if (candidateUsers) {
+      }else if (candidateUsers) {
         formProp.value.assigneeType = 'candidateUsers'
         formProp.value.assigneeValue = candidateUsers
-      }
-      if (candidateGroups) {
+      }else if (candidateGroups) {
         formProp.value.assigneeType = 'candidateGroups'
         formProp.value.assigneeValue = candidateGroups
+      }else{
+        formProp.value.assigneeType = 'assignee';
+        formProp.value.assigneeValue = '';
       }
       formProp.value.dueDate = getExPropValue<string>(props.element, 'dueDate')
       formProp.value.skipExpression = skipExpression
     }
     const updateProps = () => {
       if (!visible.value) return
+      console.log(props.element, formProp.value.assigneeType, formProp.value.assigneeValue);
       updateExPropValue(props.element, formProp.value.assigneeType, formProp.value.assigneeValue)
       updateExPropValue(props.element, 'dueDate', formProp.value.dueDate)
       updateExPropValue(props.element, 'skipExpression', formProp.value.skipExpression)
