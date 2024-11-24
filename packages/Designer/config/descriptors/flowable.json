@@ -260,6 +260,11 @@
           "type": "String"
         },
         {
+          "name": "nameExpression",
+          "isAttr": true,
+          "type": "String"
+        },
+        {
           "name": "historyTimeToLive",
           "isAttr": true,
           "type": "String"
@@ -525,6 +530,27 @@
         },
         {
           "name": "value",
+          "type": "String",
+          "isAttr": true
+        }
+      ]
+    },
+    {
+      "name": "HandleButton",
+      "superClass": ["Element"],
+      "properties": [
+        {
+          "name": "code",
+          "type": "String",
+          "isAttr": true
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "isAttr": true
+        },
+        {
+          "name": "resultCode",
           "type": "String",
           "isAttr": true
         }

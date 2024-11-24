@@ -63,15 +63,15 @@ export interface ListenerFieldConfig {
   value?: string
 }
 
-export type ToobarItem = 'Imports' | 'Exports' | 'Previews' | 'LintToggle' | 'Aligns' | 'Scales' | 'Commands'
-export interface ToobarOption {
-  items: ToobarItem[]
+export type ToolbarItem = 'Imports' | 'Exports' | 'Previews' | 'LintToggle' | 'Aligns' | 'Scales' | 'Commands'
+export interface ToolbarOption {
+  items: ToolbarItem[]
   extra?: () => JSX.Element
 }
-export const defaultToobarOption: ToobarOption = {
+export const defaultToolbarOption: ToolbarOption = {
   items: ['Imports', 'Exports', 'Previews', 'LintToggle', 'Aligns', 'Scales', 'Commands']
 }
-export type PanelItem = 'BasicInfo' | 'Condition' | 'Listener' | 'StartInitiator' | 'UserTask'
+export type PanelItem = 'BasicInfo' | 'Condition' | 'Listener' | 'StartInitiator' | 'UserTask' | 'UserTaskButtons'
 export interface PanelOption {
   items: PanelItem[]
   extra?: (() => JSX.Element)[]
@@ -85,7 +85,7 @@ export interface PanelOption {
   }
 }
 export const defaultPanelOption: PanelOption = {
-  items: ['BasicInfo', 'Condition', 'Listener', 'StartInitiator', 'UserTask']
+  items: ['BasicInfo', 'Condition', 'Listener', 'StartInitiator', 'UserTask', 'UserTaskButtons']
 }
 export interface DesignerOption {
   processEngine?: 'flowable' | 'activiti',
@@ -94,7 +94,7 @@ export interface DesignerOption {
 export interface BpmnDesignerOption {
   designer?: DesignerOption
   panel?: PanelOption
-  toolbar?: ToobarOption
+  toolbar?: ToolbarOption
 }
 
 export interface DataSourceItem {
@@ -111,4 +111,10 @@ export interface DataSourceExtraParam {
   description: string
   required?: boolean
   defaultValue?: string
+}
+// 任务按钮
+export interface ButtonInfo {
+  code?: string
+  name?: string
+  resultCode?: string
 }

@@ -13,7 +13,9 @@ const xml = ref<string>('')
 watch(
   () => xml.value,
   () => {
-    Logger.prettyPrimary('xml changed', xml.value)
+    console.groupCollapsed('xml changed')
+    console.log(xml.value)
+    console.groupEnd()
   }
 )
 const listenerDataSource = [
