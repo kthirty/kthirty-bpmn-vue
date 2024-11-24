@@ -9,15 +9,15 @@ import Scales from './Scales'
 import Commands from './Commands'
 
 import { Space } from 'ant-design-vue'
-import { defaultToobarOption, type ToobarOption } from '../types'
+import { defaultToolbarOption, type ToolbarOption } from '../types'
 
 const Toolbar = defineComponent({
   name: 'Toolbar',
   props: {
     option: {
-      type: Object as PropType<ToobarOption>,
+      type: Object as PropType<ToolbarOption>,
       required: false,
-      default: defaultToobarOption
+      default: defaultToolbarOption
     }
   },
   setup(props) {

@@ -11,6 +11,7 @@ interface BasicInfo {
   version?: string
   doc: string
   executable?: boolean
+  nameExpression?: string
 }
 
 export default defineComponent({
@@ -35,6 +36,7 @@ export default defineComponent({
       }
       currentIsProcess.value && (info.version = Process.getProcessVersionTag(element))
       currentIsProcess.value && (info.executable = Process.getProcessExecutable(element))
+      currentIsProcess.value && (info.nameExpression = Process.getProcessNameExpression(element))
       basicInfo.value = info
       formRef.value?.clearValidate()
     }
@@ -46,6 +48,7 @@ export default defineComponent({
       if (currentIsProcess.value) {
         Process.setProcessVersionTag(props.element, basicInfo.value.version || '')
         Process.setProcessExecutable(props.element, basicInfo.value.executable || false)
+        Process.setProcessNameExpression(props.element, basicInfo.value.nameExpression || '')
       }
     }
     onMounted(() => updateInfo(props.element))
@@ -80,6 +83,11 @@ export default defineComponent({
                   {currentIsProcess.value && (
                     <FormItem label="可执行" tooltip="描述类流程可设置为不可执行" name="executable">
                       <Switch v-model:checked={basicInfo.value.executable} onChange={updateProperties} />
+                    </FormItem>
+                  )}
+                  {currentIsProcess.value && (
+                    <FormItem label="流程标题" tooltip="自定义流程实例名称" name="nameExpression">
+                      <Textarea v-model:value={basicInfo.value.nameExpression} onChange={updateProperties} />
                     </FormItem>
                   )}
                 </Form>

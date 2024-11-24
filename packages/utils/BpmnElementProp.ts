@@ -1,13 +1,11 @@
-import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil'
-import type { Connection, Element, ModdleElement, ModdleExtension } from 'bpmn-js/lib/model/Types'
+import { getBusinessObject, is } from 'bpmn-js/lib/util/ModelUtil'
+import type { Connection, Element, ModdleElement } from 'bpmn-js/lib/model/Types'
 import { isAny } from 'bpmn-js/lib/features/modeling/util/ModelingUtil'
 import BpmnFactory from 'bpmn-js/lib/features/modeling/BpmnFactory'
-import { createElement, message, getEventDefinition, createCategoryValue, without, createModdleElement } from './BpmnElementHelper'
+import { createCategoryValue, createElement, createModdleElement, getEventDefinition, message, without } from './BpmnElementHelper'
 import { getModdle, getModeler, getModeling, getProcessEngine } from './BpmnHolder'
-import type { BpmnScript, ListenerConfig, ListenerFieldConfig, ListenerType, ScriptForm, TaskListener } from '../types'
-import { isUserTask } from './BpmnElementType'
 import type Modeling from 'bpmn-js/lib/features/modeling/Modeling'
-import Logger from './Logger'
+import type { ButtonInfo, ListenerConfig, ListenerFieldConfig, ListenerType } from '../types'
 
 /**
  * Conditional 工具类，包含处理 BPMN 条件相关的方法
@@ -319,6 +317,15 @@ export class Process {
       isExecutable: value
     })
   }
+
+  static getProcessNameExpression(element: Element): string {
+    return element.businessObject.nameExpression
+  }
+  static setProcessNameExpression(element: Element, value: string) {
+    getModeling()?.updateProperties(element, {
+      nameExpression: value
+    })
+  }
 }
 // 文档内容
 export class Document {
@@ -497,5 +504,56 @@ export class Listener {
       return config
     })
     return listenerConfigs
+  }
+}
+
+/**
+ * 用户任务相关
+ */
+export class UserTask {
+  static getButtons(element: Element): ButtonInfo[] {
+    const processEngine = getProcessEngine()
+    const businessObject = getBusinessObject(element)
+    if (!businessObject.extensionElements) return []
+    const buttons = businessObject.extensionElements.values.filter((ext: ModdleElement) => {
+      return ext.$type === `${processEngine}:HandleButton`
+    })
+    return buttons.map((it: any) => {
+      return {
+        code: it.code,
+        name: it.name,
+        resultCode: it.resultCode
+      }
+    })
+  }
+  static addButton(element: Element, buttons: ButtonInfo[]): void {
+    const modeler = getModeler()
+    const bpmnFactory = modeler!.get<BpmnFactory>('bpmnFactory')
+    const processEngine = getProcessEngine()
+    const businessObject = element.businessObject
+    const extensionElements = businessObject.extensionElements || bpmnFactory.create('bpmn:ExtensionElements')
+    if (!extensionElements.values) extensionElements.values = []
+    buttons.forEach((it: ButtonInfo) => {
+      const button = bpmnFactory.create(`${processEngine}:HandleButton`, it)
+      extensionElements.values.push(button)
+    })
+    businessObject.extensionElements = extensionElements
+    modeler!.get<Modeling>('modeling').updateProperties(element, {
+      extensionElements: extensionElements
+    })
+  }
+  static removeButtons(element: ModdleElement): void {
+    const processEngine = getProcessEngine()
+    const modeler = getModeler()
+    const businessObject = element.businessObject
+    if (!businessObject.extensionElements) {
+      return
+    }
+    businessObject.extensionElements.values = businessObject.extensionElements.values.filter((ext: ModdleElement) => {
+      return !(ext.$type === `${processEngine}:HandleButton`)
+    })
+    modeler!.get<Modeling>('modeling').updateProperties(element, {
+      extensionElements: businessObject.extensionElements
+    })
   }
 }

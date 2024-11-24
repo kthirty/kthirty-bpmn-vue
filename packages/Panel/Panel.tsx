@@ -1,4 +1,4 @@
-import { defineComponent, markRaw, ref, watch, type PropType } from 'vue'
+import { defineComponent, markRaw, type PropType, ref, watch } from 'vue'
 import { Collapse, PageHeader } from 'ant-design-vue'
 import EventEmitter from '../utils/EventEmitter'
 import { getModeler, setCurrentElement, setProcessEngine } from '../utils/BpmnHolder'
@@ -6,7 +6,7 @@ import { debounce } from '../utils/BpmnElementHelper'
 import type { Element } from 'bpmn-js/lib/model/Types'
 import Logger from '../utils/Logger'
 import { customTranslate } from '../Designer/config/modules/Translate'
-import { defaultPanelOption, defaultToobarOption, type PanelItem, type PanelOption } from '../types'
+import { defaultPanelOption, type PanelItem, type PanelOption } from '../types'
 
 // 引入子组件
 const modules = import.meta.glob('./*.tsx', { eager: true })
@@ -61,8 +61,8 @@ export default defineComponent({
     EventEmitter.on('modeler-init', (modeler: any) => {
       modeler.on('import.done', () => changeElement(null))
       // 监听选择事件，修改当前激活的元素以及表单
-      modeler.on('selection.changed', ({ newSelection }) => changeElement(newSelection[0] || null))
-      modeler.on('element.changed', ({ element }) => {
+      modeler.on('selection.changed', ({ newSelection }: { newSelection: any[] }) => changeElement(newSelection[0] || null))
+      modeler.on('element.changed', ({ element }: { element: Element }) => {
         // 保证 修改 "默认流转路径" 等类似需要修改多个元素的事件发生的时候，更新表单的元素与原选中元素不一致。
         if (element && element.id === currentElement.value?.id) changeElement(element)
       })
