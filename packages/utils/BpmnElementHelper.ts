@@ -4,6 +4,7 @@ import Modeler from 'bpmn-js/lib/Modeler'
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil'
 import { getModdle, getModeler, getModeling, getProcessEngine } from './BpmnHolder'
 import { isArray } from 'ant-design-vue/es/_util/util'
+import { emptyXml } from './BpmnElementData'
 
 // 创建元素
 export function createElement(moddle: Moddle, elementType: string, properties: Record<string, any>, parent?: Element): Element {
@@ -27,27 +28,6 @@ export function getEventDefinition(element: Element, eventType: string): Element
   })
 }
 
-// 获取空的Xml
-export function EmptyXml(key?: string, name?: string): string {
-  const timestamp = Date.now()
-  key = key || `Process_${timestamp}`
-  name = name || `业务流程_${timestamp}`
-  return `<?xml version="1.0" encoding="UTF-8"?>
-  <bpmn:definitions 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
-    xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
-    xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
-    xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
-    targetNamespace="http://bpmn.io/schema/bpmn"
-    id="Definitions_${key}">
-    <bpmn:process id="${key}" name="${name}" isExecutable="true"></bpmn:process>
-    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-      <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="${key}"></bpmndi:BPMNPlane>
-    </bpmndi:BPMNDiagram>
-  </bpmn:definitions>`
-}
-
 // 创建一个新的图表
 export async function createNewDiagram(modeler: Modeler, newXml?: string, settings?: any) {
   try {
@@ -55,12 +35,13 @@ export async function createNewDiagram(modeler: Modeler, newXml?: string, settin
     const { processId, processName } = settings || {}
     const newId: string = processId ? processId : `Process_${timestamp}`
     const newName: string = processName || `业务流程_${timestamp}`
-    const xmlString = newXml || EmptyXml(newId, newName)
+    const xmlString = newXml || emptyXml(newId, newName)
     const { warnings } = await modeler!.importXML(xmlString)
     if (warnings && warnings.length) {
       warnings.forEach((warn) => console.warn(warn))
     }
   } catch (e) {
+    // @ts-ignore
     message['error'](`[Process Designer Warn]: ${typeof e === 'string' ? e : (e as Error)?.message}`)
   }
 }
@@ -137,9 +118,9 @@ export function createModdleElement(elementType: string, properties: Record<stri
 
 // 获取节点属性
 export function getExPropValue<T>(element: any, propKey: string): T {
-  const ele = element.businessObject ? element.businessObject : element;
+  const ele = element.businessObject ? element.businessObject : element
   const exPropKey = `${getProcessEngine()}:${propKey}`
-  return ele && ele.get ? ele.get(exPropKey) : ele[exPropKey];
+  return ele && ele.get ? ele.get(exPropKey) : ele[exPropKey]
 }
 
 // 修改节点属性
@@ -178,6 +159,7 @@ export function removeExtensionElements(element: Element, businessObject: Moddle
     extensionElementsToRemove = [extensionElementsToRemove]
   }
   const extensionElements = businessObject.get('extensionElements'),
+    // @ts-ignore
     values = extensionElements.get('values').filter((value) => !extensionElementsToRemove.includes(value))
   const modeling = getModeling()
   modeling!.updateModdleProperties(element, extensionElements, { values })
@@ -192,7 +174,7 @@ export function getExtensionElementsList(businessObject: ModdleElement, type?: s
 
   const values = extensionElements.get('values')
   if (!values || !values.length) return []
-
+  // @ts-ignore
   if (type) return values.filter((value) => is(value, type))
 
   return values
