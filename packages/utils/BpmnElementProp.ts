@@ -327,7 +327,7 @@ export class Process {
     const exps = businessObject.extensionElements.values.filter((ext: ModdleElement) => {
       return ext.$type === `${processEngine}:ProcessNameExp`
     })
-    if(!exps || exps.length === 0){
+    if (!exps || exps.length === 0) {
       return ''
     }
     return exps[0].value
@@ -340,11 +340,11 @@ export class Process {
     const extensionElements = businessObject.extensionElements || bpmnFactory.create('bpmn:ExtensionElements')
     if (!extensionElements.values) extensionElements.values = []
     // 清空历史
-    businessObject.extensionElements.values = businessObject.extensionElements.values.filter((ext: ModdleElement) => {
+    extensionElements.values = extensionElements.values.filter((ext: ModdleElement) => {
       return !(ext.$type === `${processEngine}:ProcessNameExp`)
     })
     // 创建新的
-    const button = bpmnFactory.create(`${processEngine}:ProcessNameExp`, value)
+    const button = bpmnFactory.create(`${processEngine}:ProcessNameExp`, { value: value })
     extensionElements.values.push(button)
     businessObject.extensionElements = extensionElements
     modeler!.get<Modeling>('modeling').updateProperties(element, {

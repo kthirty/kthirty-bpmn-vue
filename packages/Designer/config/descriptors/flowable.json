@@ -23,7 +23,8 @@
       "properties": [
         {
           "name": "value",
-          "type": "expression"
+          "type": "expression",
+          "isBody": true
         }
       ]
     },
