@@ -291,11 +291,6 @@
           "type": "String"
         },
         {
-          "name": "nameExpression",
-          "isAttr": true,
-          "type": "String"
-        },
-        {
           "name": "historyTimeToLive",
           "isAttr": true,
           "type": "String"
