@@ -319,11 +319,36 @@ export class Process {
   }
 
   static getProcessNameExpression(element: Element): string {
-    return element.businessObject.nameExpression
+    const businessObject = getBusinessObject(element)
+    if (!businessObject.extensionElements) {
+      return ''
+    }
+    const processEngine = getProcessEngine()
+    const exps = businessObject.extensionElements.values.filter((ext: ModdleElement) => {
+      return ext.$type === `${processEngine}:ProcessNameExp`
+    })
+    if(!exps || exps.length === 0){
+      return ''
+    }
+    return exps[0].value
   }
   static setProcessNameExpression(element: Element, value: string) {
-    getModeling()?.updateProperties(element, {
-      nameExpression: value
+    const modeler = getModeler()
+    const bpmnFactory = modeler!.get<BpmnFactory>('bpmnFactory')
+    const processEngine = getProcessEngine()
+    const businessObject = element.businessObject
+    const extensionElements = businessObject.extensionElements || bpmnFactory.create('bpmn:ExtensionElements')
+    if (!extensionElements.values) extensionElements.values = []
+    // 清空历史
+    businessObject.extensionElements.values = businessObject.extensionElements.values.filter((ext: ModdleElement) => {
+      return !(ext.$type === `${processEngine}:ProcessNameExp`)
+    })
+    // 创建新的
+    const button = bpmnFactory.create(`${processEngine}:ProcessNameExp`, value)
+    extensionElements.values.push(button)
+    businessObject.extensionElements = extensionElements
+    modeler!.get<Modeling>('modeling').updateProperties(element, {
+      extensionElements: extensionElements
     })
   }
 }

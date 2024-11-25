@@ -7,6 +7,47 @@
   },
   "associations": [],
   "types": [
+    { "name": "string", "properties": [{ "name": "value", "type": "String", "isBody": true }] },
+    { "name": "expression", "properties": [{ "name": "value", "type": "Expression", "isBody": true }] },
+    {
+      "name": "field",
+      "properties": [
+        { "name": "name", "type": "String", "isAttr": true },
+        { "name": "string", "type": "string" },
+        { "name": "expression", "type": "expression" }
+      ]
+    },
+    {
+      "name": "ProcessNameExp",
+      "superClass": ["Element"],
+      "properties": [
+        {
+          "name": "value",
+          "type": "expression"
+        }
+      ]
+    },
+    {
+      "name": "HandleButton",
+      "superClass": ["Element"],
+      "properties": [
+        {
+          "name": "code",
+          "type": "String",
+          "isAttr": true
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "isAttr": true
+        },
+        {
+          "name": "resultCode",
+          "type": "String",
+          "isAttr": true
+        }
+      ]
+    },
     {
       "name": "InOutBinding",
       "superClass": ["Element"],

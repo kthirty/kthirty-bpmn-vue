@@ -18,6 +18,37 @@
       ]
     },
     {
+      "name": "ProcessNameExp",
+      "superClass": ["Element"],
+      "properties": [
+        {
+          "name": "value",
+          "type": "expression"
+        }
+      ]
+    },
+    {
+      "name": "HandleButton",
+      "superClass": ["Element"],
+      "properties": [
+        {
+          "name": "code",
+          "type": "String",
+          "isAttr": true
+        },
+        {
+          "name": "name",
+          "type": "String",
+          "isAttr": true
+        },
+        {
+          "name": "resultCode",
+          "type": "String",
+          "isAttr": true
+        }
+      ]
+    },
+    {
       "name": "InOutBinding",
       "superClass": ["Element"],
       "isAbstract": true,
@@ -530,27 +561,6 @@
         },
         {
           "name": "value",
-          "type": "String",
-          "isAttr": true
-        }
-      ]
-    },
-    {
-      "name": "HandleButton",
-      "superClass": ["Element"],
-      "properties": [
-        {
-          "name": "code",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "name",
-          "type": "String",
-          "isAttr": true
-        },
-        {
-          "name": "resultCode",
           "type": "String",
           "isAttr": true
         }
