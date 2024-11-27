@@ -1,13 +1,14 @@
-import {defineComponent, ref, toRefs, onMounted, markRaw, watch} from 'vue'
+import { defineComponent, ref, toRefs, onMounted, markRaw, watch } from 'vue'
 import type { PropType } from 'vue'
 import type { BaseViewerOptions } from 'bpmn-js/lib/BaseViewer'
 import Modeler from 'bpmn-js/lib/Modeler'
 import EventEmitter from '../utils/EventEmitter'
-import { EmptyXml } from '../utils/BpmnElementHelper'
-import {getModeler, getProcessEngine, setModeler, setProcessEngine} from '../utils/BpmnHolder'
+
+import { getModeler, getProcessEngine, setModeler, setProcessEngine } from '../utils/BpmnHolder'
 import Logger from '../utils/Logger'
-import {getConfig } from './config'
+import { getConfig } from './config'
 import type { DesignerOption } from 'packages/types'
+import { emptyXml } from '../utils/BpmnElementData'
 
 const Designer = defineComponent({
   name: 'Designer',
@@ -25,11 +26,11 @@ const Designer = defineComponent({
     // 设置流程引擎
     setProcessEngine(props.option?.processEngine || 'flowable')
     watch(
-        () => props.option?.processEngine,
-        () => {
-          setProcessEngine(props.option?.processEngine || 'flowable');
-          location.reload();
-        }
+      () => props.option?.processEngine,
+      () => {
+        setProcessEngine(props.option?.processEngine || 'flowable')
+        location.reload()
+      }
     )
 
     const { xml } = toRefs(props)
@@ -46,7 +47,7 @@ const Designer = defineComponent({
         if (props.option?.configEnhance) {
           designerConfig = props.option.configEnhance(designerConfig)
         }
-        Logger.prettyPrimary('Designer Init ', designerConfig);
+        Logger.prettyPrimary('Designer Init ', designerConfig)
         const options: BaseViewerOptions = {
           container: designer!.value as HTMLElement,
           ...designerConfig
@@ -66,7 +67,7 @@ const Designer = defineComponent({
             Logger.prettyError('commandStack.changed event handle error', error)
           }
         })
-        const xmlStr = xml!.value || EmptyXml()
+        const xmlStr = xml!.value || emptyXml()
         xmlStr && (await modeler!.importXML(xmlStr))
       } catch (e) {
         console.error(e)

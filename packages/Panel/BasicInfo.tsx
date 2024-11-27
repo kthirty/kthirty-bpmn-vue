@@ -86,7 +86,7 @@ export default defineComponent({
                     </FormItem>
                   )}
                   {currentIsProcess.value && (
-                    <FormItem label="流程标题" tooltip="自定义流程实例名称" name="nameExpression">
+                    <FormItem label="流程标题" tooltip="自定义流程实例的名称，可使用变量有[pi:流程实例信息]" name="nameExpression">
                       <Textarea v-model:value={basicInfo.value.nameExpression} onChange={updateProperties} />
                     </FormItem>
                   )}
