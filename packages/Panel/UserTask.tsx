@@ -44,15 +44,15 @@ export default defineComponent({
       if (assignee) {
         formProp.value.assigneeType = 'assignee'
         formProp.value.assigneeValue = assignee
-      }else if (candidateUsers) {
+      } else if (candidateUsers) {
         formProp.value.assigneeType = 'candidateUsers'
         formProp.value.assigneeValue = candidateUsers
-      }else if (candidateGroups) {
+      } else if (candidateGroups) {
         formProp.value.assigneeType = 'candidateGroups'
         formProp.value.assigneeValue = candidateGroups
-      }else{
-        formProp.value.assigneeType = 'assignee';
-        formProp.value.assigneeValue = '';
+      } else {
+        formProp.value.assigneeType = 'assignee'
+        formProp.value.assigneeValue = ''
       }
       formProp.value.dueDate = getExPropValue<string>(props.element, 'dueDate')
       formProp.value.skipExpression = getExPropValue<string>(props.element, 'skipExpression')
@@ -125,8 +125,8 @@ export default defineComponent({
                         v-slots={
                           dataSource.value.formKeyDateDataSource.length > 0
                             ? {
-                              addonAfter: () => <SelectableDrawer dataSource={() => dataSource.value.formKeyDateDataSource} onSelect={(res) => (formProp.value.formKey = res)} />
-                            }
+                                addonAfter: () => <SelectableDrawer dataSource={() => dataSource.value.formKeyDateDataSource} onSelect={(res) => (formProp.value.formKey = res)} />
+                              }
                             : undefined
                         }
                       />

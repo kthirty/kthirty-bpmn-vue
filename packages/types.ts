@@ -88,7 +88,7 @@ export const defaultPanelOption: PanelOption = {
   items: ['BasicInfo', 'Condition', 'Listener', 'StartInitiator', 'UserTask', 'UserTaskButtons']
 }
 export interface DesignerOption {
-  processEngine?: 'flowable' | 'activiti',
+  processEngine?: 'flowable' | 'activiti'
   configEnhance?: (config: BaseViewerOptions) => BaseViewerOptions
 }
 export interface BpmnDesignerOption {

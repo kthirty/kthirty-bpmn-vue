@@ -10,7 +10,7 @@ import bpmnlint from './modules/bpmnlint'
 const config = getConfig('activiti')
 export default config
 
-export function getConfig(processEngine: string){
+export function getConfig(processEngine: string) {
   const config: BaseViewerOptions = {
     additionalModules: [Translate, CreateAppendAnythingModule, BpmnColorPickerModule, lintModule],
     moddleExtensions: {},

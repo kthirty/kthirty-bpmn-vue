@@ -12,6 +12,5 @@ for (let index = 0; index < 10; index++) {
 <template>
   <div>
     <div>当前值为：{{ val }}</div>
-
   </div>
 </template>

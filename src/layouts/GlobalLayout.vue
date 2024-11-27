@@ -38,7 +38,14 @@ const routerViewRef = ref()
 <template>
   <a-row style="width: 100%">
     <a-col :span="2" style="position: relative">
-      <a-switch v-show="showSwitch" class="u-theme-switch" v-model:checked="themeDark" @change="onThemeChange" ripple-color="#faad14" :circle-style="{ background: themeDark ? '#001529' : '#fff' }">
+      <a-switch
+        v-show="showSwitch"
+        class="u-theme-switch"
+        v-model:checked="themeDark"
+        @change="onThemeChange"
+        ripple-color="#faad14"
+        :circle-style="{ background: themeDark ? '#001529' : '#fff' }"
+      >
         <template #node>
           <svg v-if="themeDark" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" viewBox="0 0 24 24" class="u-dark-svg">
             <path
