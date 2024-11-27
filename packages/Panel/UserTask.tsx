@@ -4,7 +4,7 @@ import type { Element } from 'bpmn-js/lib/model/Types'
 import type { PropType } from 'vue'
 import { defineComponent, onMounted, ref, watch } from 'vue'
 import SelectableDrawer from '../SelectableDrawer'
-import type { DataSourceItem, PanelOption } from '../types'
+import type { PanelOption } from '../types'
 import { getExPropValue, updateExPropValue } from '../utils/BpmnElementHelper'
 import { isUserTask } from '../utils/BpmnElementType'
 
@@ -27,6 +27,7 @@ export default defineComponent({
       assigneeValue?: string
       dueDate?: string
       skipExpression?: string
+      formKey?: string
     }>({ assigneeType: 'assignee' })
     const assigneeTypeOption = ref<DefaultOptionType[]>([
       { value: 'assignee', label: '任务人' },
@@ -40,7 +41,6 @@ export default defineComponent({
       const assignee = getExPropValue<string>(props.element, 'assignee')
       const candidateUsers = getExPropValue<string>(props.element, 'candidateUsers')
       const candidateGroups = getExPropValue<string>(props.element, 'candidateGroups')
-      const skipExpression = getExPropValue<string>(props.element, 'skipExpression')
       if (assignee) {
         formProp.value.assigneeType = 'assignee'
         formProp.value.assigneeValue = assignee
@@ -55,13 +55,14 @@ export default defineComponent({
         formProp.value.assigneeValue = '';
       }
       formProp.value.dueDate = getExPropValue<string>(props.element, 'dueDate')
-      formProp.value.skipExpression = skipExpression
+      formProp.value.skipExpression = getExPropValue<string>(props.element, 'skipExpression')
+      formProp.value.formKey = getExPropValue<string>(props.element, 'formKey')
     }
     const updateProps = () => {
       if (!visible.value) return
-      console.log(props.element, formProp.value.assigneeType, formProp.value.assigneeValue);
       updateExPropValue(props.element, formProp.value.assigneeType, formProp.value.assigneeValue)
       updateExPropValue(props.element, 'dueDate', formProp.value.dueDate)
+      updateExPropValue(props.element, 'formKey', formProp.value.formKey)
       updateExPropValue(props.element, 'skipExpression', formProp.value.skipExpression)
     }
 
@@ -77,7 +78,8 @@ export default defineComponent({
     const dataSource = ref({
       assigneeDataSource: [],
       dueDateDataSource: [],
-      skipExpressionDataSource: []
+      skipExpressionDataSource: [],
+      formKeyDateDataSource: []
     })
 
     return () =>
@@ -116,6 +118,20 @@ export default defineComponent({
                         </Row>
                       </div>
                     </FormItem>
+                    <FormItem label="表单代码" name="formKey">
+                      <Input
+                        v-model:value={formProp.value.formKey}
+                        onChange={updateProps}
+                        v-slots={
+                          dataSource.value.formKeyDateDataSource.length > 0
+                            ? {
+                              addonAfter: () => <SelectableDrawer dataSource={() => dataSource.value.formKeyDateDataSource} onSelect={(res) => (formProp.value.formKey = res)} />
+                            }
+                            : undefined
+                        }
+                      />
+                    </FormItem>
+
                     <FormItem label="到期日" name="dueDate">
                       <Input
                         v-model:value={formProp.value.dueDate}
