@@ -23,4 +23,4 @@ pnpm publish
 # git push
 
 # 重新部署文档
-pnpm docs:deploy
+pnpm publish:page
