@@ -1,5 +1,20 @@
 import { defineComponent, onMounted, type PropType, ref, watch } from 'vue'
-import { Button, CollapsePanel, ConfigProvider, Drawer, Form, type FormInstance, FormItem, Input, Popconfirm, Space, Table, type TableColumnType } from 'ant-design-vue'
+import {
+  Button,
+  CollapsePanel,
+  ConfigProvider,
+  Drawer,
+  Form,
+  type FormInstance,
+  FormItem,
+  Input,
+  Popconfirm,
+  Space,
+  Switch,
+  Table,
+  type TableColumnType,
+  Textarea
+} from 'ant-design-vue'
 import type { Element } from 'bpmn-js/lib/model/Types'
 import type { ButtonInfo, PanelOption } from '../types'
 import { isUserTask } from '../utils/BpmnElementType'
@@ -48,7 +63,8 @@ export default defineComponent({
     const columns: TableColumnType[] = [
       { title: 'Code', dataIndex: 'code', key: 'code', align: 'center', ellipsis: true },
       { title: 'Name', dataIndex: 'name', key: 'name', align: 'center', ellipsis: true },
-      { title: 'ResultCode', dataIndex: 'resultCode', key: 'resultCode', align: 'center', ellipsis: true }
+      { title: 'ResultCode', dataIndex: 'resultCode', key: 'resultCode', align: 'center', ellipsis: true },
+      { title: 'CommentRequired', dataIndex: 'commentRequired', key: 'commentRequired', align: 'center', ellipsis: true }
     ]
     // 列表数据修改
     const del = () => {
@@ -77,8 +93,14 @@ export default defineComponent({
     }
     // 数据变更Form
     const drawerShow = ref<boolean>(false)
-    const openDrawer = () => (drawerShow.value = true)
-    const closeDrawer = () => (drawerShow.value = false)
+    const openDrawer = () => {
+      editForm.value = {}
+      currentIsEdit.value = false
+      drawerShow.value = true
+    }
+    const closeDrawer = () => {
+      drawerShow.value = false
+    }
     const editForm = ref<ButtonInfo>({})
 
     return () =>
@@ -135,6 +157,12 @@ export default defineComponent({
                     </FormItem>
                     <FormItem name="resultCode" label="ResultCode" required tooltip="任务提交时，任务的传输结果值">
                       <Input v-model:value={editForm.value.resultCode} />
+                    </FormItem>
+                    <FormItem name="description" label="Description" tooltip="任务按钮的描述">
+                      <Textarea v-model:value={editForm.value.description} />
+                    </FormItem>
+                    <FormItem name="commentRequired" label="CommentRequired" tooltip="点击此按钮时是否必须填写意见">
+                      <Switch v-model:checked={editForm.value.commentRequired} />
                     </FormItem>
                   </Form>
                 </Drawer>

@@ -31,6 +31,7 @@ export default defineComponent({
 
     const loadProps = () => {
       visible.value = isCanSetConditional(props.element)
+      conditionForm.value.expression = ''
       conditionForm.value.type = Conditional.getConditionTypeValue(props.element)
       if (conditionForm.value.type === 'expression') {
         conditionForm.value.expression = Conditional.getConditionExpressionValue(props.element)

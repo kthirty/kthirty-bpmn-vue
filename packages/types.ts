@@ -79,6 +79,10 @@ export interface PanelOption {
     assigneeDataSource?: (type: string) => DataSourceItem[]
     dueDateDataSource?: () => DataSourceItem[]
     skipExpressionDataSource?: () => DataSourceItem[]
+    formKeyDateDataSource: () => DataSourceItem[]
+  }
+  StartInitiator?: {
+    formKeyDateDataSource: () => DataSourceItem[]
   }
   Listener?: {
     dataSource?: (type: ListenerType) => DataSourceItem[]
@@ -117,4 +121,6 @@ export interface ButtonInfo {
   code?: string
   name?: string
   resultCode?: string
+  description?: string
+  commentRequired?: boolean
 }

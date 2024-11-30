@@ -104,15 +104,14 @@ export default defineComponent({
                             <Input
                               v-model:value={formProp.value.assigneeValue}
                               onChange={updateProps}
-                              v-slots={
-                                dataSource.value.assigneeDataSource.length > 0
-                                  ? {
-                                      addonAfter: () => (
-                                        <SelectableDrawer dataSource={() => dataSource.value.assigneeDataSource} onSelect={(res) => (formProp.value.assigneeValue = res)} />
-                                      )
-                                    }
-                                  : undefined
-                              }
+                              v-slots={{
+                                addonAfter: () => (
+                                  <SelectableDrawer
+                                    dataSource={() => props.option?.UserTask?.assigneeDataSource?.(formProp.value.assigneeType) || []}
+                                    onSelect={(res) => (formProp.value.assigneeValue = res)}
+                                  />
+                                )
+                              }}
                             />
                           </Col>
                         </Row>
@@ -122,13 +121,11 @@ export default defineComponent({
                       <Input
                         v-model:value={formProp.value.formKey}
                         onChange={updateProps}
-                        v-slots={
-                          dataSource.value.formKeyDateDataSource.length > 0
-                            ? {
-                                addonAfter: () => <SelectableDrawer dataSource={() => dataSource.value.formKeyDateDataSource} onSelect={(res) => (formProp.value.formKey = res)} />
-                              }
-                            : undefined
-                        }
+                        v-slots={{
+                          addonAfter: () => (
+                            <SelectableDrawer dataSource={() => props.option?.UserTask?.formKeyDateDataSource() || []} onSelect={(res) => (formProp.value.formKey = res)} />
+                          )
+                        }}
                       />
                     </FormItem>
 
@@ -136,28 +133,27 @@ export default defineComponent({
                       <Input
                         v-model:value={formProp.value.dueDate}
                         onChange={updateProps}
-                        v-slots={
-                          dataSource.value.dueDateDataSource.length > 0
-                            ? {
-                                addonAfter: () => <SelectableDrawer dataSource={() => dataSource.value.dueDateDataSource} onSelect={(res) => (formProp.value.dueDate = res)} />
-                              }
-                            : undefined
-                        }
+                        v-slots={{
+                          addonAfter: () => (
+                            <SelectableDrawer dataSource={() => props.option?.UserTask?.dueDateDataSource?.() || []} onSelect={(res) => (formProp.value.dueDate = res)} />
+                          )
+                        }}
                       />
                     </FormItem>
                     <FormItem label="跳过表达式" name="skipExpression">
                       <Input
                         v-model:value={formProp.value.skipExpression}
                         onChange={updateProps}
-                        v-slots={
-                          dataSource.value.skipExpressionDataSource.length > 0
-                            ? {
-                                addonAfter: () => (
-                                  <SelectableDrawer dataSource={() => dataSource.value.skipExpressionDataSource} onSelect={(res) => (formProp.value.skipExpression = res)} />
-                                )
-                              }
-                            : undefined
-                        }
+                        v-slots={{
+                          addonAfter: () => (
+                            <SelectableDrawer
+                              dataSource={() => {
+                                return props.option?.UserTask?.skipExpressionDataSource?.() || []
+                              }}
+                              onSelect={(res) => (formProp.value.skipExpression = res)}
+                            />
+                          )
+                        }}
                       />
                     </FormItem>
                   </Form>

@@ -45,6 +45,16 @@
           "name": "resultCode",
           "type": "String",
           "isAttr": true
+        },{
+          "name": "description",
+          "type": "String",
+          "isAttr": true
+        },
+        {
+          "name": "commentRequired",
+          "type": "Boolean",
+          "isAttr": true,
+          "default": false
         }
       ]
     },
