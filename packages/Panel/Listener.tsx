@@ -163,7 +163,10 @@ export default defineComponent({
       show: ref<boolean>(false),
       form: ref<ListenerFieldConfig>({ name: '', type: 'string' }),
       del: () => (editForm.value.field = editForm.value.field?.filter((it) => !fieldCurrentSelected.value.rows.includes(it))),
-      toAdd: () => (fieldAction.show.value = true),
+      toAdd: () => {
+        fieldAction.form.value = { name: '', type: 'string'}
+        fieldAction.show.value = true
+      },
       toEdit: () => {
         fieldAction.form.value = { ...fieldCurrentSelected.value.rows[0] }
         fieldAction.isEdit.value = true
