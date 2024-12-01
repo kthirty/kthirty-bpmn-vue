@@ -125,11 +125,12 @@ export default defineComponent({
     }
     const save = () => {
       const currentList = activeTab.value === 'EventListener' ? eventList : activeTab.value === 'ExecutionListener' ? executionList : taskList
+      let formInfo = { ...editForm.value, event: Array.isArray(editForm.value.event) ? editForm.value.event.join(',') : editForm.value.event }
       if (currentIsEdit.value) {
         const index = currentList.value.indexOf(currentSelect.value[0])
-        currentList.value[index] = { ...editForm.value }
+        currentList.value[index] = formInfo
       } else {
-        currentList.value.push({ ...editForm.value })
+        currentList.value.push(formInfo)
       }
       updateProps()
       closeDrawer()
@@ -140,7 +141,7 @@ export default defineComponent({
       }
       currentIsEdit.value = true
       let formInfo = { ...currentSelect.value[0] }
-      if (activeTab.value === 'EventListener' && typeof currentSelect.value[0].event === 'string') {
+      if (activeTab.value === 'EventListener' && !Array.isArray(currentSelect.value[0].event)) {
         formInfo.event = (currentSelect.value[0].event as string).split(',')
       }
       editForm.value = formInfo
@@ -164,7 +165,7 @@ export default defineComponent({
       form: ref<ListenerFieldConfig>({ name: '', type: 'string' }),
       del: () => (editForm.value.field = editForm.value.field?.filter((it) => !fieldCurrentSelected.value.rows.includes(it))),
       toAdd: () => {
-        fieldAction.form.value = { name: '', type: 'string'}
+        fieldAction.form.value = { name: '', type: 'string' }
         fieldAction.show.value = true
       },
       toEdit: () => {
