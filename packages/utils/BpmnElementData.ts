@@ -16,6 +16,11 @@ export const listenerValueTypeOptions: { label: string; value: string }[] = [
   { label: '表达式', value: 'expression' },
   { label: '代理表达式', value: 'delegateExpression' }
 ]
+export const listenerTransactionTypeOptions: { label: string; value: string }[] = [
+  { label: '提交前', value: 'before-commit' },
+  { label: '提交后', value: 'committed' },
+  { label: '回滚', value: 'rolled-back' }
+]
 
 export const fieldTypeOptions: { label: string; value: string }[] = [
   { label: '字符串', value: 'string' },

@@ -55,6 +55,7 @@ export interface ListenerConfig {
   event?: string | string[]
   type?: 'class' | 'expression' | 'delegateExpression'
   value?: string
+  onTransaction?: 'before-commit' | 'committed' | 'rolled-back'
   field?: ListenerFieldConfig[]
 }
 export interface ListenerFieldConfig {

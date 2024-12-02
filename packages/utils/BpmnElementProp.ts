@@ -435,6 +435,9 @@ export class Listener {
     } else {
       prop.events = listenerConfig.event
     }
+    if (listenerConfig.onTransaction) {
+      prop.onTransaction = listenerConfig.onTransaction
+    }
     if (listenerConfig.type === 'class') prop.class = listenerConfig.value
     if (listenerConfig.type === 'expression') prop.expression = listenerConfig.value
     if (listenerConfig.type === 'delegateExpression') prop.delegateExpression = listenerConfig.value
