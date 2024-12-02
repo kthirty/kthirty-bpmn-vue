@@ -428,8 +428,9 @@ export class Listener {
     const extensionElements = businessObject.extensionElements || bpmnFactory.create('bpmn:ExtensionElements')
 
     const prop: any = {}
-    // 事件监听器额外处理event
+    // 事件监听器额外处理
     if (listenerType === 'EventListener') {
+      listenerConfig.field = undefined
       prop.events = listenerConfig.event
     } else {
       prop.events = listenerConfig.event

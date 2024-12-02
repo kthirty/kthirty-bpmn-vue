@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Logger from '../../../packages/utils/Logger'
 import { ref, watch } from 'vue'
+import type { ListenerType } from '../../../packages/types'
 
 // import.meta.glob 都支持以字符串形式导入文件，类似于 以字符串形式导入资源
 const modules = import.meta.glob('../../../package.json', { eager: true })
@@ -48,7 +49,7 @@ const listenerDataSource = [
         panel: {
           processEngine: 'flowable',
           Listener: {
-            dataSource: () => {
+            dataSource: (type: ListenerType) => {
               return listenerDataSource
             }
           }
