@@ -5,7 +5,8 @@ export default defineConfig({
   description: '可视化流程编辑器',
   base: '/kthirty-bpmn-vue/docs/',
 
-  head: [ // 网站图标
+  head: [
+    // 网站图标
     ['link', { rel: 'icon', type: 'image/svg+xml', href: 'https://cn.vitejs.dev/viteconf.svg' }]
     // ['link', { rel: 'icon', type: 'image/x-icon', href: 'favicon.ico' }],
   ],
@@ -36,8 +37,8 @@ export default defineConfig({
     //   provider: 'local'
     // },
 
-    algolia: { // algolia 搜索服务 与 内置 search 可二选一
-      
+    algolia: {
+      // algolia 搜索服务 与 内置 search 可二选一
     },
 
     footer: {
@@ -46,27 +47,14 @@ export default defineConfig({
     },
 
     nav: [
-      { text: '组件', link: '/guide/features', activeMatch: '/guide/' },
       {
         text: '链接',
         items: [
           { text: 'Github', link: 'https://github.com/kthirty' },
-          {
-            items: [
-              {
-                text: 'vue',
-                link: 'https://cn.vuejs.org/'
-              },
-              {
-                text: 'vitepress',
-                link: 'https://vitepress.dev/'
-              },
-              {
-                text: 'markdown',
-                link: 'https://markdown.com.cn/'
-              }
-            ]
-          }
+          { text: 'Preview', link: 'https://blog.kthirty.top/kthirty-bpmn-vue/' },
+          { text: 'bpmn-js', link: 'https://bpmn.io/' },
+          { text: 'vue', link: 'https://cn.vuejs.org/' },
+          { text: 'vitepress', link: 'https://vitepress.dev/' }
         ]
       }
     ],
@@ -77,7 +65,7 @@ export default defineConfig({
           text: '指引',
           items: [
             {
-              text: '特性',
+              text: '简介',
               link: '/guide/features'
             },
             {
@@ -89,15 +77,8 @@ export default defineConfig({
               link: '/guide/changelog'
             }
           ]
-        },
-        {
-          text: '组件',
-          items: [
-           
-          ]
         }
       ]
-     
     }
   }
 })
