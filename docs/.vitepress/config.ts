@@ -33,7 +33,8 @@ export default defineConfig({
       // }
     ],
 
-    // search: { // vitepress 内置 search
+    // search: {
+    //   // vitepress 内置 search
     //   provider: 'local'
     // },
 
