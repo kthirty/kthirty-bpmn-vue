@@ -1,6 +1,6 @@
 import { defineComponent, onMounted, type PropType, ref, watch } from 'vue'
 import {
-  Button,
+  Button, Card,
   CollapsePanel,
   ConfigProvider,
   Drawer,
@@ -98,6 +98,27 @@ export default defineComponent({
       currentIsEdit.value = false
       drawerShow.value = true
     }
+    const fastAdd = (type:string) => {
+      if(type === 'pass'){
+        buttons.value.push({
+          code: 'PASS',
+          name: '通过',
+          resultCode: 'PASS',
+          description: '',
+          commentRequired: false
+        });
+      }
+      if(type === 'reject'){
+        buttons.value.push({
+          code: 'REJECT',
+          name: '驳回',
+          resultCode: 'REJECT',
+          description: '',
+          commentRequired: true
+        });
+      }
+    }
+
     const closeDrawer = () => {
       drawerShow.value = false
     }
@@ -124,6 +145,11 @@ export default defineComponent({
                     </Button>
                   </Popconfirm>
                 </Space>
+                <Space>
+                  <Button type="default" size='small' onClick={() => fastAdd('pass')}>通过按钮</Button>
+                  <Button type="default" size='small' onClick={() => fastAdd('reject')}>驳回按钮</Button>
+                </Space>
+
                 <Table
                   rowSelection={{ type: 'checkbox', onChange: rowSelected, selectedRowKeys: currentSelectKeys.value }}
                   rowKey={(re: any) => JSON.stringify(re)}

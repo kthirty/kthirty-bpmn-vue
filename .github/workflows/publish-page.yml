@@ -1,0 +1,27 @@
+name: Run Page Publish
+
+# 触发条件：当有代码推送到主分支时
+on:
+  push:
+    branches:
+      - main  # 替换为你想触发的分支名称
+
+# 定义工作流的任务
+jobs:
+  update-script:
+    runs-on: ubuntu-latest  # 指定运行环境，可以是 Linux、Windows 或 MacOS
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # 设置运行环境
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+      # 安装依赖（如果需要）
+      - name: Install dependencies
+        run: pnpm install
+      # 运行你的更新脚本
+      - name: Run Update Script
+        run: bash ./scripts/deploy.sh

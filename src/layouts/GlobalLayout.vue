@@ -37,7 +37,7 @@ const routerViewRef = ref()
 </script>
 <template>
   <a-row style="width: 100%">
-    <a-col :span="2" style="position: relative">
+    <a-col :span="0" style="position: relative">
       <a-switch
         v-show="showSwitch"
         class="u-theme-switch"
@@ -73,7 +73,7 @@ const routerViewRef = ref()
         </a-menu>
       </div>
     </a-col>
-    <a-col :span="21">
+    <a-col :span="24">
       <div class="scrollbar" style="height: 100vh">
         <div class="router-view" ref="routerViewRef">
           <RouterView v-slot="{ Component }">
