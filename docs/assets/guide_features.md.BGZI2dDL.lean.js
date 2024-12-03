@@ -1,0 +1,1 @@
+import{_ as e,c as a,o as i,a4 as l}from"./chunks/framework.DOleKK9r.js";const m=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"guide/features.md","filePath":"guide/features.md"}'),t={name:"guide/features.md"},o=l("",6),r=[o];function s(n,_,c,d,h,u){return i(),a("div",null,r)}const p=e(t,[["render",s]]);export{m as __pageData,p as default};

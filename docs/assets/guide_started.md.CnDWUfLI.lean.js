@@ -1,0 +1,1 @@
+import{_ as s,c as i,o as a,a4 as t}from"./chunks/framework.DOleKK9r.js";const y=JSON.parse('{"title":"","description":"","frontmatter":{},"headers":[],"relativePath":"guide/started.md","filePath":"guide/started.md"}'),n={name:"guide/started.md"},h=t("",5),l=[h];function p(e,k,r,d,g,E){return a(),i("div",null,l)}const c=s(n,[["render",p]]);export{y as __pageData,c as default};
