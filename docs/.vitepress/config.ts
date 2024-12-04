@@ -33,14 +33,14 @@ export default defineConfig({
       // }
     ],
 
-    // search: {
-    //   // vitepress 内置 search
-    //   provider: 'local'
-    // },
-
-    algolia: {
-      // algolia 搜索服务 与 内置 search 可二选一
+    search: {
+      // vitepress 内置 search
+      provider: 'local'
     },
+
+    // algolia: {
+      // algolia 搜索服务 与 内置 search 可二选一
+    // },
 
     footer: {
       message: 'Released under the MIT License.',
@@ -72,6 +72,10 @@ export default defineConfig({
             {
               text: '快速上手',
               link: '/guide/started'
+            },
+            {
+              text: '配置说明',
+              link: '/guide/configs'
             },
             {
               text: '更新日志',
