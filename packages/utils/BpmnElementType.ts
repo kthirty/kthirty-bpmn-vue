@@ -33,6 +33,10 @@ export function isProcess(element: Element): boolean {
 export function isUserTask(element: Element): boolean {
   return is(element, 'bpmn:UserTask')
 }
+// 是否服务节点
+export function isServiceTask(element: Element): boolean {
+  return is(element, 'bpmn:ServiceTask')
+}
 // 是否支持设置监听器
 export function isExecutable(element: Element): boolean {
   const LISTENER_ALLOWED_TYPES = ['bpmn:Activity', 'bpmn:Event', 'bpmn:Gateway', 'bpmn:SequenceFlow', 'bpmn:Process', 'bpmn:Participant']

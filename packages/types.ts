@@ -51,6 +51,7 @@ export interface FormItemVisible {
   scriptType: string
 }
 export type ListenerType = 'TaskListener' | 'ExecutionListener' | 'EventListener'
+export type ValueType = 'class' | 'expression' | 'delegateExpression'
 export interface ListenerConfig {
   event?: string | string[]
   type?: 'class' | 'expression' | 'delegateExpression'
@@ -72,7 +73,7 @@ export interface ToolbarOption {
 export const defaultToolbarOption: ToolbarOption = {
   items: ['Imports', 'Exports', 'Previews', 'LintToggle', 'Aligns', 'Scales', 'Commands']
 }
-export type PanelItem = 'BasicInfo' | 'Condition' | 'Listener' | 'StartInitiator' | 'UserTask' | 'UserTaskButtons'
+export type PanelItem = 'BasicInfo' | 'Condition' | 'Listener' | 'StartInitiator' | 'UserTask' | 'UserTaskButtons' | 'ServiceTask'
 export interface PanelOption {
   items: PanelItem[]
   extra?: (() => JSX.Element)[]
@@ -88,9 +89,12 @@ export interface PanelOption {
   Listener?: {
     dataSource?: (type: ListenerType) => DataSourceItem[]
   }
+  ServiceTask?: {
+    serviceDataSource?: (type: ValueType) => DataSourceItem[]
+  }
 }
 export const defaultPanelOption: PanelOption = {
-  items: ['BasicInfo', 'Condition', 'Listener', 'StartInitiator', 'UserTask', 'UserTaskButtons']
+  items: ['BasicInfo', 'Condition', 'Listener', 'StartInitiator', 'UserTask', 'UserTaskButtons', 'ServiceTask']
 }
 export interface DesignerOption {
   processEngine?: 'flowable' | 'activiti'
