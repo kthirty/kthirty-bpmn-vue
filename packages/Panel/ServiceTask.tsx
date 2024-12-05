@@ -3,9 +3,22 @@ import { Element } from 'bpmn-js/lib/model/Types'
 import { PanelOption } from '../types'
 import { isServiceTask } from '../utils/BpmnElementType'
 import { getExPropValue, updateExPropValue } from '../utils/BpmnElementHelper'
-import { Col, CollapsePanel, Form, FormItem, FormItemRest, Input, Row, Select, Textarea } from 'ant-design-vue'
+import {
+  Button,
+  CollapsePanel,
+  Divider, Drawer,
+  Form,
+  FormItem,
+  Input,
+  Popconfirm,
+  RadioGroup,
+  Space, Table,
+  Textarea
+} from 'ant-design-vue'
 import SelectableDrawer from '../SelectableDrawer'
 import { DefaultOptionType } from 'ant-design-vue/es/select'
+import { fieldTypeOptions } from '../utils/BpmnElementData'
+import FieldDrawer from '../FieldDrawer'
 
 export default defineComponent({
   name: 'ServiceTask',
@@ -25,8 +38,8 @@ export default defineComponent({
       serviceType: 'class' | 'expression' | 'delegateExpression',
       serviceValue: string,
       resultVariableName: string
-      fields: []
-    }>({ serviceType: 'class', serviceValue: '' })
+      fields?: []
+    }>({ serviceType: 'class', serviceValue: '',resultVariableName:'' })
 
     const loadProps = () => {
       visible.value = isServiceTask(props.element)
@@ -77,7 +90,7 @@ export default defineComponent({
             default: () =>
               <Form colon={false} model={formProp.value} labelCol={{ span: 6 }} validateTrigger='blur'>
                 <FormItem name="serviceType" label="服务类型">
-                  <Select onChange={typeChange} v-model:value={formProp.value.serviceType} options={serviceTypeOption.value} />
+                  <RadioGroup onChange={typeChange} v-model:value={formProp.value.serviceType} options={serviceTypeOption.value} />
                 </FormItem>
                 <FormItem label="服务值" name="serviceValue">
                   <Textarea
@@ -93,6 +106,7 @@ export default defineComponent({
                 <FormItem label="结果变量名" name="resultVariableName">
                   <Input v-model:value={formProp.value.resultVariableName} onChange={updateProps} />
                 </FormItem>
+                <FieldDrawer v-model:value={formProp.value.fields} onChange={updateProps}/>
               </Form>
           }}
         />) : (
