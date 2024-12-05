@@ -1,6 +1,6 @@
 import { defineComponent, onMounted, type PropType, ref, watch } from 'vue'
 import {
-  Button, Card,
+  Button,
   CollapsePanel,
   ConfigProvider,
   Drawer,
@@ -20,7 +20,7 @@ import type { ButtonInfo, PanelOption } from '../types'
 import { isUserTask } from '../utils/BpmnElementType'
 import type { Key } from 'ant-design-vue/es/table/interface'
 import { message } from '../utils/BpmnElementHelper'
-import { Listener, UserTask } from '../utils/BpmnElementProp'
+import { UserTask } from '../utils/BpmnElementProp'
 
 export default defineComponent({
   name: 'UserTaskButtons',
@@ -98,24 +98,24 @@ export default defineComponent({
       currentIsEdit.value = false
       drawerShow.value = true
     }
-    const fastAdd = (type:string) => {
-      if(type === 'pass'){
+    const fastAdd = (type: string) => {
+      if (type === 'pass') {
         buttons.value.push({
           code: 'PASS',
           name: '通过',
           resultCode: 'PASS',
           description: '',
           commentRequired: false
-        });
+        })
       }
-      if(type === 'reject'){
+      if (type === 'reject') {
         buttons.value.push({
           code: 'REJECT',
           name: '驳回',
           resultCode: 'REJECT',
           description: '',
           commentRequired: true
-        });
+        })
       }
     }
 
@@ -146,8 +146,12 @@ export default defineComponent({
                   </Popconfirm>
                 </Space>
                 <Space>
-                  <Button type="default" size='small' onClick={() => fastAdd('pass')}>通过按钮</Button>
-                  <Button type="default" size='small' onClick={() => fastAdd('reject')}>驳回按钮</Button>
+                  <Button type="default" size="small" onClick={() => fastAdd('pass')}>
+                    通过按钮
+                  </Button>
+                  <Button type="default" size="small" onClick={() => fastAdd('reject')}>
+                    驳回按钮
+                  </Button>
                 </Space>
 
                 <Table

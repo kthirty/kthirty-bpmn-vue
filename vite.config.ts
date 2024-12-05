@@ -19,7 +19,6 @@ const { f } = minimist(process.argv.slice(2))
 
 // https://vitejs.dev/config/
 export default defineConfig(({command,mode}) => {
-  console.log(command, mode)
 
   return {
     base: mode === 'example' ? '/kthirty-bpmn-vue/' : '/',
@@ -84,7 +83,7 @@ export default defineConfig(({command,mode}) => {
         output: {
           name: 'KThirtyBpmnVue', // 对于输出格式为 iife | umd 的 bundle 来说，若想要使用全局变量名来表示你的 bundle 时，该选项是必要的。同一页面上的其他脚本可以使用这个变量名来访问你的 bundle 输出
           /*
-          output.format: 
+          output.format:
           • amd – 异步模块加载，适用于 RequireJS 等模块加载器
           • cjs – CommonJS，适用于 Node 环境和其他打包工具（别名：commonjs）
           • es – 将 bundle 保留为 ES 模块文件，适用于其他打包工具，以及支持 <script type=module> 标签的浏览器。（别名：esm，module）
