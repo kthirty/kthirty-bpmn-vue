@@ -5,7 +5,7 @@ import BpmnFactory from 'bpmn-js/lib/features/modeling/BpmnFactory'
 import { createCategoryValue, createElement, createModdleElement, getEventDefinition, message, without } from './BpmnElementHelper'
 import { getModdle, getModeler, getModeling, getProcessEngine } from './BpmnHolder'
 import type Modeling from 'bpmn-js/lib/features/modeling/Modeling'
-import type { ButtonInfo, ListenerConfig, ListenerFieldConfig, ListenerType } from '../types'
+import type { ButtonInfo, Field, ListenerConfig, ListenerFieldConfig, ListenerType } from '../types'
 
 /**
  * Conditional 工具类，包含处理 BPMN 条件相关的方法
@@ -414,6 +414,55 @@ export class Start {
 export function getListenersContainer(element: Element): ModdleElement {
   const businessObject = getBusinessObject(element)
   return businessObject?.get('processRef') || businessObject
+}
+
+export class ServiceTask{
+  static setField(element: Element,fields ?: Field[]){
+    fields = fields || []
+    const modeler = getModeler()
+    const bpmnFactory = modeler!.get<BpmnFactory>('bpmnFactory')
+    const processEngine = getProcessEngine()
+    const businessObject = element.businessObject
+    const extensionElements = businessObject.extensionElements || bpmnFactory.create('bpmn:ExtensionElements')
+    if (!extensionElements.values) {
+      extensionElements.values = []
+    }
+    debugger;
+    // 去除所有field
+    extensionElements.values = extensionElements.values.filter((ext: ModdleElement) => {
+      return !(ext.$type === `${processEngine}:field`)
+    })
+    // 添加新的字段
+    fields.forEach(fi => {
+      const fieldElement = bpmnFactory.create(`${processEngine}:field`, { name: fi.name })
+      fieldElement[fi.type] = bpmnFactory.create(`${processEngine}:${fi.type}`, { value: fi.value })
+      extensionElements.values.push(fieldElement)
+    })
+    businessObject.extensionElements = extensionElements
+    modeler!.get<Modeling>('modeling').updateProperties(element, {
+      extensionElements: extensionElements
+    })
+  }
+  static getField(element: Element): Field[]{
+    const modeler = getModeler()
+    const bpmnFactory = modeler!.get<BpmnFactory>('bpmnFactory')
+    const processEngine = getProcessEngine()
+    const businessObject = element.businessObject
+    const extensionElements = businessObject.extensionElements || bpmnFactory.create('bpmn:ExtensionElements')
+    if (!extensionElements.values) {
+      extensionElements.values = []
+    }
+    return extensionElements.values
+      .filter((ext: ModdleElement) => ext.$type === `${processEngine}:field`)
+      .map((ext: ModdleElement) => {
+        const fi:Field = {
+          name: ext.name,
+          value: ext.string || ext.expression,
+          type: ext.expression ? 'expression' : 'string'
+        }
+        return fi
+      })
+  }
 }
 
 /**

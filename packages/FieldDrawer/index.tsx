@@ -9,24 +9,19 @@ import {
   RadioGroup,
   Space,
   Table,
-  TableColumnType
+  type TableColumnType
 } from 'ant-design-vue'
 import { fieldTypeOptions } from '../utils/BpmnElementData'
-import { defineComponent, PropType, ref, toRefs, watch } from 'vue'
-import type { ListenerFieldConfig } from '../types'
-import { Key } from 'ant-design-vue/es/table/interface'
+import { defineComponent, type PropType, ref, watch } from 'vue'
+import type { Key } from 'ant-design-vue/es/table/interface'
+import type { Field } from '../types'
 
 export default defineComponent({
   name: 'FieldDrawer',
   props: {
     value: {
-      type: Array as PropType<ListenerFieldConfig[]>,
+      type: Array as () => Field[],
       required: true
-    },
-    title: {
-      type: String as PropType<string>,
-      required: false,
-      default: '注入字段'
     }
   },
   emits: ['change','update:value'],
@@ -46,7 +41,7 @@ export default defineComponent({
     const fieldAction = {
       isEdit: ref<boolean>(false),
       show: ref<boolean>(false),
-      form: ref<ListenerFieldConfig>({ name: '', type: 'string' }),
+      form: ref<Field>({ name: '', type: 'string' }),
       del: () => (fields.value = fields.value?.filter((it) => !fieldCurrentSelected.value.rows.includes(it))),
       toAdd: () => {
         fieldAction.form.value = { name: '', type: 'string' }
@@ -75,7 +70,7 @@ export default defineComponent({
       }
     }
     // 字段编辑
-    const fieldCurrentSelected = ref<{ keys: Key[]; rows: ListenerFieldConfig[] }>({ keys: [], rows: [] })
+    const fieldCurrentSelected = ref<{ keys: Key[]; rows: Field[] }>({ keys: [], rows: [] })
     const fieldSelected = (keys: Key[], rows: any[]) => {
       fieldCurrentSelected.value.keys = keys
       fieldCurrentSelected.value.rows = rows

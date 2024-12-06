@@ -1,24 +1,12 @@
-import { defineComponent, onMounted, PropType, ref, watch } from 'vue'
-import { Element } from 'bpmn-js/lib/model/Types'
-import { PanelOption } from '../types'
+import { defineComponent, onMounted, type PropType, ref, watch } from 'vue'
+import type { Element } from 'bpmn-js/lib/model/Types'
+import type { Field, PanelOption } from '../types'
 import { isServiceTask } from '../utils/BpmnElementType'
 import { getExPropValue, updateExPropValue } from '../utils/BpmnElementHelper'
-import {
-  Button,
-  CollapsePanel,
-  Divider, Drawer,
-  Form,
-  FormItem,
-  Input,
-  Popconfirm,
-  RadioGroup,
-  Space, Table,
-  Textarea
-} from 'ant-design-vue'
+import { CollapsePanel, Form, FormItem, Input, RadioGroup, Textarea } from 'ant-design-vue'
 import SelectableDrawer from '../SelectableDrawer'
-import { DefaultOptionType } from 'ant-design-vue/es/select'
-import { fieldTypeOptions } from '../utils/BpmnElementData'
 import FieldDrawer from '../FieldDrawer'
+import { ServiceTask } from '../utils/BpmnElementProp'
 
 export default defineComponent({
   name: 'ServiceTask',
@@ -38,8 +26,8 @@ export default defineComponent({
       serviceType: 'class' | 'expression' | 'delegateExpression',
       serviceValue: string,
       resultVariableName: string
-      fields?: []
-    }>({ serviceType: 'class', serviceValue: '',resultVariableName:'' })
+      fields: Field[]
+    }>({ serviceType: 'class', serviceValue: '',resultVariableName:'' ,fields : []})
 
     const loadProps = () => {
       visible.value = isServiceTask(props.element)
@@ -60,11 +48,13 @@ export default defineComponent({
         formProp.value.serviceType = 'class'
         formProp.value.serviceValue = ''
       }
+      formProp.value.fields = ServiceTask.getField(props.element)
     }
     const updateProps = () => {
       if (!visible.value) return
       updateExPropValue(props.element, formProp.value.serviceType, formProp.value.serviceValue)
       updateExPropValue(props.element, 'resultVariableName', formProp.value.resultVariableName)
+      ServiceTask.setField(props.element,formProp.value.fields)
     }
     onMounted(loadProps)
     watch(() => props.element, loadProps)
@@ -75,7 +65,7 @@ export default defineComponent({
       updateExPropValue(props.element, 'expression', '')
       updateExPropValue(props.element, 'delegateExpression', '')
     }
-    const serviceTypeOption = ref<DefaultOptionType[]>([
+    const serviceTypeOption = ref<{ label: string; value: string }[]>([
       { value: 'class', label: '类' },
       { value: 'expression', label: '表达式' },
       { value: 'delegateExpression', label: '代理表达式' }
@@ -98,7 +88,7 @@ export default defineComponent({
                     onChange={updateProps}
                     v-slots={{
                       addonAfter: () => (
-                        <SelectableDrawer dataSource={() => props.option?.ServiceTask?.serviceDataSource(formProp.value.serviceType) || []} onSelect={(res) => (formProp.value.serviceValue = res)} />
+                        <SelectableDrawer dataSource={() => props.option?.ServiceTask?.serviceDataSource?.(formProp.value.serviceType) || []} onSelect={(res) => (formProp.value.serviceValue = res)} />
                       )
                     }}
                   />

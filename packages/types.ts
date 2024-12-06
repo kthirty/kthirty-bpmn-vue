@@ -64,6 +64,11 @@ export interface ListenerFieldConfig {
   type: 'string' | 'expression'
   value?: string
 }
+export interface Field {
+  name: string
+  type: 'string' | 'expression'
+  value?: string
+}
 
 export type ToolbarItem = 'Imports' | 'Exports' | 'Previews' | 'LintToggle' | 'Aligns' | 'Scales' | 'Commands'
 export interface ToolbarOption {
