@@ -18,26 +18,26 @@ export default defineComponent({
     }
   },
   emits: ['update:xml', 'command-stack-changed'],
-  setup(props, { emit }) {
+  setup(props: { xml?: string; option?: BpmnDesignerOption }, { emit }) {
     const handleUpdateXml = (updatedXml: string) => emit('update:xml', updatedXml)
     const handleCommandStackChanged = (event: Event) => emit('command-stack-changed')
     const xml = ref<string>(props.xml || '')
 
     return () => (
-      <Layout style="height: 100%" hasSider={true}>
+      <Layout style="height: 100%" class="bpmn-vue-layout" hasSider={true}>
         <Layout>
           <LayoutHeader
             style={{
               height: '5%',
               lineHeight: '5%',
-              background: 'none',
+              backgroundColor: '#fff',
               paddingLeft: '15px',
               paddingTop: '10px'
             }}
           >
             <Toolbar option={props.option?.toolbar} />
           </LayoutHeader>
-          <LayoutContent style={{ height: '95%' }}>
+          <LayoutContent style={{ height: '95%', backgroundColor: '#fff' }}>
             <Designer v-model:xml={xml.value} onCommand-stack-changed={handleCommandStackChanged} onUpdate:xml={handleUpdateXml} option={props.option?.designer} />
           </LayoutContent>
         </Layout>

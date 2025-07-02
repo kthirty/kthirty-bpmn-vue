@@ -15,7 +15,7 @@ const Scales = defineComponent({
         canvas = modeler.get<any>('canvas')
         currentScale.value = canvas.zoom()
       } finally {
-        modeler.on('canvas.viewbox.changed', ({ viewbox }) => {
+        modeler.on('canvas.viewbox.changed', ({ viewbox }: { viewbox: any }) => {
           currentScale.value = (viewbox as any).scale
         })
       }

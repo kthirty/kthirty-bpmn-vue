@@ -1,16 +1,4 @@
-import {
-  Button,
-  Divider,
-  Drawer,
-  Form,
-  FormItem,
-  Input,
-  Popconfirm,
-  RadioGroup,
-  Space,
-  Table,
-  type TableColumnType
-} from 'ant-design-vue'
+import { Button, Divider, Drawer, Form, FormItem, Input, Popconfirm, RadioGroup, Space, Table, type TableColumnType } from 'ant-design-vue'
 import { fieldTypeOptions } from '../utils/BpmnElementData'
 import { defineComponent, type PropType, ref, watch } from 'vue'
 import type { Key } from 'ant-design-vue/es/table/interface'
@@ -24,14 +12,13 @@ export default defineComponent({
       required: true
     }
   },
-  emits: ['change','update:value'],
-  setup(props,{ emit }) {
-
+  emits: ['change', 'update:value'],
+  setup(props, { emit }) {
     const fields = ref(props.value)
     watch(fields, (newValue) => {
-      emit('update:value', newValue);
-      emit('change',newValue)
-    });
+      emit('update:value', newValue)
+      emit('change', newValue)
+    })
     const fieldColumns: TableColumnType[] = [
       { title: '字段名', dataIndex: 'name', key: 'name', align: 'center' },
       { title: '字段类型', dataIndex: 'type', key: 'type', align: 'center', customRender: ({ text }) => fieldTypeOptions.filter((it) => it.value === text)?.[0].label },
@@ -53,7 +40,7 @@ export default defineComponent({
         fieldAction.show.value = true
       },
       save: () => {
-        if (!fields.value || fields.value.length == 0){
+        if (!fields.value || fields.value.length == 0) {
           fields.value = []
         }
         if (fieldAction.isEdit.value) {
@@ -76,7 +63,7 @@ export default defineComponent({
       fieldCurrentSelected.value.rows = rows
     }
 
-    return () =>
+    return () => (
       <FormItem>
         <Divider>注入字段</Divider>
         <Space style="margin-bottom:10px">
@@ -125,5 +112,6 @@ export default defineComponent({
           </Form>
         </Drawer>
       </FormItem>
+    )
   }
 })

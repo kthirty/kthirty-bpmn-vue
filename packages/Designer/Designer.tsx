@@ -7,7 +7,7 @@ import EventEmitter from '../utils/EventEmitter'
 import { getModeler, getProcessEngine, setModeler, setProcessEngine } from '../utils/BpmnHolder'
 import Logger from '../utils/Logger'
 import { getConfig } from './config'
-import type { DesignerOption } from 'packages/types'
+import type { DesignerOption } from '../types'
 import { emptyXml } from '../utils/BpmnElementData'
 
 const Designer = defineComponent({
@@ -22,7 +22,7 @@ const Designer = defineComponent({
     }
   },
   emits: ['update:xml', 'command-stack-changed'],
-  setup(props, { emit }) {
+  setup(props: { xml?: string; option?: DesignerOption }, { emit }) {
     // 设置流程引擎
     setProcessEngine(props.option?.processEngine || 'flowable')
     watch(

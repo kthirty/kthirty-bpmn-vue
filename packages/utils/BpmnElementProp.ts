@@ -416,8 +416,8 @@ export function getListenersContainer(element: Element): ModdleElement {
   return businessObject?.get('processRef') || businessObject
 }
 
-export class ServiceTask{
-  static setField(element: Element,fields ?: Field[]){
+export class ServiceTask {
+  static setField(element: Element, fields?: Field[]) {
     fields = fields || []
     const modeler = getModeler()
     const bpmnFactory = modeler!.get<BpmnFactory>('bpmnFactory')
@@ -427,13 +427,13 @@ export class ServiceTask{
     if (!extensionElements.values) {
       extensionElements.values = []
     }
-    debugger;
+    debugger
     // 去除所有field
     extensionElements.values = extensionElements.values.filter((ext: ModdleElement) => {
       return !(ext.$type === `${processEngine}:field`)
     })
     // 添加新的字段
-    fields.forEach(fi => {
+    fields.forEach((fi) => {
       const fieldElement = bpmnFactory.create(`${processEngine}:field`, { name: fi.name })
       fieldElement[fi.type] = bpmnFactory.create(`${processEngine}:${fi.type}`, { value: fi.value })
       extensionElements.values.push(fieldElement)
@@ -443,7 +443,7 @@ export class ServiceTask{
       extensionElements: extensionElements
     })
   }
-  static getField(element: Element): Field[]{
+  static getField(element: Element): Field[] {
     const modeler = getModeler()
     const bpmnFactory = modeler!.get<BpmnFactory>('bpmnFactory')
     const processEngine = getProcessEngine()
@@ -455,7 +455,7 @@ export class ServiceTask{
     return extensionElements.values
       .filter((ext: ModdleElement) => ext.$type === `${processEngine}:field`)
       .map((ext: ModdleElement) => {
-        const fi:Field = {
+        const fi: Field = {
           name: ext.name,
           value: ext.string || ext.expression,
           type: ext.expression ? 'expression' : 'string'

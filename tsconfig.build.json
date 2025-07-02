@@ -1,0 +1,17 @@
+{
+    "include": ["packages/**/*.ts", "packages/**/*.tsx", "packages/**/*.vue"],
+    "compilerOptions": {
+      "declaration": true,
+      "emitDeclarationOnly": true,
+      "declarationDir": "dist/types",
+      "noEmit": false,
+      "skipLibCheck": true,         // 忽略依赖类型错误
+      "skipDefaultLibCheck": true,  // 忽略默认库类型错误
+      "noImplicitAny": false,        // 允许隐式any
+      "jsx": "preserve",
+      "moduleResolution": "node",
+      "resolveJsonModule": true,
+      "module": "esnext",
+      "allowSyntheticDefaultImports": true
+    }
+  }

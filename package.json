@@ -32,12 +32,13 @@
     "build": "run-s format clean build:lib",
     "format": "prettier --write src/ packages/",
     "clean": "rimraf ./dist",
-    "build:lib": "run-p type-check build:es build:browser",
+    "build:lib": "run-p type-check build:types build:es build:browser",
     "type-check": "vue-tsc --noEmit",
     "build:es": "vite build",
     "build:browser": "vite -f iife build",
     "preview": "vite preview --outDir dist --base /kthirty-bpmn-vue/",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-pattern .gitignore"
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-pattern .gitignore",
+    "build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types --project tsconfig.build.json"
   },
   "dependencies": {
     "ant-design-vue": "^4.2.3",

@@ -60,3 +60,4 @@ export { Designer, Panel, Toolbar, BpmnDesigner, SelectableDrawer }
 export default {
   install
 }
+export * from './types'
