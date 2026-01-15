@@ -13,9 +13,7 @@ console.log('dependencies', dependencies)
 const xml = ref<string>('')
 watch(
   () => xml.value,
-  () => {
-    
-  }
+  () => {}
 )
 const listenerDataSource = [
   {

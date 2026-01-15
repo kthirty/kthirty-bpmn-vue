@@ -23,7 +23,7 @@ export default defineComponent({
       console.groupCollapsed('flowable xml changed')
       console.log(updatedXml)
       console.groupEnd()
-      emit('update:xml', updatedXml);
+      emit('update:xml', updatedXml)
     }
     const handleCommandStackChanged = (event: Event) => emit('command-stack-changed')
     const xml = ref<string>(props.xml || '')
