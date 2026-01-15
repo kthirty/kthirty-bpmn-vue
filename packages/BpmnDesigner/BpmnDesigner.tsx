@@ -19,7 +19,12 @@ export default defineComponent({
   },
   emits: ['update:xml', 'command-stack-changed'],
   setup(props: { xml?: string; option?: BpmnDesignerOption }, { emit }) {
-    const handleUpdateXml = (updatedXml: string) => emit('update:xml', updatedXml)
+    const handleUpdateXml = (updatedXml: string) => {
+      console.groupCollapsed('flowable xml changed')
+      console.log(updatedXml)
+      console.groupEnd()
+      emit('update:xml', updatedXml);
+    }
     const handleCommandStackChanged = (event: Event) => emit('command-stack-changed')
     const xml = ref<string>(props.xml || '')
 
