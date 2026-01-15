@@ -1,0 +1,1 @@
+import{d as t,r as a,c as u,o as n,e as o,t as r}from"./index-fzfOccwt.js";const d=t({name:"SelectTable",__name:"SelectTable",setup(c){const l=a("5"),s=a([]);for(let e=0;e<10;e++)s.value.push({value:e+"",label:"label"+e});return(e,v)=>(n(),u("div",null,[o("div",null,"当前值为："+r(l.value),1)]))}});export{d as default};
