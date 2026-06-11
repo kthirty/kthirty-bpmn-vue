@@ -11,10 +11,7 @@ const dependencies = (modules as Recordable)[url].dependencies
 console.log('dependencies', dependencies)
 
 const xml = ref<string>('')
-watch(
-  () => xml.value,
-  () => {}
-)
+
 const listenerDataSource = [
   {
     value: {
