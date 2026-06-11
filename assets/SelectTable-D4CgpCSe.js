@@ -1,0 +1,1 @@
+import{d as t,o as u,c as n,e as o,t as r,b as l}from"./index-CGRrDFOz.js";const d=t({name:"SelectTable",__name:"SelectTable",setup(b){const a=l("5"),s=l([]);for(let e=0;e<10;e++)s.value.push({value:e+"",label:"label"+e});return(e,c)=>(u(),n("div",null,[o("div",null,"当前值为："+r(a.value),1)]))}});export{d as default};
