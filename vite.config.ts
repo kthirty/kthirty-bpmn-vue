@@ -12,8 +12,6 @@ import { AntDesignVueResolver, NaiveUiResolver } from 'unplugin-vue-components/r
 
 import minimist from 'minimist'
 
-import terser from '@rollup/plugin-terser'
-
 // 获取构建选项 build:browser 时，传入的变量: -f iife
 const { f } = minimist(process.argv.slice(2))
 
@@ -73,12 +71,11 @@ export default defineConfig(({command,mode}) => {
               name: 'KThirtyBpmnVue', // 暴露的全局变量
               fileName: 'kthirty-bpmn-vue' // 输出的包文件名，默认是 package.json 的 name 选项
             },
+      cssCodeSplit: false,
+      minify: mode === 'example' ? 'esbuild' : false,
       rollupOptions: {
-        // 自定义底层的Rollup打包配置
-        plugins: [terser()],
-        // https://rollupjs.org/configuration-options/
-        // 确保外部化处理那些你不想打包进库的依赖（作为外部依赖）
-        external: mode === 'example' ? [] : ['vue'],
+        // vue 由使用方提供，避免组件库再打一份
+        external: mode === 'example' ? [] : ['vue', 'vue/jsx-runtime'],
         // 当创建 iife 或 umd 格式的 bundle 时，你需要通过 output.globals 选项提供全局变量名，以替换掉外部引入。
         output: {
           name: 'KThirtyBpmnVue', // 对于输出格式为 iife | umd 的 bundle 来说，若想要使用全局变量名来表示你的 bundle 时，该选项是必要的。同一页面上的其他脚本可以使用这个变量名来访问你的 bundle 输出

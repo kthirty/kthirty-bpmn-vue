@@ -1,6 +1,6 @@
 import { defineComponent, ref, onMounted, watch, markRaw } from 'vue'
 import type { PropType } from 'vue'
-import { CollapsePanel, Form, FormItem, Input, Switch, Textarea } from 'ant-design-vue'
+import { CollapsePanel, Form, FormItem, Input, Switch, Textarea } from '../ui'
 import { isProcess } from '../utils/BpmnElementType'
 import { Id, Name, Process, Document } from '../utils/BpmnElementProp'
 import type { Element } from 'bpmn-js/lib/model/Types'
@@ -38,7 +38,6 @@ export default defineComponent({
       currentIsProcess.value && (info.executable = Process.getProcessExecutable(element))
       currentIsProcess.value && (info.nameExpression = Process.getProcessNameExpression(element))
       basicInfo.value = info
-      formRef.value?.clearValidate()
     }
     const updateProperties = () => {
       if (!basicInfo.value) return

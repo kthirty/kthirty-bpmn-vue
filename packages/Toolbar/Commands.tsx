@@ -2,8 +2,7 @@ import { defineComponent } from 'vue'
 import EventEmitter from '../utils/EventEmitter'
 import type Modeler from 'bpmn-js/lib/Modeler'
 import type { CommandStack } from 'bpmn-js/lib/features/modeling/Modeling'
-import { Button, Divider, Popover } from 'ant-design-vue'
-import { Eraser, Redo2, Undo2 } from 'lucide-vue-next'
+import { Button, Divider, Icon, Popover } from '../ui'
 import { emptyXml } from '../utils/BpmnElementData'
 
 const Commands = defineComponent({
@@ -37,17 +36,17 @@ const Commands = defineComponent({
         <Divider type="vertical" />
         <Popover content="撤销" placement="bottom">
           <Button size="small" type="text" onClick={undo}>
-            <Undo2 size={18} />
+            <Icon name="undo" />
           </Button>
         </Popover>
         <Popover content="恢复" placement="bottom">
           <Button size="small" type="text" onClick={redo}>
-            <Redo2 size={18} />
+            <Icon name="redo" />
           </Button>
         </Popover>
         <Popover content="重做" placement="bottom">
           <Button size="small" type="text" onClick={restart}>
-            <Eraser size={18} />
+            <Icon name="eraser" />
           </Button>
         </Popover>
       </div>

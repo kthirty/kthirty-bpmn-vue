@@ -1,24 +1,16 @@
 import { defineComponent } from 'vue'
-import { Button, Dropdown, Menu, MenuItem } from 'ant-design-vue'
+import { Button, Dropdown, Icon, Menu, MenuItem } from '../ui'
 import { downloadFile, setEncoded } from '../utils/BpmnElementHelper'
 import { getModeler } from '../utils/BpmnHolder'
-import { FolderDown } from 'lucide-vue-next'
 
 const Exports = defineComponent({
   name: 'ExportTools',
   setup() {
-    // 下载流程图到本地
-    /**
-     * @param {string} type
-     * @param {*} name
-     */
     const downloadProcess = async (type: string, name: string = 'diagram') => {
       try {
         const modeler = getModeler()
-        // 按需要类型创建文件并下载
         if (type === 'xml' || type === 'bpmn') {
           const { error, xml } = await modeler!.saveXML({})
-          // 读取异常时抛出异常
           if (error) {
             console.error(`[Process Designer Warn ]: ${error.message || error}`)
           }
@@ -26,7 +18,6 @@ const Exports = defineComponent({
           downloadFile(href, filename)
         } else {
           const { svg } = await modeler!.saveSVG()
-          // 读取异常时抛出异常
           const { href, filename } = setEncoded('SVG', name, svg!)
           downloadFile(href, filename)
         }
@@ -35,18 +26,16 @@ const Exports = defineComponent({
       }
     }
 
-    const handleMenuClick = ({ key }) => downloadProcess(key)
-
     return () => (
       <Dropdown
         v-slots={{
           default: () => (
             <Button size="small" type="text">
-              <FolderDown size={18} />
+              <Icon name="folder-down" />
             </Button>
           ),
           overlay: () => (
-            <Menu onClick={handleMenuClick}>
+            <Menu onClick={({ key }: { key: string }) => downloadProcess(String(key))}>
               <MenuItem key="bpmn">导出为BPMN</MenuItem>
               <MenuItem key="xml">导出为XML</MenuItem>
               <MenuItem key="svg">导出为SVG</MenuItem>

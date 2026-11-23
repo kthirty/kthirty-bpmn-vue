@@ -253,6 +253,7 @@ export class Id {
    * @param value - ID 值
    */
   static setIdValue(element: Element, value: string) {
+    if (element?.businessObject?.id === value) return
     const errorMsg = this.isIdValid(element, value)
     if (errorMsg && errorMsg.length) return message('warning', errorMsg)
     getModeling()?.updateProperties(element, { id: value })

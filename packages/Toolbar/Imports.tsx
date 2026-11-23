@@ -1,7 +1,6 @@
 import { defineComponent, ref } from 'vue'
-import { Button, Popover } from 'ant-design-vue'
+import { Button, Icon, Popover } from '../ui'
 import { getModeler } from '../utils/BpmnHolder'
-import { FolderInput } from 'lucide-vue-next'
 import EventEmitter from '../utils/EventEmitter'
 
 const Imports = defineComponent({
@@ -31,7 +30,7 @@ const Imports = defineComponent({
       <span>
         <Popover content="打开文件" placement="bottom">
           <Button size="small" type="text" onClick={openImportWindow}>
-            <FolderInput size={18} />
+            <Icon name="folder-input" />
           </Button>
         </Popover>
         <input type="file" ref={importRef} style="display: none" accept=".xml,.bpmn" onChange={changeImportFile}></input>

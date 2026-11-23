@@ -10,12 +10,14 @@
   ],
   "main": "./dist/kthirty-bpmn-vue.umd.cjs",
   "module": "./dist/kthirty-bpmn-vue.js",
+  "types": "./dist/types/index.d.ts",
   "browser": "./dist/kthirty-bpmn-vue.js",
   "unpkg": "dist/kthirty-bpmn-vue.iife.js",
   "exports": {
     "./dist/style.css": "./dist/style.css",
     "./css": "./dist/style.css",
     ".": {
+      "types": "./dist/types/index.d.ts",
       "import": "./dist/kthirty-bpmn-vue.js",
       "require": "./dist/kthirty-bpmn-vue.umd.cjs"
     }
@@ -40,21 +42,20 @@
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-pattern .gitignore",
     "build:types": "vue-tsc --declaration --emitDeclarationOnly --outDir dist/types --project tsconfig.build.json"
   },
+  "peerDependencies": {
+    "vue": "^3.4.0"
+  },
   "dependencies": {
-    "ant-design-vue": "^4.2.3",
     "bpmn-js": "^17.9.2",
     "bpmn-js-bpmnlint": "^0.22.3",
     "bpmn-js-color-picker": "^0.7.1",
     "bpmn-js-create-append-anything": "^0.5.2",
-    "bpmn-moddle": "^9.0.1",
-    "bpmnlint": "^10.3.0",
-    "core-js": "^3.38.0",
-    "lucide-vue-next": "^0.424.0",
-    "vue": "^3.4.36"
+    "bpmnlint": "^10.3.0"
   },
   "devDependencies": {
+    "vue": "^3.4.36",
+    "ant-design-vue": "^4.2.3",
     "vue-router": "^4.4.3",
-    "@rollup/plugin-terser": "^0.4.4",
     "@rushstack/eslint-patch": "^1.10.4",
     "@types/node": "^22.1.0",
     "@vitejs/plugin-vue": "^5.1.2",

@@ -8,7 +8,7 @@ import Aligns from './Aligns'
 import Scales from './Scales'
 import Commands from './Commands'
 
-import { Space } from 'ant-design-vue'
+import { Space } from '../ui'
 import { defaultToolbarOption, type ToolbarOption } from '../types'
 
 const Toolbar = defineComponent({

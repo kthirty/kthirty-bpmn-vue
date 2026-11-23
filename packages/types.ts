@@ -1,5 +1,5 @@
 import type { BaseViewerOptions } from 'bpmn-js/lib/BaseViewer'
-import type { JSX } from 'vue/jsx-runtime'
+import type { VNode } from 'vue'
 
 // bpmn.js 事件参数
 // 1. canvas 事件
@@ -71,9 +71,16 @@ export interface Field {
 }
 
 export type ToolbarItem = 'Imports' | 'Exports' | 'Previews' | 'LintToggle' | 'Aligns' | 'Scales' | 'Commands'
+
+/** 输入框右侧按钮。用 h() 返回节点，可使用本包导出的 Button、Icon 等组件。 */
+export interface FieldAddonProps {
+  onSelect: (value: string) => void
+}
+export type FieldAddon = (props: FieldAddonProps) => VNode
+
 export interface ToolbarOption {
   items: ToolbarItem[]
-  extra?: () => JSX.Element
+  extra?: () => VNode
 }
 export const defaultToolbarOption: ToolbarOption = {
   items: ['Imports', 'Exports', 'Previews', 'LintToggle', 'Aligns', 'Scales', 'Commands']
@@ -81,21 +88,27 @@ export const defaultToolbarOption: ToolbarOption = {
 export type PanelItem = 'BasicInfo' | 'Condition' | 'Listener' | 'StartInitiator' | 'UserTask' | 'UserTaskButtons' | 'ServiceTask'
 export interface PanelOption {
   items: PanelItem[]
-  extra?: (() => JSX.Element)[]
+  extra?: Array<() => VNode>
   UserTask?: {
     assigneeDataSource?: (type: string) => DataSourceItem[]
     dueDateDataSource?: () => DataSourceItem[]
     skipExpressionDataSource?: () => DataSourceItem[]
     formKeyDateDataSource: () => DataSourceItem[]
+    assigneeAddon?: FieldAddon
+    dueDateAddon?: FieldAddon
+    skipExpressionAddon?: FieldAddon
+    formKeyAddon?: FieldAddon
   }
   StartInitiator?: {
     formKeyDateDataSource: () => DataSourceItem[]
+    formKeyAddon?: FieldAddon
   }
   Listener?: {
     dataSource?: (type: ListenerType) => DataSourceItem[]
   }
   ServiceTask?: {
     serviceDataSource?: (type: ValueType) => DataSourceItem[]
+    serviceAddon?: FieldAddon
   }
 }
 export const defaultPanelOption: PanelOption = {

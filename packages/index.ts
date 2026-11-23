@@ -1,39 +1,5 @@
 import './less/global.less'
-import {
-  dateFormat,
-  formatNumber,
-  rafTimeout,
-  cancelRaf,
-  throttle,
-  debounce,
-  add,
-  downloadFile,
-  toggleDark,
-  useEventListener,
-  useMutationObserver,
-  useScrollDirection,
-  useFps,
-  useMediaQuery,
-  useResizeObserver
-} from './utils'
-
-export {
-  dateFormat,
-  formatNumber,
-  rafTimeout,
-  cancelRaf,
-  throttle,
-  debounce,
-  add,
-  downloadFile,
-  toggleDark,
-  useEventListener,
-  useMutationObserver,
-  useScrollDirection,
-  useFps,
-  useMediaQuery,
-  useResizeObserver
-}
+import './ui/ui.less'
 
 import Designer from './Designer'
 import Panel from './Panel'
@@ -57,6 +23,7 @@ const install = function (app: App) {
   components.forEach((component) => app.component(component.name as string, component))
 }
 export { Designer, Panel, Toolbar, BpmnDesigner, SelectableDrawer }
+export * from './ui'
 export default {
   install
 }

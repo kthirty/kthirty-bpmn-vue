@@ -2,7 +2,7 @@ import { defineComponent, onMounted, ref, watch } from 'vue'
 import type { PropType } from 'vue'
 import type { Element } from 'bpmn-js/lib/model/Types'
 import { isCanSetConditional } from '../utils/BpmnElementType'
-import { CollapsePanel, Form, FormItem, Select, Textarea } from 'ant-design-vue'
+import { CollapsePanel, Form, FormItem, Select, Textarea } from '../ui'
 import { Conditional } from '../utils/BpmnElementProp'
 
 interface ConditionForm {

@@ -3,7 +3,6 @@ import type { Moddle } from 'bpmn-js/lib/model/Types'
 import Modeler from 'bpmn-js/lib/Modeler'
 import { is, getBusinessObject } from 'bpmn-js/lib/util/ModelUtil'
 import { getModdle, getModeler, getModeling, getProcessEngine } from './BpmnHolder'
-import { isArray } from 'ant-design-vue/es/_util/util'
 import { emptyXml } from './BpmnElementData'
 
 // 创建元素
@@ -155,7 +154,7 @@ export function addExtensionElements(element: Element, businessObject: ModdleEle
  * Remove one or more extension elements. Remove bpmn:ExtensionElements afterwards if it's empty.
  */
 export function removeExtensionElements(element: Element, businessObject: ModdleElement, extensionElementsToRemove: ModdleElement | ModdleElement[]) {
-  if (!isArray(extensionElementsToRemove)) {
+  if (!Array.isArray(extensionElementsToRemove)) {
     extensionElementsToRemove = [extensionElementsToRemove]
   }
   const extensionElements = businessObject.get('extensionElements'),

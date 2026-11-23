@@ -2,7 +2,7 @@ import { defineComponent, onMounted, ref, watch } from 'vue'
 import type { PropType } from 'vue'
 import type { Element } from 'bpmn-js/lib/model/Types'
 import { Start } from '../utils/BpmnElementProp'
-import { CollapsePanel, FormItem, Input } from 'ant-design-vue'
+import { CollapsePanel, FormItem, Input } from '../ui'
 import { isCanSetInitiator } from '../utils/BpmnElementType'
 import SelectableDrawer from '../SelectableDrawer'
 import type { PanelOption } from '../types'
@@ -51,9 +51,18 @@ export default defineComponent({
                     v-model:value={formKey.value}
                     onChange={updateFormKey}
                     v-slots={{
-                      addonAfter: () => (
-                        <SelectableDrawer dataSource={() => props.option?.StartInitiator?.formKeyDateDataSource() || []} onSelect={(res) => (formKey.value = res)} />
-                      )
+                      addonAfter: () => {
+                        const select = (res: string) => {
+                          formKey.value = res
+                          updateFormKey()
+                        }
+                        const addon = props.option?.StartInitiator?.formKeyAddon
+                        return addon ? (
+                          addon({ onSelect: select })
+                        ) : (
+                          <SelectableDrawer dataSource={() => props.option?.StartInitiator?.formKeyDateDataSource() || []} onSelect={select} />
+                        )
+                      }
                     }}
                   />
                 </FormItem>

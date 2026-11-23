@@ -1,24 +1,9 @@
 import { defineComponent, onMounted, type PropType, ref, watch } from 'vue'
-import {
-  Button,
-  CollapsePanel,
-  ConfigProvider,
-  Drawer,
-  Form,
-  type FormInstance,
-  FormItem,
-  Input,
-  Popconfirm,
-  Space,
-  Switch,
-  Table,
-  type TableColumnType,
-  Textarea
-} from 'ant-design-vue'
+import { Button, CollapsePanel, ConfigProvider, Drawer, Form, FormItem, Input, Popconfirm, Space, Switch, Table, Textarea } from '../ui'
 import type { Element } from 'bpmn-js/lib/model/Types'
 import type { ButtonInfo, PanelOption } from '../types'
 import { isUserTask } from '../utils/BpmnElementType'
-import type { Key } from 'ant-design-vue/es/table/interface'
+type Key = string | number
 import { message } from '../utils/BpmnElementHelper'
 import { UserTask } from '../utils/BpmnElementProp'
 
@@ -51,7 +36,7 @@ export default defineComponent({
       UserTask.addButton(props.element, buttons.value)
     }
     // 列表选择
-    const formRef = ref<FormInstance | null>(null)
+    const formRef = ref(null)
     const currentIsEdit = ref<boolean>(false)
     const currentSelect = ref<ButtonInfo[]>([])
     const currentSelectKeys = ref<Key[]>([])
@@ -60,7 +45,7 @@ export default defineComponent({
       currentSelect.value = rows
     }
     // 列表字段
-    const columns: TableColumnType[] = [
+    const columns = [
       { title: 'Code', dataIndex: 'code', key: 'code', align: 'center', ellipsis: true },
       { title: 'Name', dataIndex: 'name', key: 'name', align: 'center', ellipsis: true },
       { title: 'ResultCode', dataIndex: 'resultCode', key: 'resultCode', align: 'center', ellipsis: true },
@@ -77,21 +62,19 @@ export default defineComponent({
       }
       currentIsEdit.value = true
       editForm.value = { ...currentSelect.value[0] }
-      openDrawer()
+      drawerShow.value = true
     }
     const save = () => {
-      formRef.value?.validate().then(() => {
-        if (currentIsEdit.value) {
-          const index = buttons.value.indexOf(currentSelect.value[0])
-          buttons.value[index] = { ...editForm.value }
-        } else {
-          buttons.value.push({ ...editForm.value })
-        }
-        updateProps()
-        closeDrawer()
-      })
+      if (!formRef.value?.validate()) return
+      if (currentIsEdit.value) {
+        const index = buttons.value.indexOf(currentSelect.value[0])
+        buttons.value[index] = { ...editForm.value }
+      } else {
+        buttons.value.push({ ...editForm.value })
+      }
+      updateProps()
+      closeDrawer()
     }
-    // 数据变更Form
     const drawerShow = ref<boolean>(false)
     const openDrawer = () => {
       editForm.value = {}
@@ -117,6 +100,7 @@ export default defineComponent({
           commentRequired: true
         })
       }
+      updateProps()
     }
 
     const closeDrawer = () => {
@@ -167,7 +151,7 @@ export default defineComponent({
                     editForm.value = {}
                     currentIsEdit.value = false
                   }}
-                  width="30%"
+                  width="35%"
                   v-model:open={drawerShow.value}
                   title="按钮编辑"
                   v-slots={{

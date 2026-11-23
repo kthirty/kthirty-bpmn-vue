@@ -1,30 +1,11 @@
 import { defineComponent, onMounted, reactive, ref, watch, type PropType } from 'vue'
 import type { Element } from 'bpmn-js/lib/model/Types'
-import {
-  Button,
-  CollapsePanel,
-  ConfigProvider,
-  Divider,
-  Drawer,
-  Form,
-  FormItem,
-  Input,
-  Popconfirm,
-  RadioGroup,
-  Select,
-  Space,
-  Table,
-  TabPane,
-  Tabs,
-  type TableColumnType,
-  Alert
-} from 'ant-design-vue'
+import { Button, CollapsePanel, ConfigProvider, Divider, Drawer, Form, FormItem, Input, Popconfirm, RadioGroup, Select, Space, Table, TabPane, Tabs } from '../ui'
 import { isProcess, isUserTask } from '../utils/BpmnElementType'
 import { Listener } from '../utils/BpmnElementProp'
 import type { DataSourceItem, ListenerConfig, ListenerFieldConfig, ListenerType, PanelOption } from '../types'
-import type { DefaultOptionType } from 'ant-design-vue/es/select'
 import { eventEventOptions, executionEventOptions, fieldTypeOptions, listenerTransactionTypeOptions, listenerValueTypeOptions, taskEventOptions } from '../utils/BpmnElementData'
-import type { Key } from 'ant-design-vue/es/table/interface'
+type Key = string | number
 import { format, message } from '../utils/BpmnElementHelper'
 import SelectableDrawer from '../SelectableDrawer'
 
@@ -41,14 +22,14 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const columns: TableColumnType[] = [
+    const columns = [
       {
         title: '事件',
         dataIndex: 'event',
         ellipsis: true,
         key: 'event',
         align: 'center',
-        customRender: ({ text }) => eventOptions.value.filter((it) => it.value === text)?.[0]?.label
+        customRender: ({ text }: { text: string }) => eventOptions.value.filter((it) => it.value === text)?.[0]?.label
       },
       {
         title: '类型',
@@ -56,13 +37,13 @@ export default defineComponent({
         ellipsis: true,
         key: 'type',
         align: 'center',
-        customRender: ({ text }) => listenerValueTypeOptions.filter((it) => it.value === text)?.[0].label
+        customRender: ({ text }: { text: string }) => listenerValueTypeOptions.filter((it) => it.value === text)?.[0].label
       },
       { title: '监听器', dataIndex: 'value', key: 'value', align: 'center', ellipsis: true }
     ]
-    const fieldColumns: TableColumnType[] = [
+    const fieldColumns = [
       { title: '字段名', dataIndex: 'name', key: 'name', align: 'center' },
-      { title: '字段类型', dataIndex: 'type', key: 'type', align: 'center', customRender: ({ text }) => fieldTypeOptions.filter((it) => it.value === text)?.[0].label },
+      { title: '字段类型', dataIndex: 'type', key: 'type', align: 'center', customRender: ({ text }: { text: string }) => fieldTypeOptions.filter((it) => it.value === text)?.[0].label },
       { title: '字段值', dataIndex: 'value', key: 'value', align: 'center' }
     ]
 
@@ -111,7 +92,7 @@ export default defineComponent({
     const openDrawer = () => (drawerShow.value = true)
     const closeDrawer = () => (drawerShow.value = false)
     const editForm = ref<ListenerConfig>({ type: 'class' })
-    const eventOptions = ref<DefaultOptionType[]>([])
+    const eventOptions = ref<Record<string, string>[]>([])
     const valueTypeOptions = ref<{ label: string; value: string }[]>([])
 
     // 事件选项加载
@@ -145,7 +126,9 @@ export default defineComponent({
       activeTab.value === 'TaskListener' && (taskList.value = taskList.value.filter((it) => !currentSelect.value.includes(it)))
       updateProps()
     }
+    const formRef = ref<{ validate: () => boolean } | null>(null)
     const save = () => {
+      if (!formRef.value?.validate()) return
       const currentList = activeTab.value === 'EventListener' ? eventList : activeTab.value === 'ExecutionListener' ? executionList : taskList
       let formInfo = { ...editForm.value, event: Array.isArray(editForm.value.event) ? editForm.value.event.join(',') : editForm.value.event }
       if (currentIsEdit.value) {
@@ -289,7 +272,7 @@ export default defineComponent({
                   editForm.value = { type: 'class' }
                   currentIsEdit.value = false
                 }}
-                width="30%"
+                width="35%"
                 v-model:open={drawerShow.value}
                 title={getListenerTypeName(activeTab.value)}
                 v-slots={{
@@ -300,7 +283,7 @@ export default defineComponent({
                   )
                 }}
               >
-                <Form model={editForm.value} validateTrigger="blur">
+                <Form ref={formRef} model={editForm.value} validateTrigger="blur">
                   <FormItem name="event" label="事件" required>
                     <Select
                       v-model:value={editForm.value.event}
@@ -357,7 +340,7 @@ export default defineComponent({
                         title="字段编辑"
                         v-model:open={fieldAction.show.value}
                         onClose={fieldAction.onClose}
-                        width="30%"
+                        width="35%"
                         v-slots={{
                           extra: () => (
                             <Button type="primary" onClick={fieldAction.save}>

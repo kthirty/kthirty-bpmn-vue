@@ -1,5 +1,5 @@
 import { defineComponent, markRaw, type PropType, ref, watch } from 'vue'
-import { Collapse, PageHeader } from 'ant-design-vue'
+import { Collapse, PageHeader } from '../ui'
 import EventEmitter from '../utils/EventEmitter'
 import { getModeler, setCurrentElement, setProcessEngine } from '../utils/BpmnHolder'
 import { debounce } from '../utils/BpmnElementHelper'

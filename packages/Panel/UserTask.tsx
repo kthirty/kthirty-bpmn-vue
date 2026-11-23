@@ -1,5 +1,4 @@
-import { Col, CollapsePanel, Form, FormItem, FormItemRest, Input, Row, Select } from 'ant-design-vue'
-import type { DefaultOptionType } from 'ant-design-vue/es/select'
+import { Col, CollapsePanel, Form, FormItem, FormItemRest, Input, Row, Select } from '../ui'
 import type { Element } from 'bpmn-js/lib/model/Types'
 import type { PropType } from 'vue'
 import { defineComponent, onMounted, ref, watch } from 'vue'
@@ -29,7 +28,7 @@ export default defineComponent({
       skipExpression?: string
       formKey?: string
     }>({ assigneeType: 'assignee' })
-    const assigneeTypeOption = ref<DefaultOptionType[]>([
+    const assigneeTypeOption = ref<Array<{ value: string; label: string }>>([
       { value: 'assignee', label: '任务人' },
       { value: 'candidateUsers', label: '候选人' },
       { value: 'candidateGroups', label: '候选组' }
@@ -105,12 +104,18 @@ export default defineComponent({
                               v-model:value={formProp.value.assigneeValue}
                               onChange={updateProps}
                               v-slots={{
-                                addonAfter: () => (
-                                  <SelectableDrawer
-                                    dataSource={() => props.option?.UserTask?.assigneeDataSource?.(formProp.value.assigneeType) || []}
-                                    onSelect={(res) => (formProp.value.assigneeValue = res)}
-                                  />
-                                )
+                                addonAfter: () => {
+                                  const select = (res: string) => {
+                                    formProp.value.assigneeValue = res
+                                    updateProps()
+                                  }
+                                  const addon = props.option?.UserTask?.assigneeAddon
+                                  return addon ? (
+                                    addon({ onSelect: select })
+                                  ) : (
+                                    <SelectableDrawer dataSource={() => props.option?.UserTask?.assigneeDataSource?.(formProp.value.assigneeType) || []} onSelect={select} />
+                                  )
+                                }
                               }}
                             />
                           </Col>
@@ -122,9 +127,14 @@ export default defineComponent({
                         v-model:value={formProp.value.formKey}
                         onChange={updateProps}
                         v-slots={{
-                          addonAfter: () => (
-                            <SelectableDrawer dataSource={() => props.option?.UserTask?.formKeyDateDataSource() || []} onSelect={(res) => (formProp.value.formKey = res)} />
-                          )
+                          addonAfter: () => {
+                            const select = (res: string) => {
+                              formProp.value.formKey = res
+                              updateProps()
+                            }
+                            const addon = props.option?.UserTask?.formKeyAddon
+                            return addon ? addon({ onSelect: select }) : <SelectableDrawer dataSource={() => props.option?.UserTask?.formKeyDateDataSource() || []} onSelect={select} />
+                          }
                         }}
                       />
                     </FormItem>
@@ -134,9 +144,14 @@ export default defineComponent({
                         v-model:value={formProp.value.dueDate}
                         onChange={updateProps}
                         v-slots={{
-                          addonAfter: () => (
-                            <SelectableDrawer dataSource={() => props.option?.UserTask?.dueDateDataSource?.() || []} onSelect={(res) => (formProp.value.dueDate = res)} />
-                          )
+                          addonAfter: () => {
+                            const select = (res: string) => {
+                              formProp.value.dueDate = res
+                              updateProps()
+                            }
+                            const addon = props.option?.UserTask?.dueDateAddon
+                            return addon ? addon({ onSelect: select }) : <SelectableDrawer dataSource={() => props.option?.UserTask?.dueDateDataSource?.() || []} onSelect={select} />
+                          }
                         }}
                       />
                     </FormItem>
@@ -145,14 +160,18 @@ export default defineComponent({
                         v-model:value={formProp.value.skipExpression}
                         onChange={updateProps}
                         v-slots={{
-                          addonAfter: () => (
-                            <SelectableDrawer
-                              dataSource={() => {
-                                return props.option?.UserTask?.skipExpressionDataSource?.() || []
-                              }}
-                              onSelect={(res) => (formProp.value.skipExpression = res)}
-                            />
-                          )
+                          addonAfter: () => {
+                            const select = (res: string) => {
+                              formProp.value.skipExpression = res
+                              updateProps()
+                            }
+                            const addon = props.option?.UserTask?.skipExpressionAddon
+                            return addon ? (
+                              addon({ onSelect: select })
+                            ) : (
+                              <SelectableDrawer dataSource={() => props.option?.UserTask?.skipExpressionDataSource?.() || []} onSelect={select} />
+                            )
+                          }
                         }}
                       />
                     </FormItem>

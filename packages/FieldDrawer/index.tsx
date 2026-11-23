@@ -1,15 +1,15 @@
-import { Button, Divider, Drawer, Form, FormItem, Input, Popconfirm, RadioGroup, Space, Table, type TableColumnType } from 'ant-design-vue'
+import { Button, Divider, Drawer, Form, FormItem, Input, Popconfirm, RadioGroup, Space, Table } from '../ui'
 import { fieldTypeOptions } from '../utils/BpmnElementData'
 import { defineComponent, type PropType, ref, watch } from 'vue'
-import type { Key } from 'ant-design-vue/es/table/interface'
+type Key = string | number
 import type { Field } from '../types'
 
 export default defineComponent({
   name: 'FieldDrawer',
   props: {
     value: {
-      type: Array as () => Field[],
-      required: true
+      type: Array as PropType<Field[]>,
+      default: () => []
     }
   },
   emits: ['change', 'update:value'],
@@ -19,9 +19,9 @@ export default defineComponent({
       emit('update:value', newValue)
       emit('change', newValue)
     })
-    const fieldColumns: TableColumnType[] = [
+    const fieldColumns = [
       { title: '字段名', dataIndex: 'name', key: 'name', align: 'center' },
-      { title: '字段类型', dataIndex: 'type', key: 'type', align: 'center', customRender: ({ text }) => fieldTypeOptions.filter((it) => it.value === text)?.[0].label },
+      { title: '字段类型', dataIndex: 'type', key: 'type', align: 'center', customRender: ({ text }: { text: string }) => fieldTypeOptions.filter((it) => it.value === text)?.[0].label },
       { title: '字段值', dataIndex: 'value', key: 'value', align: 'center' }
     ]
     // 字段修改
@@ -90,7 +90,7 @@ export default defineComponent({
           title="字段编辑"
           v-model:open={fieldAction.show.value}
           onClose={fieldAction.onClose}
-          width="30%"
+          width="35%"
           v-slots={{
             extra: () => (
               <Button type="primary" onClick={fieldAction.save}>

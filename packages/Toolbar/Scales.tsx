@@ -1,8 +1,7 @@
 import { defineComponent, ref } from 'vue'
 import EventEmitter from '../utils/EventEmitter'
 import type Modeler from 'bpmn-js/lib/Modeler'
-import { Button, Divider, Popover } from 'ant-design-vue'
-import { ZoomIn, ZoomOut } from 'lucide-vue-next'
+import { Button, Divider, Icon, Popover } from '../ui'
 
 const Scales = defineComponent({
   name: 'Scales',
@@ -40,7 +39,7 @@ const Scales = defineComponent({
         <Divider type="vertical" />
         <Popover content="缩小视图" placement="bottom">
           <Button size="small" type="text" onClick={() => zoomOut()}>
-            <ZoomOut size={18} />
+            <Icon name="zoom-out" />
           </Button>
         </Popover>
         <Popover content="重置视图" placement="bottom">
@@ -48,9 +47,9 @@ const Scales = defineComponent({
             <span style="width: 40px">{Math.floor(currentScale.value * 10) * 10 + '%'}</span>
           </Button>
         </Popover>
-        <Popover content="缩小视图" placement="bottom">
+        <Popover content="放大视图" placement="bottom">
           <Button size="small" type="text" onClick={() => zoomIn()}>
-            <ZoomIn size={18} />
+            <Icon name="zoom-in" />
           </Button>
         </Popover>
       </div>

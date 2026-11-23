@@ -1,7 +1,6 @@
 import { defineComponent } from 'vue'
-import { Button, Popover } from 'ant-design-vue'
+import { Button, Icon, Popover } from '../ui'
 import { getModeler } from '../utils/BpmnHolder'
-import { BadgeAlert } from 'lucide-vue-next'
 
 const LintToggle = defineComponent({
   name: 'LintToggle',
@@ -13,7 +12,7 @@ const LintToggle = defineComponent({
     return () => (
       <Popover content="开启/关闭流程验证" placement="bottom">
         <Button size="small" type="text" onClick={toggleLint}>
-          <BadgeAlert size={18} />
+          <Icon name="badge-alert" />
         </Button>
       </Popover>
     )

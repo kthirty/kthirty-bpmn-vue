@@ -3,7 +3,7 @@ import type { Element } from 'bpmn-js/lib/model/Types'
 import type { Field, PanelOption } from '../types'
 import { isServiceTask } from '../utils/BpmnElementType'
 import { getExPropValue, updateExPropValue } from '../utils/BpmnElementHelper'
-import { CollapsePanel, Form, FormItem, Input, RadioGroup, Textarea } from 'ant-design-vue'
+import { CollapsePanel, Form, FormItem, Input, RadioGroup, Textarea } from '../ui'
 import SelectableDrawer from '../SelectableDrawer'
 import FieldDrawer from '../FieldDrawer'
 import { ServiceTask } from '../utils/BpmnElementProp'
@@ -87,12 +87,18 @@ export default defineComponent({
                     v-model:value={formProp.value.serviceValue}
                     onChange={updateProps}
                     v-slots={{
-                      addonAfter: () => (
-                        <SelectableDrawer
-                          dataSource={() => props.option?.ServiceTask?.serviceDataSource?.(formProp.value.serviceType) || []}
-                          onSelect={(res) => (formProp.value.serviceValue = res)}
-                        />
-                      )
+                      addonAfter: () => {
+                        const select = (res: string) => {
+                          formProp.value.serviceValue = res
+                          updateProps()
+                        }
+                        const addon = props.option?.ServiceTask?.serviceAddon
+                        return addon ? (
+                          addon({ onSelect: select })
+                        ) : (
+                          <SelectableDrawer dataSource={() => props.option?.ServiceTask?.serviceDataSource?.(formProp.value.serviceType) || []} onSelect={select} />
+                        )
+                      }
                     }}
                   />
                 </FormItem>

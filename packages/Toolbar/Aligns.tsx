@@ -1,23 +1,21 @@
 import { h, computed, defineComponent } from 'vue'
-import type { ComputedRef, Component } from 'vue'
 import Modeler from 'bpmn-js/lib/Modeler'
 import Modeling from 'bpmn-js/lib/features/modeling/Modeling.js'
 import EventEmitter from '../utils/EventEmitter'
 import { message } from '../utils/BpmnElementHelper'
-import { Button, Divider, Popover } from 'ant-design-vue'
-import { AlignStartVertical, AlignCenterVertical, AlignEndVertical, AlignStartHorizontal, AlignCenterHorizontal, AlignEndHorizontal } from 'lucide-vue-next'
+import { Button, Divider, Icon, Popover } from '../ui'
 
 const Aligns = defineComponent({
   name: 'Aligns',
   setup() {
-    const buttons: ComputedRef<{ name: string; key: string; icon: Component }[]> = computed(() => {
+    const buttons = computed(() => {
       return [
-        { name: '左对齐', key: 'left', icon: AlignStartVertical },
-        { name: '水平居中', key: 'center', icon: AlignCenterVertical },
-        { name: '右对齐', key: 'right', icon: AlignEndVertical },
-        { name: '上对齐', key: 'top', icon: AlignStartHorizontal },
-        { name: '垂直居中', key: 'middle', icon: AlignCenterHorizontal },
-        { name: '下对齐', key: 'bottom', icon: AlignEndHorizontal }
+        { name: '左对齐', key: 'left', icon: 'align-left' },
+        { name: '水平居中', key: 'center', icon: 'align-center-v' },
+        { name: '右对齐', key: 'right', icon: 'align-right' },
+        { name: '上对齐', key: 'top', icon: 'align-top' },
+        { name: '垂直居中', key: 'middle', icon: 'align-middle' },
+        { name: '下对齐', key: 'bottom', icon: 'align-bottom' }
       ]
     })
 
@@ -51,7 +49,7 @@ const Aligns = defineComponent({
                 content: () => item.name,
                 default: () => (
                   <Button size="small" type="text" onClick={() => alignElements(item.key)}>
-                    {() => h(item.icon, { size: 18 })}
+                    {() => h(Icon, { name: item.icon })}
                   </Button>
                 )
               }}

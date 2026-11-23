@@ -1,11 +1,7 @@
-import { defineComponent, markRaw, ref, toRefs, watch, type PropType } from 'vue'
-import { Button, Drawer, Form, FormItem, Input, Table, type TableColumnType } from 'ant-design-vue'
-import type { Key } from 'ant-design-vue/es/table/interface'
-import { Settings } from 'lucide-vue-next'
+import { defineComponent, ref, type PropType } from 'vue'
+import { Button, Drawer, Form, FormItem, Icon, Input, Table } from '../ui'
 import type { DataSourceExtraParam, DataSourceItem } from '../types'
 import { format } from '../utils/BpmnElementHelper'
-import { add } from './../utils/index'
-
 export default defineComponent({
   name: 'SelectableDrawer',
   props: {
@@ -24,7 +20,7 @@ export default defineComponent({
     }
     const closeDrawer = () => (drawerVisible.value = false)
 
-    const columns: TableColumnType[] = [
+    const columns = [
       { title: '名称', dataIndex: 'label', key: 'label', width: 100, ellipsis: true, align: 'center' },
       { title: '描述', dataIndex: 'description', key: 'description', width: 100, ellipsis: true, align: 'center' }
     ]
@@ -39,7 +35,6 @@ export default defineComponent({
       }
     }
 
-    const extraFormRef = ref()
     const extra = ref<{ visible: boolean; model: any; columns: DataSourceExtraParam[]; row?: DataSourceItem }>({
       row: undefined,
       visible: false,
@@ -48,19 +43,16 @@ export default defineComponent({
     })
     const extraClose = () => (extra.value.visible = false)
     const extraOpen = () => (extra.value.visible = true)
+    const formRef = ref<{ validate: () => boolean } | null>(null)
     const extraSave = () => {
-      extraFormRef.value
-        .validate()
-        .then(() => {
-          emit('select', format({ ...extra.value.row?.value }, extra.value.model))
-          extraClose()
-          closeDrawer()
-        })
-        .catch(() => {})
+      if (!formRef.value?.validate()) return
+      emit('select', format({ ...extra.value.row?.value }, extra.value.model))
+      extraClose()
+      closeDrawer()
     }
     return () => (
       <>
-        <div onClick={openDrawer}>{slots.default ? slots.default() : <Settings style="cursor: pointer;" size={18} />}</div>
+        <div onClick={openDrawer}>{slots.default ? slots.default() : <Icon name="settings" />}</div>
         <Drawer visible={drawerVisible.value} onClose={closeDrawer} destroyOnClose={true} title="请选择">
           <Table
             customRow={(record) => {
@@ -84,9 +76,9 @@ export default defineComponent({
             )
           }}
         >
-          <Form ref={extraFormRef} colon={false} labelCol={{ span: 6 }} model={extra.value.model}>
+          <Form ref={formRef} colon={false} labelCol={{ span: 6 }} model={extra.value.model} validateTrigger="blur">
             {extra.value.columns.map((item) => (
-              <FormItem label={item.label} name={item.value} tooltip={item.description} rules={item.required ? { required: true, message: `${item.label}不可为空` } : undefined}>
+              <FormItem label={item.label} name={item.value} tooltip={item.description} required={item.required}>
                 <Input v-model:value={extra.value.model[item.value]} />
               </FormItem>
             ))}
