@@ -21,7 +21,13 @@ export default defineComponent({
     })
     const fieldColumns = [
       { title: '字段名', dataIndex: 'name', key: 'name', align: 'center' },
-      { title: '字段类型', dataIndex: 'type', key: 'type', align: 'center', customRender: ({ text }: { text: string }) => fieldTypeOptions.filter((it) => it.value === text)?.[0].label },
+      {
+        title: '字段类型',
+        dataIndex: 'type',
+        key: 'type',
+        align: 'center',
+        customRender: ({ text }: { text: string }) => fieldTypeOptions.filter((it) => it.value === text)?.[0].label
+      },
       { title: '字段值', dataIndex: 'value', key: 'value', align: 'center' }
     ]
     // 字段修改

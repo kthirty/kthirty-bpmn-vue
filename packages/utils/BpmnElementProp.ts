@@ -428,7 +428,6 @@ export class ServiceTask {
     if (!extensionElements.values) {
       extensionElements.values = []
     }
-    debugger
     // 去除所有field
     extensionElements.values = extensionElements.values.filter((ext: ModdleElement) => {
       return !(ext.$type === `${processEngine}:field`)

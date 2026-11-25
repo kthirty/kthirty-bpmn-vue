@@ -1,7 +1,7 @@
 import { defineComponent, onMounted, reactive, ref, watch, type PropType } from 'vue'
 import type { Element } from 'bpmn-js/lib/model/Types'
 import { Button, CollapsePanel, ConfigProvider, Divider, Drawer, Form, FormItem, Input, Popconfirm, RadioGroup, Select, Space, Table, TabPane, Tabs } from '../ui'
-import { isProcess, isUserTask } from '../utils/BpmnElementType'
+import { isExecutable, isProcess, isUserTask } from '../utils/BpmnElementType'
 import { Listener } from '../utils/BpmnElementProp'
 import type { DataSourceItem, ListenerConfig, ListenerFieldConfig, ListenerType, PanelOption } from '../types'
 import { eventEventOptions, executionEventOptions, fieldTypeOptions, listenerTransactionTypeOptions, listenerValueTypeOptions, taskEventOptions } from '../utils/BpmnElementData'
@@ -43,7 +43,13 @@ export default defineComponent({
     ]
     const fieldColumns = [
       { title: '字段名', dataIndex: 'name', key: 'name', align: 'center' },
-      { title: '字段类型', dataIndex: 'type', key: 'type', align: 'center', customRender: ({ text }: { text: string }) => fieldTypeOptions.filter((it) => it.value === text)?.[0].label },
+      {
+        title: '字段类型',
+        dataIndex: 'type',
+        key: 'type',
+        align: 'center',
+        customRender: ({ text }: { text: string }) => fieldTypeOptions.filter((it) => it.value === text)?.[0].label
+      },
       { title: '字段值', dataIndex: 'value', key: 'value', align: 'center' }
     ]
 
@@ -202,175 +208,178 @@ export default defineComponent({
       currentList.value.push({ ...selected })
       // updateProps()
     }
-    return () => (
-      <CollapsePanel
-        key="Listener"
-        v-slots={{
-          header: () => '监听配置',
-          default: () => (
-            <ConfigProvider componentSize="middle">
-              <Space>
-                {templateDataSource.value.length > 0 && (
-                  <SelectableDrawer dataSource={() => templateDataSource.value} onSelect={templateSelect}>
-                    <Button type="primary">选择预设</Button>
-                  </SelectableDrawer>
-                )}
-                <Button type="primary" onClick={openDrawer}>
-                  新增
-                </Button>
-                <Button type="primary" disabled={currentSelect.value.length !== 1} onClick={toEdit}>
-                  编辑
-                </Button>
-                <Popconfirm title="确认删除？" okText="Yes" cancelText="No" disabled={currentSelect.value.length === 0} onConfirm={del}>
-                  <Button type="primary" danger disabled={currentSelect.value.length === 0}>
-                    删除
+    return () =>
+      isExecutable(props.element) ? (
+        <CollapsePanel
+          key="Listener"
+          v-slots={{
+            header: () => '监听配置',
+            default: () => (
+              <ConfigProvider componentSize="middle">
+                <Space>
+                  {templateDataSource.value.length > 0 && (
+                    <SelectableDrawer dataSource={() => templateDataSource.value} onSelect={templateSelect}>
+                      <Button type="primary">选择预设</Button>
+                    </SelectableDrawer>
+                  )}
+                  <Button type="primary" onClick={openDrawer}>
+                    新增
                   </Button>
-                </Popconfirm>
-              </Space>
-              <Tabs v-model:activeKey={activeTab.value}>
-                <TabPane key="ExecutionListener" tab="执行监听">
-                  <Table
-                    rowSelection={{ type: 'checkbox', onChange: rowSelected, selectedRowKeys: currentSelectKeys.value }}
-                    rowKey={(re: any) => JSON.stringify(re)}
-                    pagination={false}
-                    bordered
-                    columns={columns}
-                    dataSource={executionList.value}
-                  />
-                </TabPane>
-                {isUserTask(props.element) && (
-                  <TabPane key="TaskListener" tab="任务监听">
-                    <Table
-                      rowSelection={{
-                        type: 'checkbox',
-                        onChange: rowSelected,
-                        selectedRowKeys: currentSelectKeys.value
-                      }}
-                      rowKey={(re: any) => JSON.stringify(re)}
-                      pagination={false}
-                      bordered
-                      columns={columns}
-                      dataSource={taskList.value}
-                    />
-                  </TabPane>
-                )}
-                {isProcess(props.element) && (
-                  <TabPane key="EventListener" tab="事件监听">
+                  <Button type="primary" disabled={currentSelect.value.length !== 1} onClick={toEdit}>
+                    编辑
+                  </Button>
+                  <Popconfirm title="确认删除？" okText="Yes" cancelText="No" disabled={currentSelect.value.length === 0} onConfirm={del}>
+                    <Button type="primary" danger disabled={currentSelect.value.length === 0}>
+                      删除
+                    </Button>
+                  </Popconfirm>
+                </Space>
+                <Tabs v-model:activeKey={activeTab.value}>
+                  <TabPane key="ExecutionListener" tab="执行监听">
                     <Table
                       rowSelection={{ type: 'checkbox', onChange: rowSelected, selectedRowKeys: currentSelectKeys.value }}
                       rowKey={(re: any) => JSON.stringify(re)}
                       pagination={false}
                       bordered
                       columns={columns}
-                      dataSource={eventList.value}
+                      dataSource={executionList.value}
                     />
                   </TabPane>
-                )}
-              </Tabs>
-              <Drawer
-                onClose={() => {
-                  editForm.value = { type: 'class' }
-                  currentIsEdit.value = false
-                }}
-                width="35%"
-                v-model:open={drawerShow.value}
-                title={getListenerTypeName(activeTab.value)}
-                v-slots={{
-                  extra: () => (
-                    <Button type="primary" onClick={save}>
-                      保存
-                    </Button>
-                  )
-                }}
-              >
-                <Form ref={formRef} model={editForm.value} validateTrigger="blur">
-                  <FormItem name="event" label="事件" required>
-                    <Select
-                      v-model:value={editForm.value.event}
-                      options={eventOptions.value}
-                      allowClear
-                      showSearch
-                      mode={activeTab.value === 'EventListener' ? 'multiple' : undefined}
-                    />
-                  </FormItem>
-                  <FormItem name="type" label="监听类型" required tooltip={getListenerTypeName(activeTab.value) + '必须实现' + getListenerSuperClass(activeTab.value) + '接口'}>
-                    <RadioGroup v-model:value={editForm.value.type} options={valueTypeOptions.value} />
-                  </FormItem>
-                  <FormItem name="value" label="监听值" required>
-                    <Input v-model:value={editForm.value.value} />
-                  </FormItem>
-                  {activeTab.value !== 'EventListener' ? (
-                    <FormItem
-                      name="onTransaction"
-                      label="事务类型"
-                      required
-                      tooltip="before-commit：事务提交之前触发监听器。监听器异常事务回滚。
+                  {isUserTask(props.element) && (
+                    <TabPane key="TaskListener" tab="任务监听">
+                      <Table
+                        rowSelection={{
+                          type: 'checkbox',
+                          onChange: rowSelected,
+                          selectedRowKeys: currentSelectKeys.value
+                        }}
+                        rowKey={(re: any) => JSON.stringify(re)}
+                        pagination={false}
+                        bordered
+                        columns={columns}
+                        dataSource={taskList.value}
+                      />
+                    </TabPane>
+                  )}
+                  {isProcess(props.element) && (
+                    <TabPane key="EventListener" tab="事件监听">
+                      <Table
+                        rowSelection={{ type: 'checkbox', onChange: rowSelected, selectedRowKeys: currentSelectKeys.value }}
+                        rowKey={(re: any) => JSON.stringify(re)}
+                        pagination={false}
+                        bordered
+                        columns={columns}
+                        dataSource={eventList.value}
+                      />
+                    </TabPane>
+                  )}
+                </Tabs>
+                <Drawer
+                  onClose={() => {
+                    editForm.value = { type: 'class' }
+                    currentIsEdit.value = false
+                  }}
+                  width="35%"
+                  v-model:open={drawerShow.value}
+                  title={getListenerTypeName(activeTab.value)}
+                  v-slots={{
+                    extra: () => (
+                      <Button type="primary" onClick={save}>
+                        保存
+                      </Button>
+                    )
+                  }}
+                >
+                  <Form ref={formRef} model={editForm.value} validateTrigger="blur">
+                    <FormItem name="event" label="事件" required>
+                      <Select
+                        v-model:value={editForm.value.event}
+                        options={eventOptions.value}
+                        allowClear
+                        showSearch
+                        mode={activeTab.value === 'EventListener' ? 'multiple' : undefined}
+                      />
+                    </FormItem>
+                    <FormItem name="type" label="监听类型" required tooltip={getListenerTypeName(activeTab.value) + '必须实现' + getListenerSuperClass(activeTab.value) + '接口'}>
+                      <RadioGroup v-model:value={editForm.value.type} options={valueTypeOptions.value} />
+                    </FormItem>
+                    <FormItem name="value" label="监听值" required>
+                      <Input v-model:value={editForm.value.value} />
+                    </FormItem>
+                    {activeTab.value !== 'EventListener' ? (
+                      <FormItem
+                        name="onTransaction"
+                        label="事务类型"
+                        required
+                        tooltip="before-commit：事务提交之前触发监听器。监听器异常事务回滚。
                           committed：事务提交之后触发监听器，监听器异常事务不回滚。
                           rolled-back：事务回滚时触发监听器。"
-                    >
-                      <RadioGroup v-model:value={editForm.value.onTransaction} options={listenerTransactionTypeOptions} />
-                    </FormItem>
-                  ) : (
-                    <div></div>
-                  )}
-                  {activeTab.value !== 'EventListener' ? (
-                    <FormItem>
-                      <Divider>注入字段</Divider>
-                      <Space style="margin-bottom:10px">
-                        <Button type="primary" onClick={fieldAction.toAdd}>
-                          新增
-                        </Button>
-                        <Button type="primary" disabled={fieldCurrentSelected.value.keys.length !== 1} onClick={fieldAction.toEdit}>
-                          修改
-                        </Button>
-                        <Popconfirm title="确认删除？" okText="Yes" cancelText="No" disabled={fieldCurrentSelected.value.keys.length === 0} onConfirm={fieldAction.del}>
-                          <Button type="primary" danger disabled={fieldCurrentSelected.value.keys.length === 0}>
-                            删除
-                          </Button>
-                        </Popconfirm>
-                      </Space>
-                      <Table
-                        columns={fieldColumns}
-                        rowSelection={{ type: 'checkbox', onChange: fieldSelected }}
-                        rowKey={(re) => JSON.stringify(re)}
-                        dataSource={editForm.value.field}
-                        pagination={false}
-                      />
-                      <Drawer
-                        title="字段编辑"
-                        v-model:open={fieldAction.show.value}
-                        onClose={fieldAction.onClose}
-                        width="35%"
-                        v-slots={{
-                          extra: () => (
-                            <Button type="primary" onClick={fieldAction.save}>
-                              保存
-                            </Button>
-                          )
-                        }}
                       >
-                        <Form model={fieldAction.form.value}>
-                          <FormItem name="name" label="字段名">
-                            <Input v-model:value={fieldAction.form.value.name} />
-                          </FormItem>
-                          <FormItem name="type" label="字段类型">
-                            <RadioGroup v-model:value={fieldAction.form.value.type} options={fieldTypeOptions} />
-                          </FormItem>
-                          <FormItem name="value" label="字段值">
-                            <Input v-model:value={fieldAction.form.value.value} />
-                          </FormItem>
-                        </Form>
-                      </Drawer>
-                    </FormItem>
-                  ) : (
-                    <div></div>
-                  )}
-                </Form>
-              </Drawer>
-            </ConfigProvider>
-          )
-        }}
-      />
-    )
+                        <RadioGroup v-model:value={editForm.value.onTransaction} options={listenerTransactionTypeOptions} />
+                      </FormItem>
+                    ) : (
+                      <div></div>
+                    )}
+                    {activeTab.value !== 'EventListener' ? (
+                      <FormItem>
+                        <Divider>注入字段</Divider>
+                        <Space style="margin-bottom:10px">
+                          <Button type="primary" onClick={fieldAction.toAdd}>
+                            新增
+                          </Button>
+                          <Button type="primary" disabled={fieldCurrentSelected.value.keys.length !== 1} onClick={fieldAction.toEdit}>
+                            修改
+                          </Button>
+                          <Popconfirm title="确认删除？" okText="Yes" cancelText="No" disabled={fieldCurrentSelected.value.keys.length === 0} onConfirm={fieldAction.del}>
+                            <Button type="primary" danger disabled={fieldCurrentSelected.value.keys.length === 0}>
+                              删除
+                            </Button>
+                          </Popconfirm>
+                        </Space>
+                        <Table
+                          columns={fieldColumns}
+                          rowSelection={{ type: 'checkbox', onChange: fieldSelected }}
+                          rowKey={(re) => JSON.stringify(re)}
+                          dataSource={editForm.value.field}
+                          pagination={false}
+                        />
+                        <Drawer
+                          title="字段编辑"
+                          v-model:open={fieldAction.show.value}
+                          onClose={fieldAction.onClose}
+                          width="35%"
+                          v-slots={{
+                            extra: () => (
+                              <Button type="primary" onClick={fieldAction.save}>
+                                保存
+                              </Button>
+                            )
+                          }}
+                        >
+                          <Form model={fieldAction.form.value}>
+                            <FormItem name="name" label="字段名">
+                              <Input v-model:value={fieldAction.form.value.name} />
+                            </FormItem>
+                            <FormItem name="type" label="字段类型">
+                              <RadioGroup v-model:value={fieldAction.form.value.type} options={fieldTypeOptions} />
+                            </FormItem>
+                            <FormItem name="value" label="字段值">
+                              <Input v-model:value={fieldAction.form.value.value} />
+                            </FormItem>
+                          </Form>
+                        </Drawer>
+                      </FormItem>
+                    ) : (
+                      <div></div>
+                    )}
+                  </Form>
+                </Drawer>
+              </ConfigProvider>
+            )
+          }}
+        />
+      ) : (
+        <div style="display: none" />
+      )
   }
 })

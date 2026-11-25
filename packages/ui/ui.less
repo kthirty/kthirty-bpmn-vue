@@ -174,7 +174,9 @@
   background: #fff;
   box-sizing: border-box;
   color: rgb(0 0 0 / 88%);
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 .bpmn-input:hover,
 .bpmn-textarea:hover {
@@ -213,7 +215,9 @@
   background: #fff;
   box-sizing: border-box;
   cursor: pointer;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 .bpmn-select.multiple .bpmn-select-selector {
   padding-left: 4px;
@@ -299,7 +303,9 @@
   border-right: 1.5px solid rgb(0 0 0 / 45%);
   border-bottom: 1.5px solid rgb(0 0 0 / 45%);
   transform: rotate(45deg);
-  transition: transform 0.2s, margin-top 0.2s;
+  transition:
+    transform 0.2s,
+    margin-top 0.2s;
   pointer-events: none;
 }
 .bpmn-select.open .bpmn-select-arrow {
@@ -580,14 +586,35 @@
   padding-top: 0;
 }
 .bpmn-page-header {
-  display: flex;
-  gap: 8px;
-  align-items: baseline;
-  padding: 8px 12px;
+  padding: 16px 24px;
+  background: #fff;
   border-bottom: 1px solid #f0f0f0;
 }
-.bpmn-page-header span {
-  color: #8c8c8c;
+.bpmn-page-header-heading {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  overflow: hidden;
+}
+.bpmn-page-header-title {
+  flex: none;
+  max-width: 100%;
+  margin-right: 12px;
+  overflow: hidden;
+  color: rgb(0 0 0 / 88%);
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 32px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.bpmn-page-header-subtitle {
+  overflow: hidden;
+  color: rgb(0 0 0 / 45%);
+  font-size: 14px;
+  line-height: 1.5715;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 .bpmn-drawer-mask,
 .bpmn-modal-mask {
@@ -746,20 +773,77 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+.bpmn-tabs {
+  color: rgb(0 0 0 / 88%);
+  font-size: 14px;
+  line-height: 1.5714285714;
+}
 .bpmn-tabs-nav {
+  position: relative;
+  margin: 0 0 16px;
+}
+.bpmn-tabs-nav::before {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  border-bottom: 1px solid #f0f0f0;
+  content: '';
+}
+.bpmn-tabs-nav-list {
+  position: relative;
   display: flex;
+}
+.bpmn-tabs-tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 12px 0;
+  border: 0;
+  background: transparent;
+  color: rgb(0 0 0 / 88%);
+  font: inherit;
+  line-height: 1.5714285714;
+  cursor: pointer;
+  outline: none;
+  transition: color 0.3s;
+}
+.bpmn-tabs-tab + .bpmn-tabs-tab {
+  margin-left: 32px;
+}
+.bpmn-tabs-tab:hover {
+  color: #4096ff;
+}
+.bpmn-tabs-tab.on,
+.bpmn-tabs-tab.on:hover {
+  color: #1677ff;
+  text-shadow: 0 0 0.25px currentcolor;
+}
+.bpmn-tabs-ink {
+  position: absolute;
+  bottom: 0;
+  height: 2px;
+  background: #1677ff;
+  pointer-events: none;
+  transition:
+    left 0.3s,
+    width 0.3s;
+}
+.bpmn-tab-pane {
+  outline: none;
+}
+.bpmn-entry {
+  display: flex;
+  flex-direction: column;
   gap: 8px;
   margin-bottom: 8px;
+  padding: 8px;
+  border: 1px solid #f0f0f0;
+  border-radius: 6px;
 }
-.bpmn-tabs-nav button {
-  border: 0;
-  border-bottom: 2px solid transparent;
-  background: transparent;
-  cursor: pointer;
-}
-.bpmn-tabs-nav button.on {
-  border-color: #1677ff;
-  color: #1677ff;
+.bpmn-entry-add {
+  margin-bottom: 8px;
 }
 .bpmn-layout {
   display: flex;

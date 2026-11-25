@@ -50,11 +50,11 @@ Logger.print = function (type = 'default', text: any, back = false) {
   }
 }
 
-Logger.printBack = function (type = 'primary', text) {
+Logger.printBack = function (type = 'primary', text: any) {
   this.print(type, text, true)
 }
 
-Logger.pretty = function (type = 'primary', title, text) {
+Logger.pretty = function (type = 'primary', title: any, text: any) {
   if (typeof text === 'object') {
     console.group('Console Group', title)
     console.log(
@@ -76,23 +76,23 @@ Logger.pretty = function (type = 'primary', title, text) {
   )
 }
 
-Logger.prettyPrimary = function (title, ...text) {
+Logger.prettyPrimary = function (title: any, ...text: any[]) {
   text.forEach((t) => this.pretty('primary', title, t))
 }
 
-Logger.prettySuccess = function (title, ...text) {
+Logger.prettySuccess = function (title: any, ...text: any[]) {
   text.forEach((t) => this.pretty('success', title, t))
 }
 
-Logger.prettyWarn = function (title, ...text) {
+Logger.prettyWarn = function (title: any, ...text: any[]) {
   text.forEach((t) => this.pretty('warn', title, t))
 }
 
-Logger.prettyError = function (title, ...text) {
+Logger.prettyError = function (title: any, ...text: any[]) {
   text.forEach((t) => this.pretty('error', title, t))
 }
 
-Logger.prettyInfo = function (title, ...text) {
+Logger.prettyInfo = function (title: any, ...text: any[]) {
   text.forEach((t) => this.pretty('info', title, t))
 }
 

@@ -22,26 +22,20 @@ import rule_15 from 'bpmnlint/rules/sub-process-blank-start-event'
 import rule_16 from 'bpmnlint/rules/superfluous-gateway'
 import rule_17 from './lint-rules/user-task-assignee'
 
-const cache = {}
+const cache: Record<string, any> = {}
 
-/**
- * A resolver that caches rules and configuration as part of the bundle,
- * making them accessible in the browser.
- *
- * @param {Object} cache
- */
-function Resolver() {}
-
-Resolver.prototype.resolveRule = function (pkg, ruleName) {
-  const rule = cache[pkg + '/' + ruleName]
-  if (!rule) {
-    throw new Error('cannot resolve rule <' + pkg + '/' + ruleName + '>')
+class Resolver {
+  resolveRule(pkg: string, ruleName: string) {
+    const rule = cache[pkg + '/' + ruleName]
+    if (!rule) {
+      throw new Error('cannot resolve rule <' + pkg + '/' + ruleName + '>')
+    }
+    return rule
   }
-  return rule
-}
 
-Resolver.prototype.resolveConfig = function (pkg, configName) {
-  throw new Error('cannot resolve config <' + configName + '> in <' + pkg + '>')
+  resolveConfig(pkg: string, configName: string) {
+    throw new Error('cannot resolve config <' + configName + '> in <' + pkg + '>')
+  }
 }
 
 const resolver = new Resolver()

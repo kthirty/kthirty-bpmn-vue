@@ -1,4 +1,4 @@
-import { computed, defineComponent, getCurrentInstance, inject, nextTick, onBeforeUnmount, onMounted, provide, reactive, ref, Teleport, watch, type PropType } from 'vue'
+import { computed, defineComponent, getCurrentInstance, inject, nextTick, onBeforeUnmount, onMounted, onUpdated, provide, reactive, ref, Teleport, watch, type PropType } from 'vue'
 
 export { default as Icon } from './Icon'
 
@@ -211,7 +211,11 @@ export const Dropdown = defineComponent({
     return () => (
       <span class="bpmn-dropdown">
         <span onClick={() => (open.value = !open.value)}>{slots.default?.()}</span>
-        {open.value && <span class="bpmn-dropdown-overlay" onClick={() => (open.value = false)}>{slots.overlay?.()}</span>}
+        {open.value && (
+          <span class="bpmn-dropdown-overlay" onClick={() => (open.value = false)}>
+            {slots.overlay?.()}
+          </span>
+        )}
       </span>
     )
   }
@@ -244,6 +248,7 @@ export const Input = defineComponent({
   props: {
     value: String,
     maxlength: Number,
+    placeholder: String,
     readonly: Boolean,
     disabled: Boolean
   },
@@ -259,6 +264,7 @@ export const Input = defineComponent({
           class="bpmn-input"
           value={props.value ?? ''}
           maxlength={props.maxlength}
+          placeholder={props.placeholder}
           readonly={props.readonly}
           disabled={props.disabled}
           onInput={(event: Event) => commit((event.target as HTMLInputElement).value)}
@@ -273,6 +279,7 @@ export const Textarea = defineComponent({
   name: 'Textarea',
   props: {
     value: String,
+    placeholder: String,
     readonly: Boolean
   },
   emits: ['update:value', 'change'],
@@ -283,7 +290,13 @@ export const Textarea = defineComponent({
     }
     return () => (
       <span class="bpmn-input-wrap block">
-        <textarea class="bpmn-textarea" readonly={props.readonly} value={props.value ?? ''} onInput={(event: Event) => commit((event.target as HTMLTextAreaElement).value)} />
+        <textarea
+          class="bpmn-textarea"
+          placeholder={props.placeholder}
+          readonly={props.readonly}
+          value={props.value ?? ''}
+          onInput={(event: Event) => commit((event.target as HTMLTextAreaElement).value)}
+        />
         {slots.addonAfter && <span class="bpmn-input-addon">{slots.addonAfter()}</span>}
       </span>
     )
@@ -317,7 +330,11 @@ export const Select = defineComponent({
     const filtered = computed(() => {
       const text = keyword.value.trim().toLowerCase()
       if (!searchable.value || !text) return props.options
-      return props.options.filter((item) => String(item.label ?? '').toLowerCase().includes(text))
+      return props.options.filter((item) =>
+        String(item.label ?? '')
+          .toLowerCase()
+          .includes(text)
+      )
     })
     const hasValue = computed(() => (multiple.value ? selectedValues.value.length > 0 : props.value !== undefined && props.value !== null && props.value !== ''))
     const labelOf = (value: string | number) => props.options.find((item) => sameValue(item.value, value))?.label ?? value
@@ -803,11 +820,7 @@ export const Drawer = defineComponent({
       present.value ? (
         <Teleport to="body">
           <div class={['bpmn-drawer-mask', { open: motion.value }]} style={{ zIndex: zIndex.value }} onClick={close}>
-            <aside
-              class="bpmn-drawer"
-              style={{ width: resolveDrawerWidth(props.width) }}
-              onClick={(event: MouseEvent) => event.stopPropagation()}
-            >
+            <aside class="bpmn-drawer" style={{ width: resolveDrawerWidth(props.width) }} onClick={(event: MouseEvent) => event.stopPropagation()}>
               <header class="bpmn-drawer-header">
                 <div class="bpmn-drawer-title">{props.title}</div>
                 <div class="bpmn-drawer-actions">
@@ -866,10 +879,15 @@ export const Table = defineComponent({
                 <tr onClick={extra.onClick} style={extra.style}>
                   {props.rowSelection && (
                     <td class="check" onClick={(event: MouseEvent) => event.stopPropagation()}>
-                      <input class="bpmn-checkbox" type="checkbox" checked={selected.value.includes(key)} onChange={(event: Event) => {
-                        const checked = (event.target as HTMLInputElement).checked
-                        change(checked ? [...selected.value, key] : selected.value.filter((item) => item !== key))
-                      }} />
+                      <input
+                        class="bpmn-checkbox"
+                        type="checkbox"
+                        checked={selected.value.includes(key)}
+                        onChange={(event: Event) => {
+                          const checked = (event.target as HTMLInputElement).checked
+                          change(checked ? [...selected.value, key] : selected.value.filter((item) => item !== key))
+                        }}
+                      />
                     </td>
                   )}
                   {props.columns.map((column) => {
@@ -895,19 +913,34 @@ export const Tabs = defineComponent({
   props: { activeKey: String },
   emits: ['update:activeKey'],
   setup(props, { slots, emit }) {
+    const list = ref<HTMLElement | null>(null)
+    const ink = ref({ left: '0px', width: '0px' })
+    const sync = () => {
+      const el = list.value?.querySelector<HTMLElement>('.bpmn-tabs-tab.on')
+      if (!el) return
+      const left = `${el.offsetLeft}px`
+      const width = `${el.offsetWidth}px`
+      if (ink.value.left === left && ink.value.width === width) return
+      ink.value = { left, width }
+    }
+    onMounted(sync)
+    onUpdated(sync)
     return () => {
-      const panes = slots.default?.() || []
-      const current = props.activeKey || panes[0]?.key
+      const panes = (slots.default?.() || []).filter((pane) => pane?.props)
+      const current = panes.some((pane) => pane.key === props.activeKey) ? props.activeKey : panes[0]?.key
       return (
         <div class="bpmn-tabs">
           <div class="bpmn-tabs-nav">
-            {panes.map((pane) => (
-              <button type="button" class={{ on: pane.key === current }} onClick={() => emit('update:activeKey', pane.key)}>
-                {pane.props?.tab}
-              </button>
-            ))}
+            <div ref={list} class="bpmn-tabs-nav-list">
+              {panes.map((pane) => (
+                <button type="button" key={pane.key ?? undefined} class={['bpmn-tabs-tab', { on: pane.key === current }]} onClick={() => emit('update:activeKey', pane.key)}>
+                  {pane.props?.tab}
+                </button>
+              ))}
+              <i class="bpmn-tabs-ink" style={ink.value} />
+            </div>
           </div>
-          {panes.filter((pane) => pane.key === current)}
+          <div class="bpmn-tabs-content">{panes.filter((pane) => pane.key === current)}</div>
         </div>
       )
     }
@@ -931,8 +964,10 @@ export const PageHeader = defineComponent({
   setup(props) {
     return () => (
       <div class="bpmn-page-header">
-        <strong>{props.title}</strong>
-        <span>{props.subTitle}</span>
+        <div class="bpmn-page-header-heading">
+          <span class="bpmn-page-header-title">{props.title}</span>
+          {props.subTitle && <span class="bpmn-page-header-subtitle">{props.subTitle}</span>}
+        </div>
       </div>
     )
   }

@@ -25,9 +25,11 @@ export default defineComponent({
     const formProp = ref<{
       serviceType: 'class' | 'expression' | 'delegateExpression'
       serviceValue: string
-      resultVariableName: string
+      resultVariable: string
+      type: string
+      topic: string
       fields: Field[]
-    }>({ serviceType: 'class', serviceValue: '', resultVariableName: '', fields: [] })
+    }>({ serviceType: 'class', serviceValue: '', resultVariable: '', type: '', topic: '', fields: [] })
 
     const loadProps = () => {
       visible.value = isServiceTask(props.element)
@@ -48,12 +50,17 @@ export default defineComponent({
         formProp.value.serviceType = 'class'
         formProp.value.serviceValue = ''
       }
+      formProp.value.resultVariable = getExPropValue<string>(props.element, 'resultVariable') || ''
+      formProp.value.type = getExPropValue<string>(props.element, 'type') || ''
+      formProp.value.topic = getExPropValue<string>(props.element, 'topic') || ''
       formProp.value.fields = ServiceTask.getField(props.element)
     }
     const updateProps = () => {
       if (!visible.value) return
       updateExPropValue(props.element, formProp.value.serviceType, formProp.value.serviceValue)
-      updateExPropValue(props.element, 'resultVariableName', formProp.value.resultVariableName)
+      updateExPropValue(props.element, 'resultVariable', formProp.value.resultVariable)
+      updateExPropValue(props.element, 'type', formProp.value.type)
+      updateExPropValue(props.element, 'topic', formProp.value.topic)
       ServiceTask.setField(props.element, formProp.value.fields)
     }
     onMounted(loadProps)
@@ -102,8 +109,14 @@ export default defineComponent({
                     }}
                   />
                 </FormItem>
-                <FormItem label="结果变量名" name="resultVariableName">
-                  <Input v-model:value={formProp.value.resultVariableName} onChange={updateProps} />
+                <FormItem label="结果变量名" name="resultVariable">
+                  <Input v-model:value={formProp.value.resultVariable} onChange={updateProps} />
+                </FormItem>
+                <FormItem label="外部类型" name="type" tooltip="如 external、http">
+                  <Input v-model:value={formProp.value.type} placeholder="external" onChange={updateProps} />
+                </FormItem>
+                <FormItem label="主题" name="topic">
+                  <Input v-model:value={formProp.value.topic} onChange={updateProps} />
                 </FormItem>
                 <FieldDrawer v-model:value={formProp.value.fields} onChange={updateProps} />
               </Form>

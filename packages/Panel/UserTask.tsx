@@ -25,6 +25,8 @@ export default defineComponent({
       assigneeType: string
       assigneeValue?: string
       dueDate?: string
+      followUpDate?: string
+      priority?: string
       skipExpression?: string
       formKey?: string
     }>({ assigneeType: 'assignee' })
@@ -54,6 +56,8 @@ export default defineComponent({
         formProp.value.assigneeValue = ''
       }
       formProp.value.dueDate = getExPropValue<string>(props.element, 'dueDate')
+      formProp.value.followUpDate = getExPropValue<string>(props.element, 'followUpDate')
+      formProp.value.priority = getExPropValue<string>(props.element, 'priority')
       formProp.value.skipExpression = getExPropValue<string>(props.element, 'skipExpression')
       formProp.value.formKey = getExPropValue<string>(props.element, 'formKey')
     }
@@ -61,6 +65,8 @@ export default defineComponent({
       if (!visible.value) return
       updateExPropValue(props.element, formProp.value.assigneeType, formProp.value.assigneeValue)
       updateExPropValue(props.element, 'dueDate', formProp.value.dueDate)
+      updateExPropValue(props.element, 'followUpDate', formProp.value.followUpDate)
+      updateExPropValue(props.element, 'priority', formProp.value.priority)
       updateExPropValue(props.element, 'formKey', formProp.value.formKey)
       updateExPropValue(props.element, 'skipExpression', formProp.value.skipExpression)
     }
@@ -133,7 +139,11 @@ export default defineComponent({
                               updateProps()
                             }
                             const addon = props.option?.UserTask?.formKeyAddon
-                            return addon ? addon({ onSelect: select }) : <SelectableDrawer dataSource={() => props.option?.UserTask?.formKeyDateDataSource() || []} onSelect={select} />
+                            return addon ? (
+                              addon({ onSelect: select })
+                            ) : (
+                              <SelectableDrawer dataSource={() => props.option?.UserTask?.formKeyDateDataSource() || []} onSelect={select} />
+                            )
                           }
                         }}
                       />
@@ -150,10 +160,20 @@ export default defineComponent({
                               updateProps()
                             }
                             const addon = props.option?.UserTask?.dueDateAddon
-                            return addon ? addon({ onSelect: select }) : <SelectableDrawer dataSource={() => props.option?.UserTask?.dueDateDataSource?.() || []} onSelect={select} />
+                            return addon ? (
+                              addon({ onSelect: select })
+                            ) : (
+                              <SelectableDrawer dataSource={() => props.option?.UserTask?.dueDateDataSource?.() || []} onSelect={select} />
+                            )
                           }
                         }}
                       />
+                    </FormItem>
+                    <FormItem label="跟进日期" name="followUpDate">
+                      <Input v-model:value={formProp.value.followUpDate} onChange={updateProps} />
+                    </FormItem>
+                    <FormItem label="优先级" name="priority">
+                      <Input v-model:value={formProp.value.priority} onChange={updateProps} />
                     </FormItem>
                     <FormItem label="跳过表达式" name="skipExpression">
                       <Input

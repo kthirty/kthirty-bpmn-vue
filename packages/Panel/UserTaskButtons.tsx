@@ -36,7 +36,7 @@ export default defineComponent({
       UserTask.addButton(props.element, buttons.value)
     }
     // 列表选择
-    const formRef = ref(null)
+    const formRef = ref<{ validate: () => boolean } | null>(null)
     const currentIsEdit = ref<boolean>(false)
     const currentSelect = ref<ButtonInfo[]>([])
     const currentSelectKeys = ref<Key[]>([])

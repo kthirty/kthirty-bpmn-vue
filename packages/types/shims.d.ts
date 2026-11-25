@@ -1,0 +1,6 @@
+declare module '*.less'
+declare module '*.css'
+declare module 'bpmn-js-create-append-anything'
+declare module 'bpmn-js-bpmnlint'
+declare module 'bpmnlint'
+declare module 'bpmnlint/*'

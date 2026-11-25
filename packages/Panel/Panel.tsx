@@ -11,7 +11,7 @@ import { defaultPanelOption, type PanelItem, type PanelOption } from '../types'
 // 引入子组件
 const modules = import.meta.glob('./*.tsx', { eager: true })
 const components = Object.keys(modules)
-  .filter((path) => path !== './Panel.tsx')
+  .filter((path) => path !== './Panel.tsx' && path !== './shared.tsx')
   .reduce(
     (acc, path) => {
       const componentName = path.match(/\.\/(.*)\.tsx$/)?.[1]
@@ -68,7 +68,8 @@ export default defineComponent({
         {!!currentElement.value && (
           <Collapse ghost accordion>
             {Object.entries(components)
-              .filter(([name, component]) => showItems.includes(name as PanelItem))
+              .filter(([name]) => showItems.includes(name as PanelItem))
+              .sort(([left], [right]) => showItems.indexOf(left as PanelItem) - showItems.indexOf(right as PanelItem))
               .map(([name, component]) => (
                 <component is={component} v-model:element={currentElement.value} option={props.option} />
               ))}

@@ -3,6 +3,7 @@ import type { PropType } from 'vue'
 import { CollapsePanel, Form, FormItem, Input, Switch, Textarea } from '../ui'
 import { isProcess } from '../utils/BpmnElementType'
 import { Id, Name, Process, Document } from '../utils/BpmnElementProp'
+import { getExPropValue, updateExPropValue } from '../utils/BpmnElementHelper'
 import type { Element } from 'bpmn-js/lib/model/Types'
 
 interface BasicInfo {
@@ -12,6 +13,11 @@ interface BasicInfo {
   doc: string
   executable?: boolean
   nameExpression?: string
+  candidateStarterUsers?: string
+  candidateStarterGroups?: string
+  historyTimeToLive?: string
+  startable?: boolean
+  taskPriority?: string
 }
 
 export default defineComponent({
@@ -37,6 +43,13 @@ export default defineComponent({
       currentIsProcess.value && (info.version = Process.getProcessVersionTag(element))
       currentIsProcess.value && (info.executable = Process.getProcessExecutable(element))
       currentIsProcess.value && (info.nameExpression = Process.getProcessNameExpression(element))
+      if (currentIsProcess.value) {
+        info.candidateStarterUsers = getExPropValue<string>(element, 'candidateStarterUsers') || ''
+        info.candidateStarterGroups = getExPropValue<string>(element, 'candidateStarterGroups') || ''
+        info.historyTimeToLive = getExPropValue<string>(element, 'historyTimeToLive') || ''
+        info.startable = getExPropValue<boolean>(element, 'isStartableInTasklist') !== false
+        info.taskPriority = getExPropValue<string>(element, 'taskPriority') || ''
+      }
       basicInfo.value = info
     }
     const updateProperties = () => {
@@ -48,6 +61,11 @@ export default defineComponent({
         Process.setProcessVersionTag(props.element, basicInfo.value.version || '')
         Process.setProcessExecutable(props.element, basicInfo.value.executable || false)
         Process.setProcessNameExpression(props.element, basicInfo.value.nameExpression || '')
+        updateExPropValue(props.element, 'candidateStarterUsers', basicInfo.value.candidateStarterUsers)
+        updateExPropValue(props.element, 'candidateStarterGroups', basicInfo.value.candidateStarterGroups)
+        updateExPropValue(props.element, 'historyTimeToLive', basicInfo.value.historyTimeToLive)
+        updateExPropValue(props.element, 'isStartableInTasklist', basicInfo.value.startable)
+        updateExPropValue(props.element, 'taskPriority', basicInfo.value.taskPriority)
       }
     }
     onMounted(() => updateInfo(props.element))
@@ -87,6 +105,31 @@ export default defineComponent({
                   {currentIsProcess.value && (
                     <FormItem label="流程标题" tooltip="自定义流程实例的名称，可使用变量有[pi:流程实例信息]" name="nameExpression">
                       <Textarea v-model:value={basicInfo.value.nameExpression} onChange={updateProperties} />
+                    </FormItem>
+                  )}
+                  {currentIsProcess.value && (
+                    <FormItem label="候选启动人" name="candidateStarterUsers">
+                      <Input v-model:value={basicInfo.value.candidateStarterUsers} onChange={updateProperties} />
+                    </FormItem>
+                  )}
+                  {currentIsProcess.value && (
+                    <FormItem label="候选启动组" name="candidateStarterGroups">
+                      <Input v-model:value={basicInfo.value.candidateStarterGroups} onChange={updateProperties} />
+                    </FormItem>
+                  )}
+                  {currentIsProcess.value && (
+                    <FormItem label="历史存活时间" name="historyTimeToLive">
+                      <Input v-model:value={basicInfo.value.historyTimeToLive} placeholder="P30D" onChange={updateProperties} />
+                    </FormItem>
+                  )}
+                  {currentIsProcess.value && (
+                    <FormItem label="任务列表可启动" name="startable">
+                      <Switch v-model:checked={basicInfo.value.startable} onChange={updateProperties} />
+                    </FormItem>
+                  )}
+                  {currentIsProcess.value && (
+                    <FormItem label="任务优先级" name="taskPriority">
+                      <Input v-model:value={basicInfo.value.taskPriority} onChange={updateProperties} />
                     </FormItem>
                   )}
                 </Form>

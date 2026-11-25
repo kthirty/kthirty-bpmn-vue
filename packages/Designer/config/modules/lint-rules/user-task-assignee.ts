@@ -7,7 +7,7 @@ function getExPropValue<T>(element: any, propKey: string): T {
 
 const userTaskAssignee = () => {
   return {
-    check(node, reporter: any) {
+    check(node: any, reporter: any) {
       if (node.$type === 'bpmn:UserTask') {
         const hasAssignee = (getExPropValue<string>(node, 'assignee') || '')?.trim() !== ''
         const hasCandidateUsers = (getExPropValue<string>(node, 'candidateUsers') || '')?.trim() !== ''

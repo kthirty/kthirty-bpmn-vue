@@ -85,7 +85,25 @@ export interface ToolbarOption {
 export const defaultToolbarOption: ToolbarOption = {
   items: ['Imports', 'Exports', 'Previews', 'LintToggle', 'Aligns', 'Scales', 'Commands']
 }
-export type PanelItem = 'BasicInfo' | 'Condition' | 'Listener' | 'StartInitiator' | 'UserTask' | 'UserTaskButtons' | 'ServiceTask'
+export type PanelItem =
+  | 'BasicInfo'
+  | 'StartInitiator'
+  | 'FormProperty'
+  | 'UserTask'
+  | 'UserTaskButtons'
+  | 'ServiceTask'
+  | 'ScriptTask'
+  | 'SendTask'
+  | 'ReceiveTask'
+  | 'BusinessRule'
+  | 'CallActivity'
+  | 'EventConfig'
+  | 'Condition'
+  | 'MultiInstance'
+  | 'AsyncJob'
+  | 'IoMapping'
+  | 'ExtensionProperty'
+  | 'Listener'
 export interface PanelOption {
   items: PanelItem[]
   extra?: Array<() => VNode>
@@ -112,7 +130,26 @@ export interface PanelOption {
   }
 }
 export const defaultPanelOption: PanelOption = {
-  items: ['BasicInfo', 'Condition', 'Listener', 'StartInitiator', 'UserTask', 'UserTaskButtons', 'ServiceTask']
+  items: [
+    'BasicInfo',
+    'StartInitiator',
+    'FormProperty',
+    'UserTask',
+    'UserTaskButtons',
+    'ServiceTask',
+    'ScriptTask',
+    'SendTask',
+    'ReceiveTask',
+    'BusinessRule',
+    'CallActivity',
+    'EventConfig',
+    'Condition',
+    'MultiInstance',
+    'AsyncJob',
+    'IoMapping',
+    'ExtensionProperty',
+    'Listener'
+  ]
 }
 export interface DesignerOption {
   processEngine?: 'flowable' | 'activiti'

@@ -1,6 +1,6 @@
 {
   "name": "kthirty-bpmn-vue3",
-  "version": "0.0.6",
+  "version": "0.0.8",
   "private": false,
   "type": "module",
   "files": [
@@ -14,13 +14,38 @@
   "browser": "./dist/kthirty-bpmn-vue.js",
   "unpkg": "dist/kthirty-bpmn-vue.iife.js",
   "exports": {
-    "./dist/style.css": "./dist/style.css",
-    "./css": "./dist/style.css",
     ".": {
       "types": "./dist/types/index.d.ts",
       "import": "./dist/kthirty-bpmn-vue.js",
       "require": "./dist/kthirty-bpmn-vue.umd.cjs"
-    }
+    },
+    "./css": "./dist/style.css",
+    "./BpmnDesigner": {
+      "types": "./dist/types/BpmnDesigner/index.d.ts",
+      "import": "./dist/entries/BpmnDesigner.js",
+      "require": "./dist/entries/BpmnDesigner.cjs"
+    },
+    "./Designer": {
+      "types": "./dist/types/Designer/index.d.ts",
+      "import": "./dist/entries/Designer.js",
+      "require": "./dist/entries/Designer.cjs"
+    },
+    "./Panel": {
+      "types": "./dist/types/Panel/index.d.ts",
+      "import": "./dist/entries/Panel.js",
+      "require": "./dist/entries/Panel.cjs"
+    },
+    "./Toolbar": {
+      "types": "./dist/types/Toolbar/index.d.ts",
+      "import": "./dist/entries/Toolbar.js",
+      "require": "./dist/entries/Toolbar.cjs"
+    },
+    "./SelectableDrawer": {
+      "types": "./dist/types/SelectableDrawer/index.d.ts",
+      "import": "./dist/entries/SelectableDrawer.js",
+      "require": "./dist/entries/SelectableDrawer.cjs"
+    },
+    "./package.json": "./package.json"
   },
   "scripts": {
     "docs:dev": "vitepress dev docs --port 8000 --open",
@@ -29,9 +54,12 @@
     "build:example": "vite build --mode example",
     "publish:page": "sh scripts/page.sh",
     "dev": "vite",
-    "pub": "sh scripts/publish.sh",
+    "pub": "node scripts/release.mjs",
+    "release": "node scripts/release.mjs",
     "push": "sh scripts/push.sh",
-    "build": "run-s format clean build:lib",
+    "build": "run-s format clean build:lib build:entries",
+    "build:entries": "node scripts/entries.mjs",
+    "prepublishOnly": "pnpm build",
     "format": "prettier --write src/ packages/",
     "clean": "rimraf ./dist",
     "build:lib": "run-p type-check build:types build:es build:browser",
@@ -53,15 +81,13 @@
     "bpmnlint": "^10.3.0"
   },
   "devDependencies": {
-    "vue": "^3.4.36",
-    "ant-design-vue": "^4.2.3",
-    "vue-router": "^4.4.3",
     "@rushstack/eslint-patch": "^1.10.4",
     "@types/node": "^22.1.0",
     "@vitejs/plugin-vue": "^5.1.2",
     "@vitejs/plugin-vue-jsx": "^4.0.0",
     "@vue/eslint-config-prettier": "^9.0.0",
     "@vue/tsconfig": "^0.5.1",
+    "ant-design-vue": "^4.2.3",
     "eslint": "^9.8.0",
     "eslint-plugin-vue": "^9.27.0",
     "less": "^4.2.0",
@@ -74,6 +100,8 @@
     "unplugin-vue-components": "^0.27.3",
     "vite": "^5.3.5",
     "vitepress": "^1.3.2",
+    "vue": "^3.4.36",
+    "vue-router": "^4.4.3",
     "vue-tsc": "^2.0.29"
   },
   "sideEffects": [
