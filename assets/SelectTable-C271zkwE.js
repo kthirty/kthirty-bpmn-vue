@@ -1,0 +1,1 @@
+import{d as n,o,c as s,e as c,t as r,b as a}from"./index-DxKBMahj.js";const i=n({name:"SelectTable",__name:"SelectTable",setup(u){const l=a("5"),t=a([]);for(let e=0;e<10;e++)t.value.push({value:e+"",label:"label"+e});return(e,p)=>(o(),s("div",null,[c("div",null,"当前值为："+r(l.value),1)]))}});export{i as default};
