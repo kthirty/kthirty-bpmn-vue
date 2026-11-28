@@ -151,14 +151,48 @@ export const defaultPanelOption: PanelOption = {
     'Listener'
   ]
 }
+export type BpmnLintCategory = 'error' | 'warn' | 'info'
+
+export interface BpmnLintIssue {
+  rule: string
+  category: BpmnLintCategory
+  elementId?: string
+  message: string
+  path?: string[]
+}
+
+export interface BpmnLintResult {
+  valid: boolean
+  errorCount: number
+  warningCount: number
+  issues: BpmnLintIssue[]
+  byRule: Record<string, BpmnLintIssue[]>
+}
+
+export type BpmnLintRuleLevel = 'off' | 'warn' | 'error' | 'warning' | 'info'
+
+export interface ValidateBpmnOptions {
+  xml?: string
+  processEngine?: 'flowable' | 'activiti'
+  /** 默认 error：仅有 error 时不通过；warn：error 或 warning 均不通过 */
+  failOn?: 'error' | 'warn'
+  rules?: Partial<Record<string, BpmnLintRuleLevel>>
+  messages?: Record<string, string>
+}
+
 export interface DesignerOption {
   processEngine?: 'flowable' | 'activiti'
   configEnhance?: (config: BaseViewerOptions) => BaseViewerOptions
+  onLintResult?: (result: BpmnLintResult) => void
+  lint?: Pick<ValidateBpmnOptions, 'failOn' | 'rules' | 'messages'>
 }
+
 export interface BpmnDesignerOption {
   designer?: DesignerOption
   panel?: PanelOption
   toolbar?: ToolbarOption
+  /** 保存/校验时合并进 validate，可被 validate() 入参覆盖 */
+  validate?: Pick<ValidateBpmnOptions, 'failOn' | 'rules' | 'messages'>
 }
 
 export interface DataSourceItem {

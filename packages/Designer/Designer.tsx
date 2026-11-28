@@ -1,4 +1,4 @@
-import { defineComponent, ref, toRefs, onMounted, markRaw, watch } from 'vue'
+import { defineComponent, ref, toRefs, onMounted, onBeforeUnmount, markRaw, watch } from 'vue'
 import type { PropType } from 'vue'
 import type { BaseViewerOptions } from 'bpmn-js/lib/BaseViewer'
 import Modeler from 'bpmn-js/lib/Modeler'
@@ -9,6 +9,8 @@ import Logger from '../utils/Logger'
 import { getConfig } from './config'
 import type { DesignerOption } from '../types'
 import { emptyXml } from '../utils/BpmnElementData'
+import { refreshCanvasLint, validateBpmn } from '../utils/bpmn-lint'
+import type { ValidateBpmnOptions } from '../types'
 
 const Designer = defineComponent({
   name: 'Designer',
@@ -22,7 +24,7 @@ const Designer = defineComponent({
     }
   },
   emits: ['update:xml', 'command-stack-changed'],
-  setup(props: { xml?: string; option?: DesignerOption }, { emit }) {
+  setup(props: { xml?: string; option?: DesignerOption }, { emit, expose }) {
     // 设置流程引擎
     setProcessEngine(props.option?.processEngine || 'flowable')
     watch(
@@ -35,6 +37,39 @@ const Designer = defineComponent({
 
     const { xml } = toRefs(props)
     const designer = ref<HTMLDivElement>()
+    const modelerReady = ref(false)
+
+    expose({
+      ready: () => modelerReady.value && !!getModeler(),
+      async validate(options?: ValidateBpmnOptions) {
+        const processEngine = options?.processEngine || props.option?.processEngine || 'flowable'
+        const merged: ValidateBpmnOptions = {
+          failOn: props.option?.lint?.failOn,
+          rules: props.option?.lint?.rules,
+          messages: props.option?.lint?.messages,
+          ...options,
+          processEngine
+        }
+        const result = await validateBpmn(merged)
+        props.option?.onLintResult?.(result)
+        await refreshCanvasLint()
+        return result
+      },
+      async getXml() {
+        const modeler = getModeler()
+        if (!modeler) return ''
+        const { xml: out } = await modeler.saveXML({ format: true })
+        return out || ''
+      },
+      async setXml(xmlStr: string) {
+        await getModeler()!.importXML(xmlStr)
+      }
+    })
+
+    onBeforeUnmount(() => {
+      modelerReady.value = false
+    })
+
     onMounted(async () => {
       try {
         if (getModeler()) {
@@ -69,8 +104,10 @@ const Designer = defineComponent({
         })
         const xmlStr = xml!.value || emptyXml()
         xmlStr && (await modeler!.importXML(xmlStr))
+        modelerReady.value = true
       } catch (e) {
         console.error(e)
+        modelerReady.value = false
       }
     })
 

@@ -23,6 +23,9 @@ const install = function (app: App) {
   components.forEach((component) => app.component(component.name as string, component))
 }
 export { Designer, Panel, Toolbar, BpmnDesigner, SelectableDrawer }
+export { validateBpmn, validateBpmnXml, isBpmnValid, refreshCanvasLint } from './utils/bpmn-lint'
+export { mergeLintMessages, translateLintMessage } from './Designer/config/modules/languages/lint-messages'
+export { emptyXml as createEmptyBpmnXml } from './utils/BpmnElementData'
 export * from './ui'
 export default {
   install

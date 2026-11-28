@@ -20,6 +20,9 @@ importers:
       bpmn-js-create-append-anything:
         specifier: ^0.5.2
         version: 0.5.2(bpmn-js@17.9.2)(diagram-js@14.11.3)
+      bpmn-moddle:
+        specifier: 8.1.0
+        version: 8.1.0
       bpmnlint:
         specifier: ^10.3.0
         version: 10.3.0

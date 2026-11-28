@@ -78,6 +78,7 @@
     "bpmn-js-bpmnlint": "^0.22.3",
     "bpmn-js-color-picker": "^0.7.1",
     "bpmn-js-create-append-anything": "^0.5.2",
+    "bpmn-moddle": "8.1.0",
     "bpmnlint": "^10.3.0"
   },
   "devDependencies": {

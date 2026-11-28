@@ -1,24 +1,13 @@
-import { getProcessEngine } from '../../../../utils/BpmnHolder'
+import { exProp } from './lint-helpers'
 
-function getExPropValue<T>(element: any, propKey: string): T {
-  const exPropKey = `${getProcessEngine()}:${propKey}`
-  return element && element.get ? element.get(exPropKey) : element ? element[exPropKey] : element
-}
-
-const userTaskAssignee = () => {
-  return {
-    check(node: any, reporter: any) {
-      if (node.$type === 'bpmn:UserTask') {
-        const hasAssignee = (getExPropValue<string>(node, 'assignee') || '')?.trim() !== ''
-        const hasCandidateUsers = (getExPropValue<string>(node, 'candidateUsers') || '')?.trim() !== ''
-        const hasCandidateGroups = (getExPropValue<string>(node, 'candidateGroups') || '')?.trim() !== ''
-
-        if (!hasAssignee && !hasCandidateUsers && !hasCandidateGroups) {
-          reporter.report(node.id, 'User task should have an assignee, candidate users, or candidate groups.')
-        }
-      }
+const userTaskAssignee = () => ({
+  check(node: any, reporter: any) {
+    if (node.$type !== 'bpmn:UserTask') return
+    const hasAssignee = exProp(node, 'assignee') !== '' || exProp(node, 'candidateUsers') !== '' || exProp(node, 'candidateGroups') !== ''
+    if (!hasAssignee) {
+      reporter.report(node.id, '用户任务须配置任务人、候选人或候选组')
     }
   }
-}
+})
 
 export default userTaskAssignee
